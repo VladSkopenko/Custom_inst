@@ -1,0 +1,18 @@
+from pathlib import Path
+
+import uvicorn
+from fastapi import FastAPI
+
+from src.routes import healtcheker_db
+
+app = FastAPI()
+app.include_router(healtcheker_db.router, prefix="/api")
+BASE_DIR = Path(__file__).parent
+
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app",
+        host="localhost",
+        port=8000,
+        log_level="info",
+    )
