@@ -7,7 +7,7 @@
 2. **Alembic upgrade head:**
    Виконати міграцію:
    ```bash
-   alembic upgrade head
+   alembic upgrade heads
 3. **Uvicorn main:app --reload:**
    Запустити сервер:
    ```bash
