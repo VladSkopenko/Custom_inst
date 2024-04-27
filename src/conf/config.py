@@ -7,12 +7,8 @@ from pydantic_settings import BaseSettings
 
 #load_dotenv()
 base_path_project = Path(__file__).resolve().parent.parent
-# print(f"{base_path_project=}")
-base_path = base_path_project.parent
-# print(f"{base_path=}")
 load_dotenv(base_path.joinpath(".env"))
 APP_ENV = environ.get("APP_ENV")
-# print(f"{APP_ENV=}")
 
 
 class Settings(BaseSettings):
