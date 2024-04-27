@@ -52,29 +52,14 @@ class Image(Base):
     comment_id: Mapped[int] = mapped_column(Integer, ForeignKey("comments.id"), nullable=True)
     tags: Mapped[int] = relationship("Tag", secondary=image_m2m_tag, back_populates="images")
     qr_url: Mapped[str] = mapped_column(String(255))
-    comment: Mapped["Comment"] = relationship("Comment", backref="images", lazy="joined")
+    # comment: Mapped["Comment"] = relationship("Comment", backref="images", lazy="joined")
+    comments: Mapped[list["Comment"]] = relationship("Comment", back_populates="images")
     created_at: Mapped[date] = mapped_column(
         "created_at", DateTime, default=func.now(), nullable=True
     )
     updated_at: Mapped[date] = mapped_column(
         "updated_at", DateTime, default=func.now(), onupdate=func.now(), nullable=True
     )
-
-
-class Comment(Base):
-    __tablename__ = 'comments'
-
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    image_id: Mapped[int] = mapped_column(ForeignKey('images.id'))
-    comment: Mapped[str] = mapped_column(String(255), nullable=False)
-    created_at: Mapped[date] = mapped_column('created_at', DateTime, default=func.now())
-    updated_at: Mapped[date] = mapped_column('updated_at', DateTime, default=func.now(), onupdate=func.now(),
-                                             nullable=True)
-    answer: Mapped[str] = mapped_column(String(255), nullable=True)
-
-    image: Mapped["Image"] = relationship("Image", backref="comments")
-    user: Mapped["User"] = relationship("User", backref="comments")
 
 
 class User(Base):
@@ -91,6 +76,22 @@ class User(Base):
     created_at: Mapped[date] = mapped_column('created_at', DateTime, default=func.now())
     updated_at: Mapped[date] = mapped_column('updated_at', DateTime, default=func.now(), onupdate=func.now(),
                                              nullable=True)
+
+
+class Comment(Base):
+    __tablename__ = 'comments'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    image_id: Mapped[int] = mapped_column(ForeignKey('images.id'))
+    comment: Mapped[str] = mapped_column(String(255), nullable=False)
+    created_at: Mapped[date] = mapped_column('created_at', DateTime, default=func.now())
+    updated_at: Mapped[date] = mapped_column('updated_at', DateTime, default=func.now(), onupdate=func.now(),
+                                             nullable=True)
+    answer: Mapped[str] = mapped_column(String(255), nullable=True)
+
+    image: Mapped["Image"] = relationship("Image", backref="comments")
+    user: Mapped["User"] = relationship("User", backref="comments")
 
 
 class UserInfo(Base):
