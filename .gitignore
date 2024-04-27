@@ -3,3 +3,8 @@ __pycache__
 .idea
 .vscode
 postgres-data
+.env
+poetry.lock
+pyproject.toml
+Pipfile
+Pipfile.lock
