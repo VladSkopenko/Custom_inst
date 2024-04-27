@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     RATE_LIMITER_TIMES: int = 2
     RATE_LIMITER_SECONDS: int = 5
     STATIC_DIRECTORY: str = str(base_path_project.joinpath("static"))
+    
     class Config:
         extra = "ignore"
         env_file = ".env"

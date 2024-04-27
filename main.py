@@ -132,6 +132,7 @@ static_files_path = os.path.join(os.path.dirname(__file__), "src", "static")
 if not static_files_path:
     raise RuntimeError("STATIC_DIRECTORY does not exist")
 
+
 app.mount(
     path="/static",
     app=StaticFilesCache(
