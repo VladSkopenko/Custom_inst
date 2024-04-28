@@ -30,7 +30,7 @@ import uvicorn
 
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-
+from src.routes import healthchecker_db
 from src.conf.config import config
 from src.database.db import get_db, get_redis, check_redis
 
@@ -75,6 +75,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+app.include_router(healthchecker_db.router, prefix="/api")
 
 # @app.on_event("startup")
 async def startup():
@@ -168,35 +170,6 @@ async def read_item(request: Request):
     except Exception as e:
         print(f"Error rendering template: {e}")
         raise
-
-
-@app.get("/api/healthchecker")
-def healthchecker(db: Session = Depends(get_db)):
-    """
-    Endpoint to check the health of the application.
-    This endpoint checks the health of the application by querying the database.
-    Parameters:
-    - db (Session): Database session dependency.
-    Returns:
-    - dict: A dictionary containing a health message.
-    """
-    try:
-        # Make request
-        result = db.execute(text("SELECT 1")).fetchone()
-        if result is None:
-            raise HTTPException(
-                status_code=500, detail="Database is not configured correctly"
-            )
-        return {
-            "message": f"Welcome to FastAPI on Howe Work 14 APP: {config.app_name.upper()}!"
-        }
-    except Exception as e:
-        print(e)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error connecting to the database",
-        )
-
 
 # app.include_router(auth.router, prefix="/auth")
 # app.include_router(users.router, prefix="/")
