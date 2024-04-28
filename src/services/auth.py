@@ -2,6 +2,7 @@ import pickle
 from datetime import datetime, timedelta
 from typing import Optional
 
+import pytz
 import redis
 from fastapi import Depends, HTTPException, status
 from passlib.context import CryptContext
@@ -27,12 +28,6 @@ class Auth:
         db=0
     )
 
-    # cache = redis.Redis(
-    #     host=config.REDIS_DOMAIN,
-    #     port=config.REDIS_PORT,
-    #     db=0,
-    #     password=config.REDIS_PASSWORD,
-    # )
 
     def verify_password(self, plain_password, hashed_password):
         return self.pwd_context.verify(plain_password, hashed_password)
@@ -47,11 +42,11 @@ class Auth:
     ):
         to_encode = data.copy()
         if expires_delta:
-            expire = datetime.utcnow() + timedelta(seconds=expires_delta)
+            expire = datetime.now(pytz.UTC) + timedelta(seconds=expires_delta)
         else:
-            expire = datetime.utcnow() + timedelta(minutes=15)
+            expire = datetime.now(pytz.UTC) + timedelta(minutes=15)
         to_encode.update(
-            {"iat": datetime.utcnow(), "exp": expire, "scope": "access_token"}
+            {"iat": datetime.now(pytz.UTC), "exp": expire, "scope": "access_token"}
         )
         encoded_access_token = jwt.encode(
             to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM
@@ -63,11 +58,11 @@ class Auth:
     ):
         to_encode = data.copy()
         if expires_delta:
-            expire = datetime.utcnow() + timedelta(seconds=expires_delta)
+            expire = datetime.now(pytz.UTC) + timedelta(seconds=expires_delta)
         else:
-            expire = datetime.utcnow() + timedelta(days=7)
+            expire = datetime.now(pytz.UTC) + timedelta(days=7)
         to_encode.update(
-            {"iat": datetime.utcnow(), "exp": expire, "scope": "refresh_token"}
+            {"iat": datetime.now(pytz.UTC), "exp": expire, "scope": "refresh_token"}
         )
         encoded_refresh_token = jwt.encode(
             to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM
@@ -130,7 +125,7 @@ class Auth:
 
     def create_email_token(self, data: dict):
         to_encode = data.copy()
-        expire = datetime.utcnow() + timedelta(days=1)
+        expire = datetime.now(pytz.UTC) + timedelta(days=1)
         to_encode.update({"iat": datetime.utcnow(), "exp": expire})
         token = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
         return token
