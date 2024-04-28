@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.common import detail_message
 from src.database.db import get_db
 
 router = APIRouter(prefix="/healthchecker", tags=["healthchecker"])
@@ -25,9 +26,9 @@ async def healthchecker(db: AsyncSession = Depends(get_db)):
         result = result.fetchone()
         if result is None:
             raise HTTPException(
-                status_code=500, detail="Database is not configured correctly"
+                status_code=500, detail=detail_message.DATABASE_ERROR
             )
-        return {"message": "Welcome to FastAPI!"}
+        return {"message": detail_message.GREETING}
     except Exception as e:
         print(e)
-        raise HTTPException(status_code=500, detail="Error connecting to the database")
+        raise HTTPException(status_code=500, detail=detail_message.CONNECT_DATABASE_ERROR)

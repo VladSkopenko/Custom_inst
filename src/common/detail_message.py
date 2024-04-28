@@ -1,0 +1,5 @@
+PERMISSION_ERROR = "Permission denied"
+FILE_NOT_FOUND = "File not found"
+DATABASE_ERROR = "Database is not configured correctly"
+CONNECT_DATABASE_ERROR = "Failed to connect to the database"
+GREETING = "Welcome to FastAPI!"

@@ -1,8 +1,10 @@
 from typing import Optional
+
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.common import detail_message
 from src.database.models import Comment
 from src.database.models import User
 from src.schemas.comments import CommentSchema
@@ -61,6 +63,6 @@ async def delete_comment(comment_id: int, db: AsyncSession, current_user: User):
             await db.commit()
             return comment
         else:
-            raise HTTPException(status_code=403, detail="Permission denied")
+            raise HTTPException(status_code=403, detail=detail_message.PERMISSION_ERROR)
     else:
-        raise HTTPException(status_code=404, detail="Comment not found")
+        raise HTTPException(status_code=404, detail=detail_message.FILE_NOT_FOUND)
