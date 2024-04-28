@@ -1,38 +1,30 @@
 import logging
-import threading
-import time
 import os
-import webbrowser
-import typing
-import colorlog
 import pathlib
+import threading
+import webbrowser
 from contextlib import asynccontextmanager
-from fastapi import (
-    FastAPI,
-    Path,
-    Query,
-    Depends,
-    HTTPException,
-    Request,
-    Response,
-    status,
-)
-from fastapi.responses import FileResponse, HTMLResponse
+
+import colorlog
+import redis.asyncio as redis
+import uvicorn
+from fastapi import FastAPI
+from fastapi import Request
+from fastapi import Response
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
-import redis.asyncio as redis
-from contextlib import asynccontextmanager
-import uvicorn
-from src.routes import auth
 
-from sqlalchemy import text
-from sqlalchemy.orm import Session
-from src.routes import healthchecker_db, images_admin
 from src.conf.config import config
-from src.database.db import get_db, get_redis, check_redis
+from src.database.db import check_redis
+from src.database.db import get_redis
+from src.routes import auth
+from src.routes import comments
+from src.routes import healthchecker_db
+from src.routes import images_admin
 
 logger = logging.getLogger(f"{config.APP_NAME}")
 logger.setLevel(logging.INFO)
@@ -79,6 +71,8 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(healthchecker_db.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
 app.include_router(images_admin.router, prefix="/api")
+app.include_router(comments.router, prefix="/api")
+
 
 # @app.on_event("startup")
 async def startup():
@@ -93,6 +87,7 @@ async def startup():
             times=config.RATE_LIMITER_TIMES, seconds=config.RATE_LIMITER_SECONDS
         )
         logger.debug("startup done")
+
 
 origins = ["http://localhost:3000"]
 
@@ -111,6 +106,7 @@ async def get_limit():
 
 async def deny_get_redis():
     return None
+
 
 static_dir: pathlib.Path = pathlib.Path(config.STATIC_DIRECTORY)
 
@@ -151,6 +147,7 @@ app.mount(
 # )
 # # print(f"{config.SPHINX_DIRECTORY=}")
 
+
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request):
     """
@@ -173,17 +170,12 @@ async def read_item(request: Request):
         print(f"Error rendering template: {e}")
         raise
 
-# app.include_router(auth.router, prefix="/auth")
-# app.include_router(users.router, prefix="/")
 
-
-# Function to open the web browser
 def open_browser():
     webbrowser.open("http://localhost:8000")
 
 
 if __name__ == "__main__":
-    # Start the web browser in a separate thread
     threading.Thread(target=open_browser).start()
-    # Run the FastAPI application
+
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
