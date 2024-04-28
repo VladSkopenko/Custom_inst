@@ -3,10 +3,11 @@ from pathlib import Path
 import uvicorn
 from fastapi import FastAPI
 
-from src.routes import healthchecker_db
+from src.routes import healthchecker_db, images_admin
 
 app = FastAPI()
 app.include_router(healthchecker_db.router, prefix="/api")
+app.include_router(images_admin.router, prefix="/api")
 BASE_DIR = Path(__file__).parent
 
 if __name__ == "__main__":
@@ -15,4 +16,5 @@ if __name__ == "__main__":
         host="localhost",
         port=8000,
         log_level="info",
+        reload=True,
     )
