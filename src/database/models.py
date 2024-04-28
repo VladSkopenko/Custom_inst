@@ -45,15 +45,12 @@ class Image(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=True)
     user: Mapped["User"] = relationship("User", backref="images", lazy="joined")
-    title: Mapped[str] = mapped_column(String(50))
-    base_url: Mapped[str] = mapped_column(String(255))
+    title: Mapped[str] = mapped_column(String(50), nullable=True)
+    base_url: Mapped[str] = mapped_column(String(255), nullable=True)
     transform_url: Mapped[str] = mapped_column(String(255), nullable=True)
     description: Mapped[text] = mapped_column(Text, nullable=True)
-    comment_id: Mapped[int] = mapped_column(Integer, ForeignKey("comments.id"), nullable=True)
     tags: Mapped[int] = relationship("Tag", secondary=image_m2m_tag, back_populates="images")
-    qr_url: Mapped[str] = mapped_column(String(255))
-    # comment: Mapped["Comment"] = relationship("Comment", backref="images", lazy="joined")
-    comments: Mapped[list["Comment"]] = relationship("Comment", back_populates="images")
+    qr_url: Mapped[str] = mapped_column(String(255), nullable=True)
     created_at: Mapped[date] = mapped_column(
         "created_at", DateTime, default=func.now(), nullable=True
     )
@@ -82,8 +79,8 @@ class Comment(Base):
     __tablename__ = 'comments'
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    image_id: Mapped[int] = mapped_column(ForeignKey('images.id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)
+    image_id: Mapped[int] = mapped_column(ForeignKey('images.id'), nullable=True)
     comment: Mapped[str] = mapped_column(String(255), nullable=False)
     created_at: Mapped[date] = mapped_column('created_at', DateTime, default=func.now())
     updated_at: Mapped[date] = mapped_column('updated_at', DateTime, default=func.now(), onupdate=func.now(),
