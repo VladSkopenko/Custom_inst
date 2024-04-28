@@ -26,7 +26,7 @@ from fastapi_limiter.depends import RateLimiter
 import redis.asyncio as redis
 from contextlib import asynccontextmanager
 import uvicorn
-
+from src.routes import auth
 
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -77,6 +77,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(healthchecker_db.router, prefix="/api")
+app.include_router(auth.router, prefix="/api")
 
 # @app.on_event("startup")
 async def startup():
