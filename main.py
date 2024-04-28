@@ -30,7 +30,7 @@ from src.routes import auth
 
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-from src.routes import healthchecker_db
+from src.routes import healthchecker_db, images_admin
 from src.conf.config import config
 from src.database.db import get_db, get_redis, check_redis
 
@@ -78,6 +78,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(healthchecker_db.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
+app.include_router(images_admin.router, prefix="/api")
 
 # @app.on_event("startup")
 async def startup():
