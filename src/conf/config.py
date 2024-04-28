@@ -1,7 +1,8 @@
-#from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
-#load_dotenv()
+
+# load_dotenv()
 
 
 class Settings(BaseSettings):
@@ -10,9 +11,9 @@ class Settings(BaseSettings):
     DATABASE_PASSWORD: str = 'postgres'
     DATABASE_NAME: str = 'postgres'
     DB_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
-    CLD_NAME: str = "dir0ipjit"
-    CLD_API_KEY: int = 331623919883923
-    CLD_API_SECRET: str = "2C52ZUoRiQG4HltL9C0hm4-_Ph4"
+    CLD_NAME: str = "dlfc34moq"
+    CLD_API_KEY: int = 287698145284357
+    CLD_API_SECRET: str = "FWrjBSc42NGO2k8YnrNYKOHIk5E"
 
     class Config:
         extra = "ignore"

@@ -1,15 +1,15 @@
 import cloudinary.uploader
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Path
 from fastapi import (
     UploadFile,
     File,
 )
-from fastapi_limiter.depends import RateLimiter
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.conf.config import config
 from src.database.db import get_db
-from src.repository import images_admin
+from src.database.models import Image
+from src.repository import images
 from src.schemas.images import ImageSchema, ImageResponseSchema
 
 router = APIRouter(prefix='/images', tags=['images'])
@@ -22,26 +22,42 @@ cloudinary.config(
 
 
 @router.post('/', response_model=ImageResponseSchema, status_code=status.HTTP_201_CREATED)
-async def load_image(body: ImageSchema, file: UploadFile = File(), db: AsyncSession = Depends(get_db)):
-    # public_id = f"Py_Web/test"
-    # upl = cloudinary.uploader.upload(file.file, public_id=public_id, owerite=True)
-    # base_url = cloudinary.CloudinaryImage(public_id).build_url(
-    #         width=500, height=800, crop="fill", version=upl.get("version")
-    #     )
-    # # print(type(base_url))
-    # print(base_url)
-    base_url = "https://res.cloudinary.com/dir0ipjit/image/upload/c_fill,h_800,w_500/v1714318623/Py_Web/test"
+async def load_image(body: ImageSchema = Depends(), file: UploadFile = File(...), db: AsyncSession = Depends(get_db)):
+
+    public_id = f"Project_Web_images/test"
+    upl = cloudinary.uploader.upload(file.file, public_id=public_id, owerite=True)
+    base_url = cloudinary.CloudinaryImage(public_id).build_url(
+            width=500, height=800, crop="fill", version=upl.get("version")
+        )
+    print(base_url)
+
     if base_url:
-        image = await images_admin.create_image(body, base_url, db)
+        image = await images.create_image(body, base_url, db)
         return image
 
-# @router.post('/')
-# async def load_image(file: UploadFile = File(), db: AsyncSession = Depends(get_db)):
-#
-#     public_id = f"Py_Web/test"
-#     upl = cloudinary.uploader.upload(file.file, public_id=public_id, owerite=True)
-#     base_url = cloudinary.CloudinaryImage(public_id).build_url(
-#             width=500, height=800, crop="fill", version=upl.get("version")
-#         )
-#     print(base_url)
-#     return {"massage": "image uploaded"}
+
+@router.get('/{image_id}', response_model=ImageResponseSchema)
+async def get_image(image_id: int = Path(ge=1), db: AsyncSession = Depends(get_db)):
+    image = await images.get_image(image_id, db)
+    if image is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f'Image with id {image_id} not found')
+    return image
+
+
+@router.put('/{image_id}', response_model=ImageResponseSchema)
+async def update_image(image_id: int = Path(ge=1), body: ImageSchema = Depends(), db: AsyncSession = Depends(get_db)):
+    image = await images.update_image(image_id, body, db)
+    if image is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f'Image with id {image_id} not found')
+    return image
+
+
+@router.delete('/{image_id}', response_model=ImageResponseSchema)
+async def delete_image(image_id: int = Path(ge=1), db: AsyncSession = Depends(get_db)):
+    image = await images.delete_image(image_id, db)
+    if image is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f'Image with id {image_id} not found')
+    return image

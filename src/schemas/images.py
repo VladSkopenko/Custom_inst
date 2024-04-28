@@ -1,10 +1,11 @@
-from datetime import date, datetime
+from datetime import datetime
 
-from pydantic import BaseModel, Field, field_validator, ConfigDict
+from pydantic import BaseModel, ConfigDict
 
 
 class ImageSchema(BaseModel):
-    base_url: str | None
+    title: str | None = None
+    description: str | None = None
 
 
 class ImageResponseSchema(BaseModel):
