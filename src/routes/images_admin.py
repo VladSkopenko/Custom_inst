@@ -14,9 +14,9 @@ from src.schemas.images import ImageSchema, ImageResponseSchema
 
 router = APIRouter(prefix='/images', tags=['images'])
 cloudinary.config(
-    cloud_name=config.CLD_NAME,
-    api_key=config.CLD_API_KEY,
-    api_secret=config.CLD_API_SECRET,
+    cloud_name=config.CLOUDINARY_NAME,
+    api_key=config.CLOUDINARY_API_KEY,
+    api_secret=config.CLOUDINARY_API_SECRET,
     secure=True,
 )
 
