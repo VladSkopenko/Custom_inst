@@ -28,7 +28,9 @@ class TokenSchema(BaseModel):
 class RequestEmail(BaseModel):
     email: EmailStr
 
-
 class PasswordChangeRequest(BaseModel):
     password: str
     confirm_password: str
+    
+class LogoutResponse(BaseModel):
+    result: str
