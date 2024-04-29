@@ -32,7 +32,7 @@ from src.utils.staticfilescache import StaticFilesCache
 from src.routes import (
     auth,
     comments,
-    images_admin,
+    images,
     frontend,
     healthchecker_db,
     )
@@ -69,7 +69,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(healthchecker_db.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
-app.include_router(images_admin.router, prefix="/api")
+app.include_router(images.router, prefix="/api")
 app.include_router(comments.router, prefix="/api")
 app.include_router(frontend.router)
 
