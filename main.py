@@ -31,6 +31,8 @@ from src.utils.logger import logger, handler
 from src.utils.staticfilescache import StaticFilesCache
 from src.routes import (
     auth,
+    comments,
+    images_admin,
     frontend,
     healthchecker_db,
     )
@@ -67,6 +69,8 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(healthchecker_db.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
+app.include_router(images_admin.router, prefix="/api")
+app.include_router(comments.router, prefix="/api")
 app.include_router(frontend.router)
 
 
@@ -130,3 +134,4 @@ if __name__ == "__main__":
     threading.Thread(target=open_browser).start()
     # Run the FastAPI application
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+

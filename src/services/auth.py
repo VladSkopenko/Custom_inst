@@ -16,11 +16,9 @@ from src.conf.config import config
 
 
 class Auth:
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    SECRET_KEY = "secret_key"
-    ALGORITHM = "HS256"
-    # SECRET_KEY = config.SECRET_KEY_JWT
-    # ALGORITHM = config.ALGORITHM
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")    
+    SECRET_KEY = config.SECRET_KEY_JWT
+    ALGORITHM = config.ALGORITHM
 
     cache = redis.Redis(
         host=config.REDIS_DOMAIN,
@@ -126,7 +124,7 @@ class Auth:
     def create_email_token(self, data: dict):
         to_encode = data.copy()
         expire = datetime.now(pytz.UTC) + timedelta(days=1)
-        to_encode.update({"iat": datetime.utcnow(), "exp": expire})
+        to_encode.update({"iat": datetime.now(pytz.UTC) , "exp": expire})
         token = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
         return token
 

@@ -1,32 +1,35 @@
 import contextlib
 import logging
 
+import redis.asyncio as redis
 from sqlalchemy import create_engine
 from sqlalchemy import URL
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio import create_async_engine
-import redis.asyncio as redis
 
 from src.conf.config import config
-from src.conf.config import config
+
 logger = logging.getLogger(f"{config.APP_NAME}.{__name__}")
 
 
 connection_string = URL.create(
-    'postgresql',
+    "postgresql",
     username=config.DATABASE_USER,
     password=config.DATABASE_PASSWORD,
     host=config.DATABASE_HOST,
     database=config.DATABASE_NAME,
 )
 engine = create_engine(connection_string)
+
+
 class DataBaseSessionManager:
     def __init__(self, url: str):
         self._engine: AsyncEngine | None = create_async_engine(url)
         self._session_maker: async_sessionmaker = async_sessionmaker(
             autoflush=False, autocommit=False, bind=self._engine
         )
+
     @contextlib.asynccontextmanager
     async def session(self):
         if self._session_maker is None:
@@ -39,13 +42,15 @@ class DataBaseSessionManager:
             raise
         finally:
             await session.close()
-sessionmanager = DataBaseSessionManager(config.DB_URL)
 
+
+sessionmanager = DataBaseSessionManager(config.DB_URL)
 
 
 async def get_db():
     async with sessionmanager.session() as session:
         yield session
+
 
 def create_redis():
     return redis.ConnectionPool(

@@ -10,12 +10,16 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.db import get_db
+from src.database.models import User
 from src.repository import users as repositories_users
 from src.schemas.users import TokenSchema
 from src.schemas.users import UserResponse
 from src.schemas.users import UserSchema
+from src.schemas.users import RequestEmail
+from src.schemas.users import PasswordChangeRequest
+from src.schemas.users import LogoutResponse
 from src.services.auth import auth_service
-from src.services.email import send_email
+from src.services.email import send_email, send_email_password
 
 router = APIRouter(prefix='/auth', tags=['auth'])
 get_refresh_token = HTTPBearer()
@@ -61,3 +65,73 @@ async def refresh_token(credentials: HTTPAuthorizationCredentials = Depends(get_
     refresh_token = await auth_service.create_refresh_token(data={"sub": email})
     await repositories_users.update_token(user, refresh_token, db)
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+
+
+@router.get('/confirmed_email/{token}')
+async def confirmed_email(token: str, db: AsyncSession = Depends(get_db)):    
+    email = await auth_service.get_email_from_token(token)
+    user = await repositories_users.get_user_by_email(email, db)
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Verification error")
+    if user.confirmed:
+        return {"message": "Your email is already confirmed"}
+    await repositories_users.confirmed_email(email, db)
+    return {"message": "Email confirmed"}
+
+
+
+@router.post('/request_email')
+async def request_email(body: RequestEmail, background_tasks: BackgroundTasks, request: Request,
+                        db: AsyncSession = Depends(get_db)):
+    
+    user = await repositories_users.get_user_by_email(body.email, db)
+
+    if user.confirmed:
+        return {"message": "Your email is already confirmed"}
+    if user:
+        background_tasks.add_task(send_email, user.email, user.nickname, str(request.base_url))
+    return {"message": "Check your email for confirmation."}
+
+
+
+# @router.post("/reset_password")
+# async def reset_password(body: RequestEmail, background_tasks: BackgroundTasks, request: Request,
+#                          db: AsyncSession = Depends(get_db)):    
+#     user = await repositories_users.get_user_by_email(body.email, db)
+
+#     if user is None:
+#         raise HTTPException(
+#             status_code=status.HTTP_400_BAD_REQUEST, detail="Not found user email"
+#         )
+    
+#     if user:
+#         background_tasks.add_task(send_email_password, user.email, user.nickname, str(request.base_url))
+#     return {"message": "Check your email for reset password. "}
+
+
+# @router.get("/change_password/{token}")
+# async def change_password(token: str, password_change: PasswordChangeRequest, 
+#                           db: AsyncSession = Depends(get_db)):  
+#     email = await auth_service.get_email_from_token(token)
+#     user = await repositories_users.get_user_by_email(email, db)
+#     if user is None:
+#         raise HTTPException(
+#             status_code=status.HTTP_400_BAD_REQUEST, detail="Password change error"
+#         )
+#     if password_change.password != password_change.confirm_password:
+#         return {"message": "Different passwords"}
+#     hashed_password = auth_service.get_password_hash(password_change.password)
+#     print(hashed_password)
+#     await repositories_users.change_password(user, hashed_password, db)
+#     return {"message": "Password change done"}
+
+
+@router.post("/logout")
+async def logout(
+    user: User = Depends(auth_service.get_current_user),
+    db: AsyncSession = Depends(get_db)
+) -> LogoutResponse:
+    user.refresh_token = None
+    db.commit()
+
+    return {"result": "Success logout"}
