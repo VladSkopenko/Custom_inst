@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     APP_HOST: str = "0.0.0.0"
     APP_PORT: int = 8000
 
+    SECRET_KEY_JWT: str = "secret_key"
+    ALGORITHM: str = "HS256"
+
     DATABASE_HOST: str = 'localhost'
     DATABASE_USER: str = 'postgres'
     DATABASE_PASSWORD: str = 'postgres'
@@ -34,6 +37,7 @@ class Settings(BaseSettings):
     RATE_LIMITER_TIMES: int = 2
     RATE_LIMITER_SECONDS: int = 5
     STATIC_DIRECTORY: str = str(base_path_project.joinpath("static"))
+
 
     class Config:
         extra = "ignore"
