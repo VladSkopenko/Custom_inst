@@ -16,7 +16,7 @@ from src.conf.config import config
 
 
 class Auth:
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")    
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     SECRET_KEY = config.SECRET_KEY_JWT
     ALGORITHM = config.ALGORITHM
 
@@ -25,7 +25,6 @@ class Auth:
         port=config.REDIS_PORT,
         db=0
     )
-
 
     def verify_password(self, plain_password, hashed_password):
         return self.pwd_context.verify(plain_password, hashed_password)
@@ -124,7 +123,7 @@ class Auth:
     def create_email_token(self, data: dict):
         to_encode = data.copy()
         expire = datetime.now(pytz.UTC) + timedelta(days=1)
-        to_encode.update({"iat": datetime.now(pytz.UTC) , "exp": expire})
+        to_encode.update({"iat": datetime.now(pytz.UTC), "exp": expire})
         token = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
         return token
 

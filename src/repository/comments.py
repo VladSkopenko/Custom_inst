@@ -33,9 +33,9 @@ async def edit_comment(
     result = await db.execute(stmt)
     comment = result.scalar_one_or_none()
     if not comment:
-        return None
+        raise HTTPException(status_code=404, detail=detail_message.FILE_NOT_FOUND)
     if comment.user_id != current_user.id and current_user.role not in (Role.admin, Role.moderator):
-        return None
+        raise HTTPException(status_code=403, detail=detail_message.PERMISSION_ERROR)
     comment.comment = body.comment
     db.add(comment)
     await db.commit()
@@ -54,7 +54,6 @@ async def delete_comment(comment_id: int, db: AsyncSession, current_user: User):
             await db.commit()
             return comment
         else:
-            print(current_user.role)
             raise HTTPException(status_code=403, detail=detail_message.PERMISSION_ERROR)
     else:
         raise HTTPException(status_code=404, detail=detail_message.FILE_NOT_FOUND)
