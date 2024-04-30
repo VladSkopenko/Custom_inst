@@ -12,45 +12,14 @@ form?.addEventListener("submit", async (e) => {
     password: password,
   };
     console.log("data: ", data)
-  const URL = `${BASE_URL}/api/auth/signup`;
-  await fetch(URL, {
+ const response = await fetch("/api/auth/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
-  })
-    .then((response) => {
-      if (response.status >= 500) {
-        throw "ERROR STATUS: " + response.status;
-      }
-      if (response.status == 201) {
-        window.location = "confirm.html";
-      }
-
-      return response.json();
-    })
-    .then((json) => {
-      console.log(json);
-      detail = json?.detail;
-      err = "";
-      if (Array.isArray(detail)) {
-        for (const d of detail) {
-          const loc = d.loc[1];
-          const mgs = d.msg;
-          err = err + " " + loc + ": " + mgs;
-          console.log(d);
-        }
-      } else {
-        err = detail;
-      }
-      if (err) {
-        showMessage(err);
-      }
-    })
-    .catch((err) => {
-      console.log("ERROR", err);
-      showMessage(err);
-    });
-});
-
+  });
+  const result = await response.json();
+  console.log("result: ", result);
+  if (result.status === "ok") {
+    alert("SUPER");
