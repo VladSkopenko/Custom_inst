@@ -2,9 +2,9 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.schemas.images import ImageSchema
 from src.database.models import Image
 from src.database.models import User, Role
+from src.schemas.images import ImageSchema
 
 
 async def create_image(body: ImageSchema, base_url: str, db: AsyncSession, current_user: User):
@@ -23,38 +23,69 @@ async def get_image(image_id: int, db: AsyncSession):
     stmt = select(Image).filter_by(id=image_id)
     res = await db.execute(stmt)
     image = res.scalar_one_or_none()
-    if image:
-        return image
-    else:
+    if image is None:
         return None
+    return image
 
 
 async def update_image(image_id: int, body: ImageSchema, db: AsyncSession, current_user: User):
     stmt = select(Image).filter_by(id=image_id)
     res = await db.execute(stmt)
     image = res.scalar_one_or_none()
+
+    if image is None:
+        return None
+
     if image.user_id != current_user.id and current_user.role not in (Role.admin, Role.moderator):
-        return None
-    if image:
-        image.title = body.title
-        # image.transform_url = body.transform_url
-        image.description = body.description
-        # image.tags = body.tags
-        # image.qr_url = body.qr_url
-        await db.commit()
-        await db.refresh(image)
-        return image
-    else:
-        return None
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+
+    image.title = body.title
+    image.description = body.description
+    await db.commit()
+    await db.refresh(image)
+    return image
 
 
 async def delete_image(image_id: int, db: AsyncSession, current_user: User):
     stmt = select(Image).filter_by(id=image_id)
     res = await db.execute(stmt)
     image = res.scalar_one_or_none()
-    if image.user_id != current_user.id and current_user.role not in (Role.admin, Role.moderator):
+
+    if image is None:
         return None
-    if image:
-        await db.delete(image)
-        await db.commit()
+
+    if image.user_id != current_user.id and current_user.role not in (Role.admin, Role.moderator):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+
+    await db.delete(image)
+    await db.commit()
     return image
+
+
+async def transform_image(image_id: int, tr_url: str, db: AsyncSession, current_user: User):
+    stmt = select(Image).filter_by(id=image_id)
+    res = await db.execute(stmt)
+    image = res.scalar_one_or_none()
+
+    if image is None:
+        return None
+
+    if image.user_id != current_user.id and current_user.role not in (Role.admin, Role.moderator):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+
+    image.transform_url = tr_url
+    await db.commit()
+    await db.refresh(image)
+    return image
+
+
+async def get_base_url(image_id: int, db: AsyncSession, current_user: User):
+    stmt = select(Image).filter_by(id=image_id)
+    res = await db.execute(stmt)
+    image = res.scalar_one_or_none()
+    if image is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Not found image by id: {image_id}")
+
+    if image.user_id != current_user.id and current_user.role not in (Role.admin, Role.moderator):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+    return image.base_url
