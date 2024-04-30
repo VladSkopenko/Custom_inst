@@ -1,11 +1,3 @@
-//const BASE_URL = "";
-
-function setCookie(cname, cvalue, expire) {
-  const d = new Date(expire);
-  const expires = "expires=" + d.toUTCString();
-  const cookie = cname + "=" + cvalue + ";" + expires + ";path=/;";
-  document.cookie = cookie;
-}
 
 const form = document.forms[0];
 
@@ -34,8 +26,6 @@ form?.addEventListener("submit", async (e) => {
     .then((json) => {
       console.log(json);
       if (json?.token_type == "bearer") {
-        // setCookie("access_token", json?.access_token, json?.expire_access_token);
-        // setCookie("refresh_token", json?.refresh_token, json?.expire_refresh_token);
         localStorage.setItem("access_token", json?.access_token);
         localStorage.setItem("refresh_token", json?.refresh_token);
         setTimeout(() => {

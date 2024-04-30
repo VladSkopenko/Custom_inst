@@ -1,21 +1,10 @@
 import threading
 import os
 import webbrowser
-import colorlog
 import pathlib
-from contextlib import asynccontextmanager
 from fastapi import (
     FastAPI,
-    Path,
-    Query,
-    Depends,
-    HTTPException,
-    Request,
-    Response,
-    status,
 )
-from fastapi.responses import FileResponse, HTMLResponse
-from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
@@ -23,8 +12,6 @@ import redis.asyncio as redis
 from contextlib import asynccontextmanager
 import uvicorn
 
-from sqlalchemy import text
-from sqlalchemy.orm import Session
 from src.conf.config import config
 from src.database.db import get_db, get_redis, check_redis
 from src.utils.logger import logger, handler
@@ -39,18 +26,10 @@ from src.routes import (
 
 
 logger.addHandler(handler)
-
-# templates_path = os.path.join(os.path.dirname(__file__), "src", "templates")
-# if not templates_path:
-#     raise RuntimeError("TEMPLATES_DIRECTORY does not exist")
-# templates = Jinja2Templates(directory=templates_path)
-
-
 static_files_path = os.path.join(os.path.dirname(__file__), "src", "static")
 
 if not static_files_path:
     raise RuntimeError("STATIC_DIRECTORY does not exist")
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
