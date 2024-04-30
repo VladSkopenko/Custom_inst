@@ -8,3 +8,4 @@ poetry.lock
 pyproject.toml
 Pipfile
 Pipfile.lock
+.pytest_cache

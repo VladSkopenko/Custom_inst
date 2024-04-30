@@ -7,11 +7,11 @@ from src.database.models import User, Role
 from src.schemas.users import UserSchema
 
 
-# async def get_admin_exist(db: AsyncSession = Depends(get_db)):
-#     stmt = select(User).filter_by(User.role == Role.admin)
-#     user = await db.execute(stmt)
-#     result = user.scalar_one_or_none()
-#     return result is not None
+async def get_admin_exist(db: AsyncSession = Depends(get_db)):
+    stmt = select(User).where(User.role == Role.admin)
+    user = await db.execute(stmt)
+    result = user.scalar_one_or_none()
+    return result is not None
 
 
 async def get_user_by_email(email: str, db: AsyncSession = Depends(get_db)):
@@ -23,11 +23,12 @@ async def get_user_by_email(email: str, db: AsyncSession = Depends(get_db)):
 
 async def create_user(body: UserSchema, db: AsyncSession = Depends(get_db)):
     new_user = User(**body.model_dump())
-    # # Перевіряємо, чи існує адміністратор
-    # if await get_admin_exist(db):
-    #     new_user.role = Role.user  # Якщо адміністратор існує, новий користувач отримує роль 'user'
-    # else:
-    #     new_user.role = Role.admin  # Якщо адміністратор ще не існує, новий користувач отримує роль 'admin'
+    
+    if await get_admin_exist(db):
+        new_user.role = Role.user  
+    else:
+        new_user.role = Role.admin
+        new_user.confirmed = True  
 
     try:
         db.add(new_user)

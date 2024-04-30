@@ -12,6 +12,7 @@ templates = Jinja2Templates(directory=templates_path)
 # Create a router for the home page
 router = APIRouter()
 
+
 @router.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """
@@ -23,7 +24,7 @@ async def home(request: Request):
     - HTMLResponse: HTML response containing the rendered template.
     """
     try:
-        context = {"request": request, "title": "Home Page"}
+        context = {"request": request, "title": "Welcomу to PhotoShare"}
         return templates.TemplateResponse("index.html", context)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error rendering template: {e}")
