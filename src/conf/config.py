@@ -1,9 +1,8 @@
-
 # from dotenv import load_dotenv
 from os import environ
 from pathlib import Path
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
 # load_dotenv()
@@ -21,13 +20,13 @@ class Settings(BaseSettings):
     SECRET_KEY_JWT: str = "secret_key"
     ALGORITHM: str = "HS256"
 
-    DATABASE_HOST: str = 'localhost'
-    DATABASE_USER: str = 'postgres'
-    DATABASE_PASSWORD: str = 'postgres'
-    DATABASE_NAME: str = 'postgres'
+    DATABASE_HOST: str = "localhost"
+    DATABASE_USER: str = "postgres"
+    DATABASE_PASSWORD: str = "postgres"
+    DATABASE_NAME: str = "postgres"
     DB_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
 
-    REDIS_DOMAIN: str = 'localhost'
+    REDIS_DOMAIN: str = "localhost"
     REDIS_PORT: int = 6379
 
     CLOUDINARY_NAME: str = "dlfc34moq"
@@ -38,7 +37,6 @@ class Settings(BaseSettings):
     RATE_LIMITER_SECONDS: int = 5
     STATIC_DIRECTORY: str = str(base_path_project.joinpath("static"))
 
-
     class Config:
         extra = "ignore"
         env_file = ".env"
@@ -46,4 +44,3 @@ class Settings(BaseSettings):
 
 
 config = Settings()
-

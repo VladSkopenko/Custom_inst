@@ -10,6 +10,7 @@ from src.database.models import User
 from src.repository.comments import create_comment
 from src.repository.comments import delete_comment
 from src.repository.comments import edit_comment
+from src.repository.comments import get_comment
 from src.schemas.comments import CommentResponseSchema
 from src.schemas.comments import CommentSchema
 from src.services.auth import auth_service
@@ -92,4 +93,25 @@ async def delete_comment_route(
     :doc-author: Trelent
     """
     comment = await delete_comment(comment_id, db, current_user)
+    return comment
+
+
+@router.get("/{comment_id}/", response_model=CommentResponseSchema)
+async def get_comment_route(
+    comment_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    The get_comment_route function is a route that returns the comment with the given id.
+        If no comment exists with that id, it will return a 404 error.
+
+    :param comment_id: int: Get the comment id from the url path
+    :param db: AsyncSession: Get a database session, which is used when executing sqlalchemy commands
+    :param : Get the comment id from the url
+    :return: The comment object
+    :doc-author: Trelent
+    """
+    comment = await get_comment(comment_id, db)
+    if not comment:
+        raise HTTPException(status_code=404, detail=detail_message.FILE_NOT_FOUND)
     return comment

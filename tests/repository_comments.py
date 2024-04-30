@@ -13,6 +13,7 @@ from src.database.models import User
 from src.repository.comments import create_comment
 from src.repository.comments import delete_comment
 from src.repository.comments import edit_comment
+from src.repository.comments import get_comment
 from src.schemas.comments import CommentSchema
 
 
@@ -223,6 +224,49 @@ class TestAsyncContacts(unittest.IsolatedAsyncioTestCase):
 
         with self.assertRaises(HTTPException) as context:
             await delete_comment(1, self.session, self.user)
+
+        self.assertEqual(context.exception.status_code, 404)
+        self.assertEqual(context.exception.detail, detail_message.FILE_NOT_FOUND)
+
+    async def test_get_comment(self):
+
+        """
+    The test_get_comment function tests the get_comment function in the comments.py file.
+    It does this by creating a mocked comment object, and then using that to test whether or not
+    the get_comment function returns an instance of Comment.
+
+    :param self: Represent the instance of the object that is passed to the method when it is called
+    :return: A comment object from the database
+    :doc-author: Trelent
+    """
+        id_ = 1
+        comment = Comment(id=1, comment="test", image_id=1, user_id=1)
+        mocked_comment = MagicMock()
+        mocked_comment.scalar_one_or_none.return_value = comment
+        self.session.execute.return_value = mocked_comment
+        result = await get_comment(id_, self.session)
+        self.assertEqual(result, comment)
+        self.assertIsInstance(result, Comment)
+
+    async def test_get_nonexistent_comment(self):
+
+        """
+    The test_get_nonexistent_comment function tests the get_comment function in the comments.py file.
+    The test_get_nonexistent_comment function is a coroutine that takes two arguments: self and id_.
+    The test uses an assertRaises context manager to check if an HTTPException is raised when trying to
+    retrieve a comment with an ID that does not exist in the database. The status code of this exception should be 404,
+    and its detail message should be FILE NOT FOUND.
+
+    :param self: Represent the instance of the class
+    :return: 404 status code and file_not_found detail message
+    :doc-author: Trelent
+    """
+        id_ = 1
+        mocked_comment = MagicMock()
+        mocked_comment.scalar_one_or_none.return_value = None
+        self.session.execute.return_value = mocked_comment
+        with self.assertRaises(HTTPException) as context:
+            await get_comment(id_, self.session)
 
         self.assertEqual(context.exception.status_code, 404)
         self.assertEqual(context.exception.detail, detail_message.FILE_NOT_FOUND)

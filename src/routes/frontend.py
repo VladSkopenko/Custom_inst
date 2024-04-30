@@ -12,6 +12,7 @@ templates = Jinja2Templates(directory=templates_path)
 # Create a router for the home page
 router = APIRouter()
 
+
 @router.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """

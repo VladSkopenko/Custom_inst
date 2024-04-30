@@ -97,3 +97,24 @@ async def delete_comment(comment_id: int, db: AsyncSession, current_user: User):
             raise HTTPException(status_code=403, detail=detail_message.PERMISSION_ERROR)
     else:
         raise HTTPException(status_code=404, detail=detail_message.FILE_NOT_FOUND)
+
+
+async def get_comment(comment_id: int, db: AsyncSession):
+    """
+    The get_comment function returns a comment object from the database.
+        Args:
+            comment_id (int): The id of the comment to be retrieved.
+            db (AsyncSession): An async session for querying the database.
+
+    :param comment_id: int: Specify the id of the comment to be retrieved
+    :param db: AsyncSession: Pass the database session to the function
+    :return: A comment object
+    :doc-author: Trelent
+    """
+    stmt = select(Comment).filter(Comment.id == comment_id)
+    result = await db.execute(stmt)
+    comment = result.scalar_one_or_none()
+    if comment:
+        return comment
+    else:
+        raise HTTPException(status_code=404, detail=detail_message.FILE_NOT_FOUND)

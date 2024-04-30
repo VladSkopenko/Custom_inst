@@ -1,5 +1,6 @@
 from fastapi.staticfiles import StaticFiles
 
+
 class StaticFilesCache(StaticFiles):
     def __init__(
         self,
