@@ -8,11 +8,11 @@ from src.services.auth import auth_service
 from src.conf.config import config
 
 conf = ConnectionConfig(
-    MAIL_USERNAME="fatsapiuser@meta.ua",
-    MAIL_PASSWORD="pythonCourse2023",
-    MAIL_FROM="fatsapiuser@meta.ua",
-    MAIL_PORT=465,
-    MAIL_SERVER="smtp.meta.ua",
+    MAIL_USERNAME=config.MAIL_USERNAME,
+    MAIL_PASSWORD=config.MAIL_PASSWORD,
+    MAIL_FROM=config.MAIL_USERNAME,
+    MAIL_PORT=config.MAIL_PORT,
+    MAIL_SERVER=config.MAIL_SERVER,
     MAIL_FROM_NAME="PHOTOSHARE",
     MAIL_STARTTLS=False,
     MAIL_SSL_TLS=True,
@@ -38,15 +38,15 @@ async def send_email(email: EmailStr, nickname: str, host: str):
         print(err)
 
 
-async def send_email_password(email: EmailStr, username: str, host: str):
+async def send_email_password(email: EmailStr, nickname: str, host: str):
     try:
         token_verification = auth_service.create_email_token({"sub": email})
         message = MessageSchema(
-            subject="Confirm your email ",
+            subject="Reset your email ",
             recipients=[email],
             template_body={
                 "host": host,
-                "username": username,
+                "nickname": nickname,
                 "token": token_verification,
             },
             subtype=MessageType.html,
