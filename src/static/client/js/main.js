@@ -28,6 +28,7 @@ form?.addEventListener("submit", async (e) => {
       if (json?.token_type == "bearer") {
         localStorage.setItem("access_token", json?.access_token);
         localStorage.setItem("refresh_token", json?.refresh_token);
+        localStorage.setItem("logged", "true");
         setTimeout(() => {
           window.location = "main.html";
         }, 500);
