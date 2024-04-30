@@ -37,6 +37,13 @@ class Settings(BaseSettings):
     RATE_LIMITER_SECONDS: int = 5
     STATIC_DIRECTORY: str = str(base_path_project.joinpath("static"))
 
+    MAIL_USERNAME: str = "fatsapiuser@meta.ua"
+    MAIL_PASSWORD: str = "pythonCourse2023"
+    MAIL_FROM: str = "fatsapiuser@meta.ua"
+    MAIL_PORT: int = 465
+    MAIL_SERVER: str = "smtp.meta.ua"
+    MAIL_FROM_NAME: str = "PHOTOSHARE"
+
     class Config:
         extra = "ignore"
         env_file = ".env"
