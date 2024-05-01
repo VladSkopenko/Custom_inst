@@ -103,12 +103,6 @@ app.mount(
 # )
 # # print(f"{config.SPHINX_DIRECTORY=}")
 
-app.mount(
-    path="/signup",
-    app=StaticFilesCache(directory=static_files_path, html=True),
-    name="signup",
-)
-print(f"{static_files_path=}")
 
 # Function to open the web browser
 def open_browser():
