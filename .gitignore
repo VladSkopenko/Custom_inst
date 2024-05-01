@@ -4,8 +4,6 @@ __pycache__
 .vscode
 postgres-data
 .env
-poetry.lock
-pyproject.toml
 Pipfile
 Pipfile.lock
 .pytest_cache
