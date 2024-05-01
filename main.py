@@ -14,6 +14,7 @@ import uvicorn
 
 from src.conf.config import config
 from src.database.db import get_db, get_redis, check_redis
+from src.routes import tags
 from src.utils.logger import logger, handler
 from src.utils.staticfilescache import StaticFilesCache
 from src.routes import (
@@ -50,6 +51,7 @@ app.include_router(healthchecker_db.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
 app.include_router(images.router, prefix="/api")
 app.include_router(comments.router, prefix="/api")
+app.include_router(tags.router, prefix="/api")
 app.include_router(frontend.router)
 
 

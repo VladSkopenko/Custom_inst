@@ -30,13 +30,7 @@ class TagType(enum.Enum):
     architecture: str = "architecture"
 
 
-image_m2m_tag = Table(
-    "image_m2m_tag",
-    Base.metadata,
-    Column("id", Integer, primary_key=True),
-    Column("image_id", Integer, ForeignKey("images.id", ondelete="CASCADE")),
-    Column("tag_id", Integer, ForeignKey("tags.id", ondelete="CASCADE")),
-)
+
 
 
 class Image(Base):
@@ -49,7 +43,6 @@ class Image(Base):
     base_url: Mapped[str] = mapped_column(String(255), nullable=True)
     transform_url: Mapped[str] = mapped_column(String(255), nullable=True)
     description: Mapped[text] = mapped_column(Text, nullable=True)
-    tags: Mapped[int] = relationship("Tag", secondary=image_m2m_tag, back_populates="images")
     qr_url: Mapped[str] = mapped_column(String(255), nullable=True)
     created_at: Mapped[date] = mapped_column(
         "created_at", DateTime, default=func.now(), nullable=True
@@ -57,7 +50,7 @@ class Image(Base):
     updated_at: Mapped[date] = mapped_column(
         "updated_at", DateTime, default=func.now(), onupdate=func.now(), nullable=True
     )
-
+    tags = relationship("Tag", secondary="image_m2m_tag", back_populates="images", lazy="select")
 
 class User(Base):
     __tablename__ = 'users'
@@ -118,9 +111,9 @@ class Tag(Base):
     __tablename__ = "tags"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    tag_name: Mapped[str] = mapped_column(String(60), nullable=False, unique=True)
+    tag_name: Mapped[str] = mapped_column(String(60), nullable=False)
     tag_type: Mapped[Enum] = mapped_column("tag_type", Enum(TagType), nullable=False)
-    images = relationship("Image", secondary=image_m2m_tag, back_populates="tags")
+    images = relationship("Image", secondary="image_m2m_tag", back_populates="tags", lazy="select")
 
 
 class ImageLike(Base):
@@ -130,3 +123,11 @@ class ImageLike(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
     image_id: Mapped[int] = mapped_column(ForeignKey('images.id'))
     grade: Mapped[int] = mapped_column(Integer, nullable=False)
+
+
+image_m2m_tag = Table(
+    "image_m2m_tag",
+    Base.metadata,
+    Column("image_id", Integer, ForeignKey("images.id")),
+    Column("tag_id", Integer, ForeignKey("tags.id")),
+)
