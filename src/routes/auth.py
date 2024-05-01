@@ -16,10 +16,9 @@ from src.schemas.users import TokenSchema
 from src.schemas.users import UserResponse
 from src.schemas.users import UserSchema
 from src.schemas.users import RequestEmail
-from src.schemas.users import PasswordChangeRequest
 from src.schemas.users import LogoutResponse
 from src.services.auth import auth_service
-from src.services.email import send_email, send_email_password
+from src.services.email import send_email
 
 router = APIRouter(prefix='/auth', tags=['auth'])
 get_refresh_token = HTTPBearer()
@@ -43,6 +42,8 @@ async def login(body: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = 
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="No such user")
     if not user.confirmed:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Email not confirmed")
+    if not user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User is non active")
     if not auth_service.verify_password(body.password, user.password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect credentials")
     access_token = await auth_service.create_access_token(data={"sub": user.email})
@@ -92,38 +93,6 @@ async def request_email(body: RequestEmail, background_tasks: BackgroundTasks, r
         background_tasks.add_task(send_email, user.email, user.nickname, str(request.base_url))
     return {"message": "Check your email for confirmation."}
 
-
-
-# @router.post("/reset_password")
-# async def reset_password(body: RequestEmail, background_tasks: BackgroundTasks, request: Request,
-#                          db: AsyncSession = Depends(get_db)):    
-#     user = await repositories_users.get_user_by_email(body.email, db)
-
-#     if user is None:
-#         raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST, detail="Not found user email"
-#         )
-    
-#     if user:
-#         background_tasks.add_task(send_email_password, user.email, user.nickname, str(request.base_url))
-#     return {"message": "Check your email for reset password. "}
-
-
-# @router.get("/change_password/{token}")
-# async def change_password(token: str, password_change: PasswordChangeRequest, 
-#                           db: AsyncSession = Depends(get_db)):  
-#     email = await auth_service.get_email_from_token(token)
-#     user = await repositories_users.get_user_by_email(email, db)
-#     if user is None:
-#         raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST, detail="Password change error"
-#         )
-#     if password_change.password != password_change.confirm_password:
-#         return {"message": "Different passwords"}
-#     hashed_password = auth_service.get_password_hash(password_change.password)
-#     print(hashed_password)
-#     await repositories_users.change_password(user, hashed_password, db)
-#     return {"message": "Password change done"}
 
 
 @router.post("/logout")
