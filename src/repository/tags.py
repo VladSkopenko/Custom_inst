@@ -16,8 +16,6 @@ async def get_tag(tag_name: str, db: AsyncSession, current_user: User):
     tag = existing_tag.scalar_one_or_none()
     if tag:
         return tag
-    else:
-        return None
 
 
 async def create_tag(body: TagSchema, db: AsyncSession, current_user: User):
@@ -49,6 +47,3 @@ async def delete_tag(tag_id: int, db: AsyncSession, current_user: User):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=detail_message.FILE_NOT_FOUND
         )
-
-
-

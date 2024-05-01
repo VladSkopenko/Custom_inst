@@ -16,3 +16,5 @@ class CommentResponseSchema(BaseModel):
     comment: str
     created_at: datetime
     updated_at: datetime
+
+

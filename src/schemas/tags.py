@@ -22,3 +22,4 @@ class TagSchema(BaseModel):
 
 class TagResponseSchema(TagSchema):
     id: int
+
