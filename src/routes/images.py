@@ -1,4 +1,6 @@
 import cloudinary.uploader
+import qrcode
+from io import BytesIO
 from fastapi import APIRouter, Depends, HTTPException, status, Path
 from fastapi import (
     UploadFile,
@@ -74,8 +76,8 @@ async def delete_image(image_id: int = Path(ge=1),
     return image
 
 
-@router.put('/transform/grayscale/{image_id}', response_model=ImageResponseSchema)
-async def transform_image(image_id: int = Path(ge=1),
+@router.post('/transform/grayscale/{image_id}', response_model=ImageResponseSchema)
+async def create_transform_image(image_id: int = Path(ge=1),
                           db: AsyncSession = Depends(get_db),
                           current_user: User = Depends(auth_service.get_current_user)
 ):
@@ -89,8 +91,8 @@ async def transform_image(image_id: int = Path(ge=1),
     return image
 
 
-@router.put('/transform/sepia/{image_id}', response_model=ImageResponseSchema)
-async def transform_image(image_id: int = Path(ge=1),
+@router.post('/transform/sepia/{image_id}', response_model=ImageResponseSchema)
+async def create_transform_image(image_id: int = Path(ge=1),
                           db: AsyncSession = Depends(get_db),
                           current_user: User = Depends(auth_service.get_current_user)
 ):
@@ -104,8 +106,8 @@ async def transform_image(image_id: int = Path(ge=1),
     return image
 
 
-@router.put('/transform/oil_paint/{image_id}', response_model=ImageResponseSchema)
-async def transform_image(image_id: int = Path(ge=1),
+@router.post('/transform/oil_paint/{image_id}', response_model=ImageResponseSchema)
+async def create_transform_image(image_id: int = Path(ge=1),
                           db: AsyncSession = Depends(get_db),
                           current_user: User = Depends(auth_service.get_current_user)
 ):
@@ -116,4 +118,27 @@ async def transform_image(image_id: int = Path(ge=1),
     tr_url = cloudinary.CloudinaryImage(public_id).build_url(**transform)
 
     image = await images_repository.transform_image(image_id, tr_url, db, current_user)
+    return image
+
+
+@router.post('/qr_code/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
+async def create_qr_code(image_id: int = Path(ge=1),
+                          db: AsyncSession = Depends(get_db),
+                          current_user: User = Depends(auth_service.get_current_user)
+):
+    transform_url = await images_repository.get_transform_url(image_id, db, current_user)
+
+    qr_name = transform_url.split('/')[-1].replace('%', ' ')
+    img = qrcode.make(transform_url)
+
+    img_buffer = BytesIO()
+    img.save(img_buffer, "PNG")
+    img_buffer.seek(0)
+
+    public_id = f"Project_Web_images/QR/{qr_name}"
+    upl = cloudinary.uploader.upload(img_buffer, public_id=public_id, overwrite=True)
+    qr_url = cloudinary.CloudinaryImage(public_id).build_url(version=upl.get("version"))
+    print(qr_url)
+
+    image = await images_repository.qr_code(image_id, qr_url, db, current_user)
     return image

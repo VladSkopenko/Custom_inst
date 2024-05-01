@@ -89,3 +89,32 @@ async def get_base_url(image_id: int, db: AsyncSession, current_user: User):
     if image.user_id != current_user.id and current_user.role not in (Role.admin, Role.moderator):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
     return image.base_url
+
+
+async def get_transform_url(image_id: int, db: AsyncSession, current_user: User):
+    stmt = select(Image).filter_by(id=image_id)
+    res = await db.execute(stmt)
+    image = res.scalar_one_or_none()
+    if image is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Not found image by id: {image_id}")
+
+    if image.user_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+    return image.transform_url
+
+
+async def qr_code(image_id: int, qr_url: str, db: AsyncSession, current_user: User):
+    stmt = select(Image).filter_by(id=image_id)
+    res = await db.execute(stmt)
+    image = res.scalar_one_or_none()
+
+    if image is None:
+        return None
+
+    if image.user_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+
+    image.qr_url = qr_url
+    await db.commit()
+    await db.refresh(image)
+    return image
