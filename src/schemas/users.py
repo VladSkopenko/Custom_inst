@@ -1,4 +1,7 @@
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
+from pydantic import BaseModel
+from pydantic import ConfigDict
+from pydantic import EmailStr
+from pydantic import Field
 
 from src.database.models import Role
 
@@ -28,9 +31,11 @@ class TokenSchema(BaseModel):
 class RequestEmail(BaseModel):
     email: EmailStr
 
+
 class PasswordChangeRequest(BaseModel):
     password: str
     confirm_password: str
-    
+
+
 class LogoutResponse(BaseModel):
     result: str

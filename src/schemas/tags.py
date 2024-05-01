@@ -18,3 +18,7 @@ class TagSchema(BaseModel):
 
     class Config:
         use_enum_values = True
+
+
+class TagResponseSchema(TagSchema):
+    id: int

@@ -23,6 +23,7 @@ from src.routes import (
     images,
     frontend,
     healthchecker_db,
+    tags_images,
     )
 
 
@@ -52,6 +53,7 @@ app.include_router(auth.router, prefix="/api")
 app.include_router(images.router, prefix="/api")
 app.include_router(comments.router, prefix="/api")
 app.include_router(tags.router, prefix="/api")
+app.include_router(tags_images.router, prefix="/api")
 app.include_router(frontend.router)
 
 

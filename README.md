@@ -11,4 +11,4 @@
 3. **Uvicorn main:app --reload:**
    Запустити сервер:
    ```bash
-   uvicorn main:app --reload
+   python main.py

@@ -19,7 +19,7 @@ router = APIRouter(prefix="/comments", tags=["comments"])
 
 
 @router.post(
-    "/create", response_model=CommentResponseSchema, status_code=status.HTTP_201_CREATED
+    "/create/{comment_id}", response_model=CommentResponseSchema, status_code=status.HTTP_201_CREATED
 )
 async def create_comment_route(
     image_id: int,
@@ -48,7 +48,7 @@ async def create_comment_route(
     return comment
 
 
-@router.put("/edit/{comment_id}/", response_model=CommentResponseSchema)
+@router.put("/edit/{comment_id}", response_model=CommentResponseSchema)
 async def edit_comment_route(
     comment_id: int,
     body: CommentSchema,
@@ -76,7 +76,7 @@ async def edit_comment_route(
     return comment
 
 
-@router.delete("/delete/{comment_id}/", response_model=CommentResponseSchema)
+@router.delete("/delete/{comment_id}", response_model=CommentResponseSchema)
 async def delete_comment_route(
     comment_id: int,
     db: AsyncSession = Depends(get_db),
@@ -96,7 +96,7 @@ async def delete_comment_route(
     return comment
 
 
-@router.get("/{comment_id}/", response_model=CommentResponseSchema)
+@router.get("/{comment_id}", response_model=CommentResponseSchema)
 async def get_comment_route(
     comment_id: int,
     db: AsyncSession = Depends(get_db),
