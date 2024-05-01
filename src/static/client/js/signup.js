@@ -1,47 +1,45 @@
-function validateForm(event) {
-  event.preventDefault();
-  const form = event.target;
+const form = document.getElementById("signup-form");
+form?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  // const payload = new FormData(form);
+  // console.log([...payload]);
+
+  const prePayload = new FormData(form);
+  const payload = new URLSearchParams(prePayload);
+  console.log("payload: ", [...payload]);
+
   const nickname = form.nickname.value;
   const email = form.email.value;
   const password = form.password.value;
-  const URL = "/api/auth/signup";
+
   const data = {
     nickname: nickname,
     email: email,
     password: password,
   };
-
   console.log("data: ", data);
 
-  fetchSignupData(data);
-}
-console.log("URL:", URL)
-async function fetchSignupData(data, URL) {
-  try {
-    const response = await fetch(URL, {
+
+  fetch(
+    "http://0.0.0.0:8000/api/auth/signup", {
       method: "POST",
+      body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
-    });
-    console.dir("response: ", response);
-
-    if (!response.ok) {
-      throw new Error("Failed to sign up");
-    }
-
-    const result = await response.json();
-    if (response.status == 201) {
-      setTimeout(() => {
-        window.location.href = "../email_sended.html";
-      }, 500);
-    }
-    console.log("Sign up successful");
-    return result;
-  } catch (error) {
-    console.error("Error during sign up:", error);
-  }
-}
-
-document.getElementById("signup-form").addEventListener("submit", validateForm);
+    // body: payload,
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      throw new Error("Network response was not ok.");
+    })
+    .then((data) => {
+      console.log(data);
+      // Redirect to email_sended.html
+      window.location.href = "/static/client/email_sended.html";
+    })
+    .catch((err) => console.log(err));
+});
