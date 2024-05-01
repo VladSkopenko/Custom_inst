@@ -103,6 +103,7 @@ app.mount(
 # )
 # # print(f"{config.SPHINX_DIRECTORY=}")
 
+
 # Function to open the web browser
 def open_browser():
     webbrowser.open("http://localhost:8000")
@@ -113,4 +114,3 @@ if __name__ == "__main__":
     threading.Thread(target=open_browser).start()
     # Run the FastAPI application
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-
