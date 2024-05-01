@@ -1,64 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
-    <title>Contacts list</title>
-  </head>
 
-  <body
-    class="text-center d-flex h-100 text-center text-white bg-dark"
-    data-bs-theme="dark"
-  >
-    <div class="container">
-      <h2 class="text-center mt-3 mb-3">
-        Simple Javasript client for displaying a list of contact only of logged users
-      </h2>
-      <div class="row mt-3">
-        <!-- <div class="col-8">
-          <h3>List of cats</h3>
-          <ul class="list-group" id="cats">
-            <div class="alert alert-primary" role="alert">Loading...</div>
-          </ul>
-        </div> -->
-        <div class="col">
-          <h3>List of Contacts</h3>
-          <ul class="list-group" id="contacts">
-            <div class="alert alert-primary" role="alert">Loading...</div>
-          </ul>
-        </div>
+<html lang="en" class="h-100">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="" />
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors" />
+  <meta name="generator" content="Hugo 0.84.0" />
+  <title>AMICORUM_FIDES</title>
+  <link rel="icon" href="{{ url_for('static', path='/favicon.ico') }}" />
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+  <style>
+    a {
+      text-decoration: none;
+    }
+
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+  <!-- Custom styles for this template -->
+</head>
+
+<body class="d-flex h-100 text-center text-white bg-dark">
+  <div class="cover-container-sd d-flex w-100 h-100 p-3 mx-auto flex-column" style="max-width: 72em">
+    <header class="mb-auto">
+      <div>
+        <span class="float-md-start mb-0 nav-link" target="_blank" href="#">AMICORUM_FIDES</span>
+        <nav class="justify-content-center float-md-end navbar navbar-expand-lg bg-body-tertiary fw-bold">
+
+          <a class="nav-link" aria-current="page" href="static/client/logout.html">LogOut</a>
+
+          <a class="nav-link" href="https://github.com/SiracencoSerghei" target="_blank"
+            rel="noopener noreferrer">Features</a>
+          <a class="nav-link" href="https://www.linkedin.com/in/siracenco-serghei/" target="_blank"
+            rel="noopener noreferrer">Contact</a>
+        </nav>
       </div>
-      <div class="row mt-3">
-        <!-- <div class="col-8">
-          <form id="ownerCreate">
-            <div class="mb-3">
-              <label for="owner_name" class="form-label"
-                >Enter email of new owner</label
-              >
-              <input
-                type="email"
-                class="form-control"
-                id="owner_name"
-                name="email"
-                placeholder="name@example.com"
-              />
-            </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-          </form>
-        </div> -->
-        <p class="mt-5">
-          <a href="/" class="btn btn-sm btn-secondary">Home</a>
-          <a href="index.html" class="btn btn-sm btn-secondary">Login</a>
-        </p>
-      </div>
-    </div>
-    <script src="js/config.js?ver=2023120602"></script>
-    <script src="js/app.js?ver=2023120602"></script>
-  </body>
+    </header>
+
+    <main class="px-3">
+
+    </main>
+
+    <footer class="mt-auto text-white-50">
+      <p>
+        <a class="btn btn-sm btn-primary" href="https://github.com/SiracencoSerghei/" target="_blank">Goit Python WEB ©
+          AMICORUM_FIDES</a>
+      </p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+</body>
+
 </html>
