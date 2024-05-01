@@ -8,7 +8,7 @@ from src.common import detail_message
 from src.database.models import image_m2m_tag
 from src.database.models import User
 from src.repository.images import get_image
-from src.repository.tags import create_tag
+from src.repository.tags import create_tag, get_tag
 from src.schemas.tags import TagSchema
 
 
