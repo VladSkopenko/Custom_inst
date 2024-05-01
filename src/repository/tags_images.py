@@ -8,11 +8,12 @@ from src.common import detail_message
 from src.database.models import image_m2m_tag
 from src.database.models import User
 from src.repository.images import get_image
-from src.repository.tags import get_tag
+from src.repository.tags import create_tag
+from src.schemas.tags import TagSchema
 
 
 async def add_tag_to_image(
-    image_id: int, tag_name: str, db: AsyncSession, current_user: User
+    image_id: int, body: TagSchema, db: AsyncSession, current_user: User
 ):
     image = await get_image(image_id, db)
     owner_image = image.user_id
@@ -21,7 +22,7 @@ async def add_tag_to_image(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=detail_message.PERMISSION_ERROR,
         )
-    tag = await get_tag(tag_name, db, current_user)
+    tag = await create_tag(body, db, current_user)
     stmt = select(func.count(image_m2m_tag.c.tag_id)).where(
         image_m2m_tag.c.image_id == image_id
     )
