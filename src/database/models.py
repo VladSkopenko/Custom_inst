@@ -30,9 +30,6 @@ class TagType(enum.Enum):
     architecture: str = "architecture"
 
 
-
-
-
 class Image(Base):
     __tablename__ = "images"
 
@@ -51,6 +48,7 @@ class Image(Base):
         "updated_at", DateTime, default=func.now(), onupdate=func.now(), nullable=True
     )
     tags = relationship("Tag", secondary="image_m2m_tag", back_populates="images", lazy="select")
+
 
 class User(Base):
     __tablename__ = 'users'

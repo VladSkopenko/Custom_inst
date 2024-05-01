@@ -91,6 +91,13 @@ async def get_base_url(image_id: int, db: AsyncSession, current_user: User):
     return image.base_url
 
 
+async def get_all_images(db: AsyncSession):
+    stmt = select(Image)
+    res = await db.execute(stmt)
+    images = res.scalars().all()
+    return images
+
+
 async def get_transform_url(image_id: int, db: AsyncSession, current_user: User):
     stmt = select(Image).filter_by(id=image_id)
     res = await db.execute(stmt)
