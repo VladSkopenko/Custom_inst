@@ -1,4 +1,7 @@
+from io import BytesIO
+
 import cloudinary.uploader
+import qrcode
 from fastapi import APIRouter, Depends, HTTPException, status, Path
 from fastapi import (
     UploadFile,
@@ -8,11 +11,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.conf.config import config
 from src.database.db import get_db
-from src.database.models import Image, User
+from src.database.models import User
 from src.repository import images as images_repository
 from src.schemas.images import ImageSchema, ImageResponseSchema
 from src.services.auth import auth_service
-
 
 router = APIRouter(prefix='/images', tags=['images'])
 cloudinary.config(
@@ -28,8 +30,7 @@ async def load_image(body: ImageSchema = Depends(),
                      file: UploadFile = File(...),
                      db: AsyncSession = Depends(get_db),
                      current_user: User = Depends(auth_service.get_current_user)
-):
-
+                     ):
     public_id = f"Project_Web_images/{body.title}"
     upl = cloudinary.uploader.upload(file.file, public_id=public_id, owerite=True)
     base_url = cloudinary.CloudinaryImage(public_id).build_url(version=upl.get("version"))
@@ -61,7 +62,7 @@ async def update_image(image_id: int = Path(ge=1),
                        body: ImageSchema = Depends(),
                        db: AsyncSession = Depends(get_db),
                        current_user: User = Depends(auth_service.get_current_user)
-):
+                       ):
     image = await images_repository.update_image(image_id, body, db, current_user)
     if image is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -73,7 +74,7 @@ async def update_image(image_id: int = Path(ge=1),
 async def delete_image(image_id: int = Path(ge=1),
                        db: AsyncSession = Depends(get_db),
                        current_user: User = Depends(auth_service.get_current_user)
-):
+                       ):
     image = await images_repository.delete_image(image_id, db, current_user)
     if image is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -81,11 +82,11 @@ async def delete_image(image_id: int = Path(ge=1),
     return image
 
 
-@router.put('/transform/grayscale/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
-async def transform_image(image_id: int = Path(ge=1),
-                          db: AsyncSession = Depends(get_db),
-                          current_user: User = Depends(auth_service.get_current_user)
-):
+@router.post('/transform/grayscale/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
+async def create_transform_image(image_id: int = Path(ge=1),
+                                 db: AsyncSession = Depends(get_db),
+                                 current_user: User = Depends(auth_service.get_current_user)
+                                 ):
     base_url = await images_repository.get_base_url(image_id, db, current_user)
     list_base_url = base_url.split('/')
     public_id = f"{list_base_url[-2]}/{list_base_url[-1]}"
@@ -96,11 +97,11 @@ async def transform_image(image_id: int = Path(ge=1),
     return image
 
 
-@router.put('/transform/sepia/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
-async def transform_image(image_id: int = Path(ge=1),
-                          db: AsyncSession = Depends(get_db),
-                          current_user: User = Depends(auth_service.get_current_user)
-):
+@router.post('/transform/sepia/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
+async def create_transform_image(image_id: int = Path(ge=1),
+                                 db: AsyncSession = Depends(get_db),
+                                 current_user: User = Depends(auth_service.get_current_user)
+                                 ):
     base_url = await images_repository.get_base_url(image_id, db, current_user)
     list_base_url = base_url.split('/')
     public_id = f"{list_base_url[-2]}/{list_base_url[-1]}"
@@ -111,11 +112,11 @@ async def transform_image(image_id: int = Path(ge=1),
     return image
 
 
-@router.put('/transform/oil_paint/{image_id}', response_model=ImageResponseSchema,  status_code=status.HTTP_200_OK)
-async def transform_image(image_id: int = Path(ge=1),
-                          db: AsyncSession = Depends(get_db),
-                          current_user: User = Depends(auth_service.get_current_user)
-):
+@router.post('/transform/oil_paint/{image_id}', response_model=ImageResponseSchema)
+async def create_transform_image(image_id: int = Path(ge=1),
+                                 db: AsyncSession = Depends(get_db),
+                                 current_user: User = Depends(auth_service.get_current_user)
+                                 ):
     base_url = await images_repository.get_base_url(image_id, db, current_user)
     list_base_url = base_url.split('/')
     public_id = f"{list_base_url[-2]}/{list_base_url[-1]}"
@@ -123,4 +124,27 @@ async def transform_image(image_id: int = Path(ge=1),
     tr_url = cloudinary.CloudinaryImage(public_id).build_url(**transform)
 
     image = await images_repository.transform_image(image_id, tr_url, db, current_user)
+    return image
+
+
+@router.post('/qr_code/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
+async def create_qr_code(image_id: int = Path(ge=1),
+                         db: AsyncSession = Depends(get_db),
+                         current_user: User = Depends(auth_service.get_current_user)
+                         ):
+    transform_url = await images_repository.get_transform_url(image_id, db, current_user)
+
+    qr_name = transform_url.split('/')[-1].replace('%', ' ')
+    img = qrcode.make(transform_url)
+
+    img_buffer = BytesIO()
+    img.save(img_buffer, "PNG")
+    img_buffer.seek(0)
+
+    public_id = f"Project_Web_images/QR/{qr_name}"
+    upl = cloudinary.uploader.upload(img_buffer, public_id=public_id, overwrite=True)
+    qr_url = cloudinary.CloudinaryImage(public_id).build_url(version=upl.get("version"))
+    print(qr_url)
+
+    image = await images_repository.qr_code(image_id, qr_url, db, current_user)
     return image

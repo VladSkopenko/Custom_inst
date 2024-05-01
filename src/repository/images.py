@@ -96,3 +96,32 @@ async def get_all_images(db: AsyncSession):
     res = await db.execute(stmt)
     images = res.scalars().all()
     return images
+
+
+async def get_transform_url(image_id: int, db: AsyncSession, current_user: User):
+    stmt = select(Image).filter_by(id=image_id)
+    res = await db.execute(stmt)
+    image = res.scalar_one_or_none()
+    if image is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Not found image by id: {image_id}")
+
+    if image.user_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+    return image.transform_url
+
+
+async def qr_code(image_id: int, qr_url: str, db: AsyncSession, current_user: User):
+    stmt = select(Image).filter_by(id=image_id)
+    res = await db.execute(stmt)
+    image = res.scalar_one_or_none()
+
+    if image is None:
+        return None
+
+    if image.user_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+
+    image.qr_url = qr_url
+    await db.commit()
+    await db.refresh(image)
+    return image
