@@ -89,3 +89,10 @@ async def get_base_url(image_id: int, db: AsyncSession, current_user: User):
     if image.user_id != current_user.id and current_user.role not in (Role.admin, Role.moderator):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
     return image.base_url
+
+
+async def get_all_images(db: AsyncSession):
+    stmt = select(Image)
+    res = await db.execute(stmt)
+    images = res.scalars().all()
+    return images

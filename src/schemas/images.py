@@ -2,6 +2,9 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
+from src.schemas.users import UserResponse
+from src.schemas.comments import CommentResponseSchema
+
 
 class ImageSchema(BaseModel):
     title: str | None = None
@@ -9,8 +12,8 @@ class ImageSchema(BaseModel):
 
 
 class ImageResponseSchema(BaseModel):
-    id: int
-    user_id: int | None
+    id: int = 1
+    user_id: int | None = 1
     title: str | None
     base_url: str | None
     transform_url: str | None
@@ -18,6 +21,7 @@ class ImageResponseSchema(BaseModel):
     qr_url: str | None
     created_at: datetime
     updated_at: datetime
+    user: UserResponse | None
 
     class Config(ConfigDict):
         from_attributes = True

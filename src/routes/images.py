@@ -14,7 +14,6 @@ from src.schemas.images import ImageSchema, ImageResponseSchema
 from src.services.auth import auth_service
 
 
-
 router = APIRouter(prefix='/images', tags=['images'])
 cloudinary.config(
     cloud_name=config.CLOUDINARY_NAME,
@@ -40,7 +39,15 @@ async def load_image(body: ImageSchema = Depends(),
     return image
 
 
-@router.get('/{image_id}', response_model=ImageResponseSchema)
+@router.get('/all', response_model=list[ImageResponseSchema], status_code=status.HTTP_200_OK)
+async def get_all_images(db: AsyncSession = Depends(get_db)):
+    images = await images_repository.get_all_images(db)
+    if images is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Images not found")
+    return images
+
+
+@router.get('/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
 async def get_image(image_id: int = Path(ge=1), db: AsyncSession = Depends(get_db)):
     image = await images_repository.get_image(image_id, db)
     if image is None:
@@ -49,7 +56,7 @@ async def get_image(image_id: int = Path(ge=1), db: AsyncSession = Depends(get_d
     return image
 
 
-@router.put('/{image_id}', response_model=ImageResponseSchema)
+@router.put('/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
 async def update_image(image_id: int = Path(ge=1),
                        body: ImageSchema = Depends(),
                        db: AsyncSession = Depends(get_db),
@@ -62,7 +69,7 @@ async def update_image(image_id: int = Path(ge=1),
     return image
 
 
-@router.delete('/{image_id}', response_model=ImageResponseSchema)
+@router.delete('/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
 async def delete_image(image_id: int = Path(ge=1),
                        db: AsyncSession = Depends(get_db),
                        current_user: User = Depends(auth_service.get_current_user)
@@ -74,7 +81,7 @@ async def delete_image(image_id: int = Path(ge=1),
     return image
 
 
-@router.put('/transform/grayscale/{image_id}', response_model=ImageResponseSchema)
+@router.put('/transform/grayscale/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
 async def transform_image(image_id: int = Path(ge=1),
                           db: AsyncSession = Depends(get_db),
                           current_user: User = Depends(auth_service.get_current_user)
@@ -89,7 +96,7 @@ async def transform_image(image_id: int = Path(ge=1),
     return image
 
 
-@router.put('/transform/sepia/{image_id}', response_model=ImageResponseSchema)
+@router.put('/transform/sepia/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
 async def transform_image(image_id: int = Path(ge=1),
                           db: AsyncSession = Depends(get_db),
                           current_user: User = Depends(auth_service.get_current_user)
@@ -104,7 +111,7 @@ async def transform_image(image_id: int = Path(ge=1),
     return image
 
 
-@router.put('/transform/oil_paint/{image_id}', response_model=ImageResponseSchema)
+@router.put('/transform/oil_paint/{image_id}', response_model=ImageResponseSchema,  status_code=status.HTTP_200_OK)
 async def transform_image(image_id: int = Path(ge=1),
                           db: AsyncSession = Depends(get_db),
                           current_user: User = Depends(auth_service.get_current_user)
