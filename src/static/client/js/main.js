@@ -37,8 +37,6 @@ form?.addEventListener("submit", async (e) => {
     })
     .catch((err) => {
       console.log("ERROR", err);
-      setTimeout(() => {
-        window.location = "index.html?error=login";
-      }, 500);
+      alert(`${err}`)
     });
 });

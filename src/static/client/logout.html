@@ -21,6 +21,7 @@
             }
         }
     </style>
+    <link rel="icon" href="{{ url_for('static', path='/favicon.ico') }}" />
     <link href="css/signup.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <title>Log Out</title>
@@ -28,17 +29,15 @@
 
 <body class="text-center d-flex h-100 text-center text-white bg-dark" data-bs-theme="dark">
     <main class="form-signup">
-        <form class="mb-5">
             <img class="mb-4" src="images/logo-1.png" alt="Logo Fox" height="169">
-            <h1 class="h3 mb-3 fw-normal ">Log Out</h1>
             <p  class="mt-5 mb-3 fs-2 fw-bolder">Are you sure you want to logout?</p>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Logout</button>
-        </form>
-        <a href="/" class="btn btn-sm btn-secondary">Home</a>
-        <p class="mt-5 mb-3 text-muted">2024 &copy; AMICORUM_FIDES</p>
+            <button id="logout-btn" class="w-100 btn btn-lg btn-primary" type="button">Logout</button>
+    
+        <a href="./main.html" class="mt-5 mb-3 btn btn-sm btn-secondary">Back</a>
+        <p class=" text-muted">2024 &copy; AMICORUM_FIDES</p>
     </main>
-    <script src="js/config.js?ver=2023120602"></script>
-    <script src="js/main.js?ver=2023120602"></script>
+    <script src="./js/config.js"></script>
+    <script src="./js/logout.js"></script>
 </body>
 
 </html>
