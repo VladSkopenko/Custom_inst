@@ -77,11 +77,9 @@ class TestAsyncContacts(unittest.IsolatedAsyncioTestCase):
         mocked_tag = MagicMock()
         mocked_tag.scalar_one_or_none.return_value = None
         self.db.execute.return_value = mocked_tag
-        with self.assertRaises(HTTPException) as context:
-            await get_tag(tag_name, self.db, self.user)
+        result = await get_tag(tag_name, self.db, self.user)
 
-        self.assertEqual(context.exception.status_code, 404)
-        self.assertEqual(context.exception.detail, detail_message.FILE_NOT_FOUND)
+        self.assertEqual(result, None)
 
     async def test_create_tag_exist(self):
         """

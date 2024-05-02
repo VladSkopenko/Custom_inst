@@ -26,10 +26,7 @@ async def get_tag(tag_name: str, db: AsyncSession, current_user: User):
     tag = existing_tag.scalar_one_or_none()
     if tag:
         return tag
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=detail_message.FILE_NOT_FOUND
-        )
+
 
 
 async def create_tag(body: TagSchema, db: AsyncSession, current_user: User):
