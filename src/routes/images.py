@@ -15,6 +15,7 @@ from src.database.models import User
 from src.repository import images as images_repository
 from src.schemas.images import ImageSchema, ImageResponseSchema
 from src.services.auth import auth_service
+from src.utils.watermark import watermark
 
 router = APIRouter(prefix='/images', tags=['images'])
 cloudinary.config(
@@ -34,7 +35,6 @@ async def load_image(body: ImageSchema = Depends(),
     public_id = f"Project_Web_images/{body.title}"
     upl = cloudinary.uploader.upload(file.file, public_id=public_id, owerite=True)
     base_url = cloudinary.CloudinaryImage(public_id).build_url(version=upl.get("version"))
-    print(base_url)
 
     image = await images_repository.create_image(body, base_url, db, current_user)
     return image
@@ -123,6 +123,18 @@ async def create_transform_image(image_id: int = Path(ge=1),
     transform = {'effect': 'oil_paint'}
     tr_url = cloudinary.CloudinaryImage(public_id).build_url(**transform)
 
+    image = await images_repository.transform_image(image_id, tr_url, db, current_user)
+    return image
+
+
+@router.post('/transform/watermark/{image_id}', response_model=ImageResponseSchema, status_code=status.HTTP_200_OK)
+async def create_transform_image(image_id: int = Path(ge=1),
+                                 db: AsyncSession = Depends(get_db),
+                                 current_user: User = Depends(auth_service.get_current_user)
+                                 ):
+    url = await images_repository.get_transform_url(image_id, db, current_user)
+
+    tr_url = await watermark(url, current_user.nickname)
     image = await images_repository.transform_image(image_id, tr_url, db, current_user)
     return image
 

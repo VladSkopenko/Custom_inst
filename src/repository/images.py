@@ -12,6 +12,7 @@ async def create_image(body: ImageSchema, base_url: str, db: AsyncSession, curre
     if image.title is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Title is required")
     image.base_url = base_url
+    image.transform_url = base_url
     image.user_id = current_user.id
     db.add(image)
     await db.commit()
