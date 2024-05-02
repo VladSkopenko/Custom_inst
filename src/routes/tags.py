@@ -6,12 +6,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.common import detail_message
 from src.database.db import get_db
-from src.database.models import User, Role
+from src.database.models import Role
+from src.database.models import User
 from src.repository.tags import create_tag
 from src.repository.tags import delete_tag
 from src.repository.tags import get_tag
-from src.schemas.tags import TagSchema
 from src.schemas.tags import TagResponseSchema
+from src.schemas.tags import TagSchema
 from src.schemas.tags import TagTypeChoices
 from src.services.auth import auth_service
 from src.services.roles import RoleAccess
@@ -50,7 +51,11 @@ async def create_tag_router(
     return tag
 
 
-@router.delete("/delete/{tag_id}", response_model=TagSchema,dependencies=[Depends(access_to_route_delete)])
+@router.delete(
+    "/delete/{tag_id}",
+    response_model=TagSchema,
+    dependencies=[Depends(access_to_route_delete)],
+)
 async def delete_tag_route(
     tag_id: int,
     db: AsyncSession = Depends(get_db),

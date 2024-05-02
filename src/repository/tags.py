@@ -16,6 +16,10 @@ async def get_tag(tag_name: str, db: AsyncSession, current_user: User):
     tag = existing_tag.scalar_one_or_none()
     if tag:
         return tag
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=detail_message.FILE_NOT_FOUND
+        )
 
 
 async def create_tag(body: TagSchema, db: AsyncSession, current_user: User):
@@ -31,11 +35,6 @@ async def create_tag(body: TagSchema, db: AsyncSession, current_user: User):
 
 
 async def delete_tag(tag_id: int, db: AsyncSession, current_user: User):
-    # if current_user.role not in (Role.admin, Role.moderator):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_403_FORBIDDEN,
-    #         detail=detail_message.PERMISSION_ERROR,
-    #     )
     stmt = select(Tag).where(Tag.id == tag_id)
     existing_tag = await db.execute(stmt)
     tag = existing_tag.scalar_one_or_none()
