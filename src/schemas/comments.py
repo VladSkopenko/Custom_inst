@@ -10,9 +10,9 @@ class CommentSchema(BaseModel):
 
 
 class CommentResponseSchema(BaseModel):
-    id: int
-    user_id: int
-    image_id: int
+    id: int = 1
+    user_id: int = 1
+    image_id: int = 1
     comment: str
     created_at: datetime
     updated_at: datetime

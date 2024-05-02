@@ -3,7 +3,6 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
 from src.schemas.users import UserResponse
-from src.schemas.comments import CommentResponseSchema
 
 
 class ImageSchema(BaseModel):
