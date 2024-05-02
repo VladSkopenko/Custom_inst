@@ -14,6 +14,7 @@ import uvicorn
 
 from src.conf.config import config
 from src.database.db import get_db, get_redis, check_redis
+from src.routes import likes
 from src.routes import tags
 from src.utils.logger import logger, handler
 from src.utils.staticfilescache import StaticFilesCache
@@ -48,12 +49,24 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 app.include_router(healthchecker_db.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
 app.include_router(images.router, prefix="/api")
 app.include_router(comments.router, prefix="/api")
 app.include_router(tags.router, prefix="/api")
 app.include_router(tags_images.router, prefix="/api")
+app.include_router(likes.router, prefix="/api")
 app.include_router(frontend.router)
 
 
@@ -68,17 +81,6 @@ async def startup():
             times=config.RATE_LIMITER_TIMES, seconds=config.RATE_LIMITER_SECONDS
         )
         logger.debug("startup done")
-
-origins = ["*"]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 
 async def get_limit():
     return None

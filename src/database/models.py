@@ -1,7 +1,19 @@
 import enum
 from datetime import date
-
-from sqlalchemy import String, ForeignKey, DateTime, func, Enum, Boolean, Table, Column, Integer, Text, text
+from sqlalchemy import UniqueConstraint
+from sqlalchemy import (
+    String,
+    ForeignKey,
+    DateTime,
+    func,
+    Enum,
+    Boolean,
+    Table,
+    Column,
+    Integer,
+    Text,
+    text,
+)
 from sqlalchemy.orm import DeclarativeBase, relationship
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -47,35 +59,39 @@ class Image(Base):
     updated_at: Mapped[date] = mapped_column(
         "updated_at", DateTime, default=func.now(), onupdate=func.now(), nullable=True
     )
-    tags = relationship("Tag", secondary="image_m2m_tag", back_populates="images", lazy="select")
+    tags = relationship(
+        "Tag", secondary="image_m2m_tag", back_populates="images", lazy="select"
+    )
 
 
 class User(Base):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     nickname: Mapped[str] = mapped_column(String(255), nullable=False)
     email: Mapped[str] = mapped_column(String(100), nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
-    role: Mapped[Enum] = mapped_column('role', Enum(Role), default=Role.user)
+    role: Mapped[Enum] = mapped_column("role", Enum(Role), default=Role.user)
     refresh_token: Mapped[str] = mapped_column(String(255), nullable=True)
-    is_active: Mapped[bool] = mapped_column('is_active', Boolean, default=True)
-    confirmed: Mapped[bool] = mapped_column('confirmed', Boolean, default=False)
-    created_at: Mapped[date] = mapped_column('created_at', DateTime, default=func.now())
-    updated_at: Mapped[date] = mapped_column('updated_at', DateTime, default=func.now(), onupdate=func.now(),
-                                             nullable=True)
+    is_active: Mapped[bool] = mapped_column("is_active", Boolean, default=True)
+    confirmed: Mapped[bool] = mapped_column("confirmed", Boolean, default=False)
+    created_at: Mapped[date] = mapped_column("created_at", DateTime, default=func.now())
+    updated_at: Mapped[date] = mapped_column(
+        "updated_at", DateTime, default=func.now(), onupdate=func.now(), nullable=True
+    )
 
 
 class Comment(Base):
-    __tablename__ = 'comments'
+    __tablename__ = "comments"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)
-    image_id: Mapped[int] = mapped_column(ForeignKey('images.id'), nullable=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=True)
+    image_id: Mapped[int] = mapped_column(ForeignKey("images.id"), nullable=True)
     comment: Mapped[str] = mapped_column(String(255), nullable=False)
-    created_at: Mapped[date] = mapped_column('created_at', DateTime, default=func.now())
-    updated_at: Mapped[date] = mapped_column('updated_at', DateTime, default=func.now(), onupdate=func.now(),
-                                             nullable=True)
+    created_at: Mapped[date] = mapped_column("created_at", DateTime, default=func.now())
+    updated_at: Mapped[date] = mapped_column(
+        "updated_at", DateTime, default=func.now(), onupdate=func.now(), nullable=True
+    )
     answer: Mapped[str] = mapped_column(String(255), nullable=True)
 
     image: Mapped["Image"] = relationship("Image", backref="comments")
@@ -83,26 +99,30 @@ class Comment(Base):
 
 
 class UserInfo(Base):
-    __tablename__ = 'users_info'
+    __tablename__ = "users_info"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    born_date: Mapped[date] = mapped_column('born_date', DateTime, nullable=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    born_date: Mapped[date] = mapped_column("born_date", DateTime, nullable=True)
     avatar: Mapped[str] = mapped_column(String(255), nullable=True)
-    gender: Mapped[Enum] = mapped_column('sex', Enum(Gender), nullable=True)
-    created_at: Mapped[date] = mapped_column('created_at', DateTime, default=func.now())
-    updated_at: Mapped[date] = mapped_column('updated_at', DateTime, default=func.now(), onupdate=func.now(),
-                                             nullable=True)
+    gender: Mapped[Enum] = mapped_column("sex", Enum(Gender), nullable=True)
+    created_at: Mapped[date] = mapped_column("created_at", DateTime, default=func.now())
+    updated_at: Mapped[date] = mapped_column(
+        "updated_at", DateTime, default=func.now(), onupdate=func.now(), nullable=True
+    )
 
 
 class BanList(Base):
-    __tablename__ = 'ban_list'
+    __tablename__ = "ban_list"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    banned_at: Mapped[date] = mapped_column('created_at', DateTime, default=func.now(), nullable=True)
-    unbanned_at: Mapped[date] = mapped_column('updated_at', DateTime, default=func.now(), onupdate=func.now(),
-                                              nullable=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    banned_at: Mapped[date] = mapped_column(
+        "created_at", DateTime, default=func.now(), nullable=True
+    )
+    unbanned_at: Mapped[date] = mapped_column(
+        "updated_at", DateTime, default=func.now(), onupdate=func.now(), nullable=True
+    )
 
 
 class Tag(Base):
@@ -111,16 +131,18 @@ class Tag(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     tag_name: Mapped[str] = mapped_column(String(60), nullable=False)
     tag_type: Mapped[Enum] = mapped_column("tag_type", Enum(TagType), nullable=False)
-    images = relationship("Image", secondary="image_m2m_tag", back_populates="tags", lazy="select")
+    images = relationship(
+        "Image", secondary="image_m2m_tag", back_populates="tags", lazy="select"
+    )
 
 
 class ImageLike(Base):
-    __tablename__ = 'images_likes'
+    __tablename__ = "images_likes"
 
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    image_id: Mapped[int] = mapped_column(ForeignKey('images.id'))
-    grade: Mapped[int] = mapped_column(Integer, nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    image_id = Column(Integer, ForeignKey("images.id"), primary_key=True)
+    grade = Column(Integer, nullable=False)
+    __table_args__ = (UniqueConstraint("user_id", "image_id"),)
 
 
 image_m2m_tag = Table(
@@ -129,3 +151,4 @@ image_m2m_tag = Table(
     Column("image_id", Integer, ForeignKey("images.id")),
     Column("tag_id", Integer, ForeignKey("tags.id")),
 )
+

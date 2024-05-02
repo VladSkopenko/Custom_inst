@@ -32,7 +32,7 @@ form?.addEventListener("submit", async (e) => {
   })
     .then((res) => {
       if (res.ok) {
-        return res.json();
+      return res.json();
       }
       throw new Error("Network response was not ok.");
     })
