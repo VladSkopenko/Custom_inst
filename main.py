@@ -48,6 +48,17 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 app.include_router(healthchecker_db.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
 app.include_router(images.router, prefix="/api")
@@ -68,17 +79,6 @@ async def startup():
             times=config.RATE_LIMITER_TIMES, seconds=config.RATE_LIMITER_SECONDS
         )
         logger.debug("startup done")
-
-origins = ["*"]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 
 async def get_limit():
     return None
