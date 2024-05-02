@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch(ALL_IMG_URL)
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             // Reference to the <ul> element
             const galleryList = document.getElementById('js-list');
 
