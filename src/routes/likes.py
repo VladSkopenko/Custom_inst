@@ -38,4 +38,6 @@ async def add_grade_to_image_route(
 async def get_image_rating(image_id: int, db: AsyncSession = Depends(get_db)):
 
     image = await get_current_rating(image_id, db)
-    return {"rating": image}
+    return {"rating": image,
+            'image': image_id,
+            }

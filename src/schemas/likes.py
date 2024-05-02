@@ -15,3 +15,4 @@ class LikeResponseSchema(BaseModel):
 
 class ImageRating(BaseModel):
     rating: float
+    image: int
