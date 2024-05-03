@@ -16,6 +16,7 @@ from src.database.db import get_db
 from src.database.models import User
 from src.repository import images as images_repository
 from src.repository.comments import get_comments_by_image
+from src.repository.tags_images import get_data_image
 from src.repository.tags_images import get_tags_by_image
 from src.schemas.images import ImageResponseSchema
 from src.schemas.images import ImageSchema
@@ -61,31 +62,19 @@ async def get_all_images(db: AsyncSession = Depends(get_db)):
         )
     all_image_data = []
     for image in images:
-        tags = await get_tags_by_image(image.id, db)
-        comments = await get_comments_by_image(image.id, db)
-        rating = await get_current_rating(image.id, db)
-        data_image = {
-            "image": image,
-            "tags_id": tags,
-            "comments_info": comments,
-            "rating": rating
-        }
+        data_image = await get_data_image(image.id, db)
         all_image_data.append(data_image)
     return all_image_data
 
 
 @router.get("/{image_id}", status_code=status.HTTP_200_OK)
 async def get_image(image_id: int = Path(ge=1), db: AsyncSession = Depends(get_db)):
-    image = await images_repository.get_image(image_id, db)
-    tags = await get_tags_by_image(image_id, db)
-    comments = await get_comments_by_image(image_id, db)
-    rating = await get_current_rating(image_id, db)
-    if image is None:
+    data_image = await get_data_image(image_id, db)
+    if data_image is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Image with id {image_id} not found",
         )
-    data_image = {"image": image, "tags_id": tags, "comments_info": comments, "rating": rating}
     return data_image
 
 

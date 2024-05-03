@@ -7,7 +7,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.common import detail_message
 from src.database.models import image_m2m_tag
 from src.database.models import User
+from src.repository.comments import get_comments_by_image
 from src.repository.images import get_image
+from src.repository.likes import get_current_rating
 from src.repository.tags import create_tag, get_tag
 from src.schemas.tags import TagSchema
 
@@ -67,3 +69,17 @@ async def get_tags_by_image(image_id: int, db: AsyncSession):
     stmt = select(image_m2m_tag.c.tag_id).where(image_m2m_tag.c.image_id == image_id)
     result = await db.execute(stmt)
     return result.scalars().all()
+
+
+async def get_data_image(image_id: int, db: AsyncSession):
+    image = await get_image(image_id, db)
+    comments = await get_comments_by_image(image_id, db)
+    tags = await get_tags_by_image(image_id, db)
+    rating = await get_current_rating(image_id, db)
+    data_image = {
+        "image": image,
+        "tags_id": tags,
+        "comments_info": comments,
+        "rating": rating,
+    }
+    return data_image
