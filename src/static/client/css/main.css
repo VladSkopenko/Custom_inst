@@ -2,7 +2,8 @@
 .cards__photo {
     margin: 0 auto;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
 
     @media screen and (min-width: 768px) {
@@ -67,10 +68,10 @@
 
     @media screen and (min-width: 1280px) {
         flex-basis: calc((100% - 32px) / 3);
-    }
+}
 
-    &-image__wrapper {
-        overflow: hidden;
+.photo-image__wrapper {
+    overflow: hidden;
         margin-bottom: 10px;
 
         width: 280px;
@@ -79,7 +80,7 @@
         transition: transform 250ms $time-function;
 
         @media screen and (max-width: $phone) {
-            width: 100%;
+    width: 100%;
             height: auto;
         }
 
@@ -93,9 +94,14 @@
             width: 395px;
             height: 574px;
             margin-bottom: 12px;
-        }
-    }
 }
+    }
+.photo-image__wrapper img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+    
 .photo__title {
     font-weight: 500;
     font-size: 12px;
@@ -121,17 +127,13 @@
     }
 }
 .photo__description {
-    font-weight: 500;
-    font-size: 12px;
-    line-height: calc(16 / 12);
-    color: #b92f2c;
-    margin-right: 5px;
-
-    @media screen and (min-width: 1280px) {
-        font-size: 20px;
-        line-height: calc(24 / 20);
-    }
+    flex-grow: 1;
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
 .photo__year {
     font-weight: 500;
     font-size: 12px;

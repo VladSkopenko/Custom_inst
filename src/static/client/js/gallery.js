@@ -27,7 +27,7 @@ function render_gallery(photos_data) {
             description,
             qr_url,
             created_at,
-            updated_ad,
+            updated_at,
             user
         } = photo;
         let photoTitle = title;
@@ -36,15 +36,20 @@ function render_gallery(photos_data) {
             photoTitle.length > maxCharactersPerPhotoTitle
                 ? photoTitle.slice(0, maxCharactersPerPhotoTitle) + '...'
                 : photoTitle;
+        const createdDate = new Date(created_at);
+        const formattedCreatedDate = `${createdDate.getDate().toString().padStart(2, '0')}-${(createdDate.getMonth() + 1).toString().padStart(2, '0')}-${createdDate.getFullYear()}`;
+        const updatedDate = new Date(updated_at);
+        const formattedUpdatedDate = `${updatedDate.getDate().toString().padStart(2, '0')}-${(updatedDate.getMonth() + 1).toString().padStart(2, '0')}-${updatedDate.getFullYear()}`;
         return `<li class="photo" data-id=${id}>
   <div class = "photo-image__wrapper">
-  <img src="${base_url}" alt="${title}"/></div>
+  <img src="${base_url}" alt="${title}" data-updated_at=${formattedUpdatedDate} data-qr_url=${qr_url} data-transform_url=${transform_url}/>
+  </div>
   <p class="photo__title">${photoTitle}</p>
-  <p class="photo__user" user-id=${user_id}>${user.nickname}</p>
+  <p class="photo__user" user-id=${user_id} data-user=${user}>${user.nickname}</p>
   <div class="photo__position">
    <p class="photo__description">${description}</p>
   <p class="photo__description">|</p>
-  <p class="photo__year">${created_at}</p>
+  <p class="photo__year">${formattedCreatedDate}</p>
   </div>
  
   </li>
@@ -54,5 +59,6 @@ function render_gallery(photos_data) {
     document.querySelector('#js-list').innerHTML = markup;
 
 }
+
 
 
