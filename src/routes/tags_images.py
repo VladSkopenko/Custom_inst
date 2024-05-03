@@ -13,7 +13,7 @@ from src.services.auth import auth_service
 router = APIRouter(prefix="/tags_images", tags=["tags_images"])
 
 
-@router.post("/images/{image_id}/tags/{tag_name}",  response_model=TagSchema, status_code=201,)
+@router.post("/images/{image_id}/tags/{tag_name}", status_code=201)
 async def add_tag_to_image_route(
     image_id: int,
     body: TagSchema,

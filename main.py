@@ -25,7 +25,7 @@ from src.routes import (
     frontend,
     healthchecker_db,
     tags_images,
-    )
+)
 
 
 logger.addHandler(handler)
@@ -33,6 +33,7 @@ static_files_path = os.path.join(os.path.dirname(__file__), "src", "static")
 
 if not static_files_path:
     raise RuntimeError("STATIC_DIRECTORY does not exist")
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -82,12 +83,14 @@ async def startup():
         )
         logger.debug("startup done")
 
+
 async def get_limit():
     return None
 
 
 async def deny_get_redis():
     return None
+
 
 static_dir: pathlib.Path = pathlib.Path(config.STATIC_DIRECTORY)
 static_files_path = os.path.join(os.path.dirname(__file__), "src", "static")
