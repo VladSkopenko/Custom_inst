@@ -37,7 +37,7 @@ async def add_grade_to_image_route(
 @router.get("/rating/{image_id}", response_model=ImageRating, status_code=status.HTTP_200_OK)
 async def get_image_rating(image_id: int, db: AsyncSession = Depends(get_db)):
 
-    image = await get_current_rating(image_id, db)
-    return {"rating": image,
+    rating = await get_current_rating(image_id, db)
+    return {"rating": rating,
             'image': image_id,
             }
