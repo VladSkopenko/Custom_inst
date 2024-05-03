@@ -61,3 +61,9 @@ async def remove_tag_from_image(
         return detail_message.REMOVE_TAG_SUCCESS
     else:
         return detail_message.FILE_NOT_FOUND
+
+
+async def get_tags_by_image(image_id: int, db: AsyncSession):
+    stmt = select(image_m2m_tag.c.tag_id).where(image_m2m_tag.c.image_id == image_id)
+    result = await db.execute(stmt)
+    return result.scalars().all()

@@ -6,7 +6,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.common import detail_message
 from src.database.db import get_db
-from src.database.models import User, Role
+from src.database.models import Role
+from src.database.models import User
 from src.repository.comments import create_comment
 from src.repository.comments import delete_comment
 from src.repository.comments import edit_comment
@@ -22,7 +23,9 @@ access_to_route_delete = RoleAccess([Role.admin, Role.moderator])
 
 
 @router.post(
-    "/create/{comment_id}", response_model=CommentResponseSchema, status_code=status.HTTP_201_CREATED
+    "/create/{comment_id}",
+    response_model=CommentResponseSchema,
+    status_code=status.HTTP_201_CREATED,
 )
 async def create_comment_route(
     image_id: int,
@@ -79,7 +82,11 @@ async def edit_comment_route(
     return comment
 
 
-@router.delete("/delete/{comment_id}", response_model=CommentResponseSchema, dependencies=[Depends(access_to_route_delete)])
+@router.delete(
+    "/delete/{comment_id}",
+    response_model=CommentResponseSchema,
+    dependencies=[Depends(access_to_route_delete)],
+)
 async def delete_comment_route(
     comment_id: int,
     db: AsyncSession = Depends(get_db),

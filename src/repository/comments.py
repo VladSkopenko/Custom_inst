@@ -118,3 +118,10 @@ async def get_comment(comment_id: int, db: AsyncSession):
         return comment
     else:
         raise HTTPException(status_code=404, detail=detail_message.FILE_NOT_FOUND)
+
+
+async def get_comments_by_image(image_id: int, db: AsyncSession):
+    stmt = select(Comment).filter(Comment.image_id == image_id)
+    result = await db.execute(stmt)
+    comments = result.scalars().all()
+    return comments
