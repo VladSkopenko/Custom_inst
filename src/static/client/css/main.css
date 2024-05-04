@@ -1,4 +1,15 @@
 
+.error_localstorage {
+    font-size: 20px;
+    color: #00000096;
+    text-align: center;
+    margin: 50px auto;
+
+    @media screen and (min-width: 768px) {
+        margin: 100px auto;
+    }
+}
+
 .cards__photo {
     margin: 0 auto;
     display: flex;

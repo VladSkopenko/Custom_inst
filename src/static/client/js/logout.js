@@ -1,11 +1,21 @@
-// Ensure LOGOUT_URL is defined properly
 const LOGOUT_URL = `${BASE_URL}/api/auth/logout`;
 
 // Function to handle logout
 const logout = () => {
-    // Send POST request to logout endpoint
-    fetch(LOGOUT_URL)
-        .then(response => response.json())
+    const currentUrl = window.location.href;
+    console.log(currentUrl);
+
+    console.log('Logout_url: ', LOGOUT_URL)
+    const accessToken = localStorage.getItem('access_token');
+    fetch(LOGOUT_URL, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`, // Include the access token in the Authorization header
+            'Content-Type': 'application/json' // Specify the content type
+        },
+        body: JSON.stringify({}) // Empty body for the POST request
+    })
+        .then(response => console.log(response.json()))
         .then(data => {
             // Clear access token, refresh token, and username from local storage
             localStorage.removeItem('access_token');
@@ -15,11 +25,14 @@ const logout = () => {
             localStorage.setItem('logged', 'false');
             // Redirect to index.html
             window.location.href = "/";
+            // Log success message to console
+            console.log('Logged out successfully');
+            
         })
         .catch(error => console.error('Error logging out:', error));
 };
 
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
     // Attach logout function to logout button click event
     document.getElementById("logout-btn").addEventListener("click", logout);
 });
