@@ -28,7 +28,6 @@ async def get_tag(tag_name: str, db: AsyncSession, current_user: User):
         return tag
 
 
-
 async def create_tag(body: TagSchema, db: AsyncSession, current_user: User):
     """
     The create_tag function creates a new tag in the database.

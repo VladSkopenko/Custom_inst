@@ -14,6 +14,7 @@ from src.repository.comments import create_comment
 from src.repository.comments import delete_comment
 from src.repository.comments import edit_comment
 from src.repository.comments import get_comment
+from src.repository.comments import get_comments_by_image
 from src.schemas.comments import CommentSchema
 
 
@@ -39,6 +40,7 @@ class TestAsyncContacts(unittest.IsolatedAsyncioTestCase):
         self.session = AsyncMock(spec=AsyncSession)
         self.image = Image(
             id=1,
+            user_id=1,
         )
 
     async def test_create_comment(self):
@@ -229,16 +231,15 @@ class TestAsyncContacts(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(context.exception.detail, detail_message.FILE_NOT_FOUND)
 
     async def test_get_comment(self):
-
         """
-    The test_get_comment function tests the get_comment function in the comments.py file.
-    It does this by creating a mocked comment object, and then using that to test whether or not
-    the get_comment function returns an instance of Comment.
+        The test_get_comment function tests the get_comment function in the comments.py file.
+        It does this by creating a mocked comment object, and then using that to test whether or not
+        the get_comment function returns an instance of Comment.
 
-    :param self: Represent the instance of the object that is passed to the method when it is called
-    :return: A comment object from the database
-    :doc-author: Trelent
-    """
+        :param self: Represent the instance of the object that is passed to the method when it is called
+        :return: A comment object from the database
+        :doc-author: Trelent
+        """
         id_ = 1
         comment = Comment(id=1, comment="test", image_id=1, user_id=1)
         mocked_comment = MagicMock()
@@ -249,18 +250,17 @@ class TestAsyncContacts(unittest.IsolatedAsyncioTestCase):
         self.assertIsInstance(result, Comment)
 
     async def test_get_nonexistent_comment(self):
-
         """
-    The test_get_nonexistent_comment function tests the get_comment function in the comments.py file.
-    The test_get_nonexistent_comment function is a coroutine that takes two arguments: self and id_.
-    The test uses an assertRaises context manager to check if an HTTPException is raised when trying to
-    retrieve a comment with an ID that does not exist in the database. The status code of this exception should be 404,
-    and its detail message should be FILE NOT FOUND.
+        The test_get_nonexistent_comment function tests the get_comment function in the comments.py file.
+        The test_get_nonexistent_comment function is a coroutine that takes two arguments: self and id_.
+        The test uses an assertRaises context manager to check if an HTTPException is raised when trying to
+        retrieve a comment with an ID that does not exist in the database. The status code of this exception should be 404,
+        and its detail message should be FILE NOT FOUND.
 
-    :param self: Represent the instance of the class
-    :return: 404 status code and file_not_found detail message
-    :doc-author: Trelent
-    """
+        :param self: Represent the instance of the class
+        :return: 404 status code and file_not_found detail message
+        :doc-author: Trelent
+        """
         id_ = 1
         mocked_comment = MagicMock()
         mocked_comment.scalar_one_or_none.return_value = None
@@ -270,6 +270,49 @@ class TestAsyncContacts(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(context.exception.status_code, 404)
         self.assertEqual(context.exception.detail, detail_message.FILE_NOT_FOUND)
+
+    async def test_get_comment_by_image_id(self):
+
+        """
+    The test_get_comment_by_image_id function tests the get_comments_by_image function.
+    It does this by mocking a list of comments and then comparing that to the result of calling
+    get_comments_by image with an image id. If they are equal, then it passes.
+
+    :param self: Represent the instance of the object that is passed to the method when it is called
+    :return: A list of comments
+    :doc-author: Trelent
+    """
+        image_id = 1
+        comments = [
+            Comment(id=1, comment="comment1", image_id=1, user_id=1),
+            Comment(id=2, comment="comment2", image_id=1, user_id=2),
+            Comment(id=3, comment="comment3", image_id=1, user_id=5),
+            Comment(id=4, comment="comment4", image_id=1, user_id=8),
+        ]
+        mocked_comments = MagicMock()
+        mocked_comments.scalars.return_value.all.return_value = comments
+        self.session.execute.return_value = mocked_comments
+        result = await get_comments_by_image(image_id, self.session)
+        self.assertEqual(result, comments)
+        self.session.execute.assert_called_once()
+
+    async def test_get_nonexistent_comment_by_image_id(self):
+
+        """
+    The test_get_nonexistent_comment_by_image_id function tests the get_comments_by_image function.
+    It does this by mocking a session object and then calling the get_comments_by_image function with an image id that is not in the database.
+    The mocked session object returns an empty list when queried, which is what we expect to happen if there are no comments for a given image id.
+
+    :param self: Represent the instance of the class
+    :return: An empty list
+    :doc-author: Trelent
+    """
+        image_id = 1
+        mocked_comments = MagicMock()
+        mocked_comments.scalars.return_value.all.return_value = []
+        self.session.execute.return_value = mocked_comments
+        result = await get_comments_by_image(image_id, self.session)
+        self.assertEqual(result, [])
 
 
 if __name__ == "__main__":

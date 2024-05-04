@@ -121,6 +121,16 @@ async def get_comment(comment_id: int, db: AsyncSession):
 
 
 async def get_comments_by_image(image_id: int, db: AsyncSession):
+    """
+    The get_comments_by_image function takes in an image_id and a database connection,
+    and returns all comments associated with that image.
+
+
+    :param image_id: int: Specify the image_id of the comments you want to retrieve
+    :param db: AsyncSession: Pass in the database connection
+    :return: A list of comments for a given image
+    :doc-author: Trelent
+    """
     stmt = select(Comment).filter(Comment.image_id == image_id)
     result = await db.execute(stmt)
     comments = result.scalars().all()
