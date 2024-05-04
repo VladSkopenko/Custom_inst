@@ -2,15 +2,18 @@ from io import BytesIO
 from typing import Optional
 import cloudinary.uploader
 import qrcode
-from fastapi import (APIRouter, 
-                     Depends,
-                     File, 
-                     HTTPException, 
-                     Path,
-                     status,
-                     UploadFile, 
-                     Query)
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    HTTPException,
+    Path,
+    status,
+    UploadFile,
+    Query,
+)
 from sqlalchemy.ext.asyncio import AsyncSession
+
 
 from src.conf.config import config
 from src.database.db import get_db
@@ -24,6 +27,7 @@ from src.schemas.images import ImageSchema
 from src.services.auth import auth_service
 from src.utils.watermark import watermark
 from src.repository.likes import get_current_rating
+
 router = APIRouter(prefix="/images", tags=["images"])
 cloudinary.config(
     cloud_name=config.CLOUDINARY_NAME,
@@ -42,6 +46,15 @@ async def load_image(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(auth_service.get_current_user),
 ):
+    """
+    The load_image function creates a new image in the database.
+    :param body: ImageSchema: Get the data from the request body
+    :param file: UploadFile: Upload the image
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: A JSON response with the image data
+    """
+
     public_id = f"Project_Web_images/{body.title}"
     upl = cloudinary.uploader.upload(file.file, public_id=public_id, owerite=True)
     base_url = cloudinary.CloudinaryImage(public_id).build_url(
@@ -52,15 +65,20 @@ async def load_image(
     return image
 
 
-from typing import Optional
-
-
 @router.get("/all", status_code=status.HTTP_200_OK)
 async def get_all_images(
     page: Optional[int] = Query(None, ge=1),
     per_page: Optional[int] = Query(None, ge=1),
     db: AsyncSession = Depends(get_db),
 ):
+    """
+    The get_all_images function returns a list of all images in the database.
+    :param page: Optional[int]: Specify the page number
+    :param per_page: Optional[int]: Limit the number of images returned
+    :param db: AsyncSession: Pass the database session
+    :return: A list of images
+    """
+
     images = await images_repository.get_all_images(db)
     if images is None:
         raise HTTPException(
@@ -88,6 +106,13 @@ async def get_all_images(
 
 @router.get("/{image_id}", status_code=status.HTTP_200_OK)
 async def get_image(image_id: int = Path(ge=1), db: AsyncSession = Depends(get_db)):
+    """
+    The get_image function returns the image with the specified id.
+    :param image_id: int: Get the image id from the url
+    :param db: AsyncSession: Pass the database session
+    :return: A single image object
+    """
+
     data_image = await get_data_image(image_id, db)
     if data_image is None:
         raise HTTPException(
@@ -106,6 +131,15 @@ async def update_image(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(auth_service.get_current_user),
 ):
+    """
+    The update_image function updates an image in the database.
+    :param image_id: int: Specify the image id
+    :param body: ImageSchema: Get the data from the request body
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: An image JSON response
+    """
+
     image = await images_repository.update_image(image_id, body, db, current_user)
     if image is None:
         raise HTTPException(
@@ -123,6 +157,14 @@ async def delete_image(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(auth_service.get_current_user),
 ):
+    """
+    The delete_image function deletes an image from the database.
+    :param image_id: int: Specify the image id
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: An image JSON response which was deleted
+    """
+
     image = await images_repository.delete_image(image_id, db, current_user)
     if image is None:
         raise HTTPException(
@@ -142,6 +184,14 @@ async def create_transform_image(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(auth_service.get_current_user),
 ):
+    """
+    The create_transform_image function transforms an image to grayscale.
+    :param image_id: int: Specify the image id
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: An image JSON response with transformed url
+    """
+
     base_url = await images_repository.get_base_url(image_id, db, current_user)
     list_base_url = base_url.split("/")
     public_id = f"{list_base_url[-2]}/{list_base_url[-1]}"
@@ -162,6 +212,14 @@ async def create_transform_image(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(auth_service.get_current_user),
 ):
+    """
+    The create_transform_image function transforms an image to sepia.
+    :param image_id: int: Specify the image id
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: An image JSON response with transformed url
+    """
+
     base_url = await images_repository.get_base_url(image_id, db, current_user)
     list_base_url = base_url.split("/")
     public_id = f"{list_base_url[-2]}/{list_base_url[-1]}"
@@ -178,6 +236,14 @@ async def create_transform_image(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(auth_service.get_current_user),
 ):
+    """
+    The create_transform_image function transforms an image to oil paint.
+    :param image_id: int: Specify the image id
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: An image JSON response with transformed url
+    """
+
     base_url = await images_repository.get_base_url(image_id, db, current_user)
     list_base_url = base_url.split("/")
     public_id = f"{list_base_url[-2]}/{list_base_url[-1]}"
@@ -198,6 +264,14 @@ async def create_transform_image(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(auth_service.get_current_user),
 ):
+    """
+    The create_transform_image function transforms an image to watermark.
+    :param image_id: int: Specify the image id
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: An image JSON response with transformed url
+    """
+
     url = await images_repository.get_transform_url(image_id, db, current_user)
 
     tr_url = await watermark(url, current_user.nickname)
@@ -215,6 +289,14 @@ async def create_qr_code(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(auth_service.get_current_user),
 ):
+    """
+    The create_qr_code function creates a qr code for an image.
+    :param image_id: int: Specify the image id
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: An image JSON response with qr code
+    """
+
     transform_url = await images_repository.get_transform_url(
         image_id, db, current_user
     )
