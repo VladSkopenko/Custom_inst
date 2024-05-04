@@ -1,14 +1,15 @@
 from io import BytesIO
-
+from typing import Optional
 import cloudinary.uploader
 import qrcode
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import File
-from fastapi import HTTPException
-from fastapi import Path
-from fastapi import status
-from fastapi import UploadFile
+from fastapi import (APIRouter, 
+                     Depends,
+                     File, 
+                     HTTPException, 
+                     Path,
+                     status,
+                     UploadFile, 
+                     Query)
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.conf.config import config
@@ -51,20 +52,38 @@ async def load_image(
     return image
 
 
-@router.get(
-    "/all", status_code=status.HTTP_200_OK
-)
-async def get_all_images(db: AsyncSession = Depends(get_db)):
+from typing import Optional
+
+
+@router.get("/all", status_code=status.HTTP_200_OK)
+async def get_all_images(
+    page: Optional[int] = Query(None, ge=1),
+    per_page: Optional[int] = Query(None, ge=1),
+    db: AsyncSession = Depends(get_db),
+):
     images = await images_repository.get_all_images(db)
     if images is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Images not found"
         )
-    all_image_data = []
-    for image in images:
+
+    if page is None or per_page is None:
+        all_image_data = []
+        for image in images:
+            data_image = await get_data_image(image.id, db)
+            all_image_data.append(data_image)
+        return all_image_data
+
+    start_index = (page - 1) * per_page
+    end_index = start_index + per_page
+    paginated_images = images[start_index:end_index]
+
+    paginated_image_data = []
+    for image in paginated_images:
         data_image = await get_data_image(image.id, db)
-        all_image_data.append(data_image)
-    return all_image_data
+        paginated_image_data.append(data_image)
+
+    return paginated_image_data
 
 
 @router.get("/{image_id}", status_code=status.HTTP_200_OK)

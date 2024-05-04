@@ -1,12 +1,9 @@
 from fastapi import APIRouter
 from fastapi import BackgroundTasks
-from fastapi import Depends
-from fastapi import HTTPException
-from fastapi import Request
-from fastapi import status
-from fastapi.security import HTTPAuthorizationCredentials
-from fastapi.security import HTTPBearer
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import (Depends, HTTPException, Request, Response, Security, status)
+from fastapi.security import (HTTPAuthorizationCredentials,
+                              HTTPBearer,
+                              OAuth2PasswordRequestForm)
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.db import get_db
@@ -80,11 +77,10 @@ async def confirmed_email(token: str, db: AsyncSession = Depends(get_db)):
     return {"message": "Email confirmed"}
 
 
-
 @router.post('/request_email')
 async def request_email(body: RequestEmail, background_tasks: BackgroundTasks, request: Request,
                         db: AsyncSession = Depends(get_db)):
-    
+
     user = await repositories_users.get_user_by_email(body.email, db)
 
     if user.confirmed:
@@ -94,13 +90,13 @@ async def request_email(body: RequestEmail, background_tasks: BackgroundTasks, r
     return {"message": "Check your email for confirmation."}
 
 
-
-@router.post("/logout")
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
 async def logout(
     user: User = Depends(auth_service.get_current_user),
-    db: AsyncSession = Depends(get_db)
-) -> LogoutResponse:
+    db: AsyncSession = Depends(get_db),
+):
+    await repositories_users.update_token(user, "", db)
     user.refresh_token = None
     db.commit()
-
-    return {"result": "Success logout"}
+    await db.flush()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
