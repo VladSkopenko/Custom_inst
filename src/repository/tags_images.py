@@ -31,7 +31,7 @@ The add_tag_to_image function adds a tag to an image.
 :return: A string
 :doc-author: Trelent
 """
-    image = await get_image(image_id, db)
+    image = await get_image(image_id, db, mode="add_tag_to_image")
     owner_image = image.user_id
     if owner_image != current_user.id:
         raise HTTPException(

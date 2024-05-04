@@ -33,7 +33,7 @@ async def create_image(
     return image
 
 
-async def get_image(image_id: int, db: AsyncSession):
+async def get_image(image_id: int, db: AsyncSession, mode=1):
     """
     The get_image function takes in an image_id and a database session, and returns an image object if it exists.
     :param image_id: int: Specify the image you want to retrieve
@@ -46,24 +46,27 @@ async def get_image(image_id: int, db: AsyncSession):
     image = res.scalar_one_or_none()
     if image is None:
         return None
-    image_dict = {
-        "id": image.id,
-        "user_id": image.user_id,
-        "title": image.title,
-        "base_url": image.base_url,
-        "transform_url": image.transform_url,
-        "description": image.description,
-        "qr_url": image.qr_url,
-        "created_at": image.created_at,
-        "updated_at": image.updated_at,
-        "user": {
-            "id": image.user_id,
-            "nickname": image.user.nickname,
-            "created_at": image.user.created_at,
-            "role": image.user.role,
-        },
-    }
-    return image_dict
+    if mode == 1:
+        image_dict = {
+            "id": image.id,
+            "user_id": image.user_id,
+            "title": image.title,
+            "base_url": image.base_url,
+            "transform_url": image.transform_url,
+            "description": image.description,
+            "qr_url": image.qr_url,
+            "created_at": image.created_at,
+            "updated_at": image.updated_at,
+            "user": {"id": image.user_id,
+                     "nickname": image.user.nickname,
+                     "created_at": image.user.created_at,
+                     "role": image.user.role
+                     }
+            ,
+        }
+        return image_dict
+    else:
+        return image
 
 
 async def update_image(
@@ -91,8 +94,7 @@ async def update_image(
     ):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
 
-    if body.title:
-        image.title = body.title
+    image.title = body.title
     image.description = body.description
     await db.commit()
     await db.refresh(image)
