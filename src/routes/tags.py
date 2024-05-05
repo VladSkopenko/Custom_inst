@@ -26,6 +26,7 @@ access_to_route_delete = RoleAccess([Role.admin, Role.moderator])
 async def show_types():
     """
     Return list of tag types.
+
     :return: List of tag types
     """
 
@@ -40,6 +41,7 @@ async def get_tag_router(
 ):
     """
     Get tag by name.
+
     :param tag_name: str: Name of the tag
     :param db: AsyncSession: Pass the database session
     :param current_user: User: Get the current user
@@ -60,6 +62,7 @@ async def create_tag_router(
 ):
     """
     Create tag.
+
     :param body: TagSchema: Pass the tag data
     :param db: AsyncSession: Pass the database session
     :param current_user: User: Get the current user
@@ -84,6 +87,7 @@ async def delete_tag_route(
 ):
     """
     Delete tag.
+
     :param tag_id: int: Specify the tag id
     :param db: AsyncSession: Pass the database session
     :param current_user: User: Get the current user

@@ -20,13 +20,17 @@ class Auth:
     SECRET_KEY = config.SECRET_KEY_JWT
     ALGORITHM = config.ALGORITHM
 
-    cache = redis.Redis(
-        host=config.REDIS_DOMAIN,
-        port=config.REDIS_PORT,
-        db=0
-    )
+    cache = redis.Redis(host=config.REDIS_DOMAIN, port=config.REDIS_PORT, db=0)
 
     def verify_password(self, plain_password, hashed_password):
+        """
+        Verify plain password with hashed password.
+
+        :param plain_password: plain password
+        :param hashed_password: hashed password
+        :return: boolean
+        """
+
         return self.pwd_context.verify(plain_password, hashed_password)
 
     def get_password_hash(self, password: str):
@@ -35,8 +39,16 @@ class Auth:
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
     async def create_access_token(
-            self, data: dict, expires_delta: Optional[float] = None
+        self, data: dict, expires_delta: Optional[float] = None
     ):
+        """
+        Create access token.
+
+        :param data: data
+        :param expires_delta: expiration time
+        :return: access token
+        """
+
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.now(pytz.UTC) + timedelta(seconds=expires_delta)
@@ -51,8 +63,16 @@ class Auth:
         return encoded_access_token
 
     async def create_refresh_token(
-            self, data: dict, expires_delta: Optional[float] = None
+        self, data: dict, expires_delta: Optional[float] = None
     ):
+        """
+        Create refresh token.
+
+        :param data: data
+        :param expires_delta: expiration time
+        :return: refresh token
+        """
+
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.now(pytz.UTC) + timedelta(seconds=expires_delta)
@@ -67,6 +87,13 @@ class Auth:
         return encoded_refresh_token
 
     async def decode_refresh_token(self, refresh_token: str):
+        """
+        Decode refresh token.
+
+        :param refresh_token: refresh token
+        :return: email
+        """
+
         try:
             payload = jwt.decode(
                 refresh_token, self.SECRET_KEY, algorithms=[self.ALGORITHM]
@@ -85,8 +112,16 @@ class Auth:
             )
 
     async def get_current_user(
-            self, token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
+        self, token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
     ):
+        """
+        Get current user.
+
+        :param token: access token
+        :param db: database session
+        :return: user
+        """
+
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
@@ -121,6 +156,13 @@ class Auth:
         return user
 
     def create_email_token(self, data: dict):
+        """
+        Create email token.
+
+        :param data: data
+        :return: email token
+        """
+
         to_encode = data.copy()
         expire = datetime.now(pytz.UTC) + timedelta(days=1)
         to_encode.update({"iat": datetime.now(pytz.UTC), "exp": expire})
@@ -128,6 +170,13 @@ class Auth:
         return token
 
     async def get_email_from_token(self, token: str):
+        """
+        Get email from token.
+
+        :param token: token
+        :return: email
+        """
+
         try:
             payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
             email = payload["sub"]

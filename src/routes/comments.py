@@ -35,19 +35,16 @@ async def create_comment_route(
 ):
     """
     The create_comment_route function creates a comment for an image.
-        The function takes in the following parameters:
-            - image_id: int, the id of the image to create a comment for.
-            - body: CommentSchema, which is used to validate and deserialize data sent by users.
-                It contains two fields (text and user_id) that are required when creating comments.
 
     :param image_id: int: Get the image id from the url
     :param body: CommentSchema: Validate the request body
     :param db: AsyncSession: Pass the database session to the function
     :param current_user: User: Get the user who is currently logged in
     :param : Get the image id from the url
+
     :return: A comment object
-    :doc-author: Trelent
     """
+
     comment = await create_comment(image_id, body, db, current_user)
     if not comment:
         raise HTTPException(status_code=404, detail=detail_message.FILE_NOT_FOUND)
@@ -63,19 +60,16 @@ async def edit_comment_route(
 ):
     """
     The edit_comment_route function allows a user to edit an existing comment.
-        The function takes in the following parameters:
-            - comment_id: int, the id of the comment that is being edited.
-            - body: CommentSchema, a schema containing all of the information needed to update a given file's metadata.
-                This includes fields such as title and description (see models/comment_schema for more details).
 
     :param comment_id: int: Get the comment id from the url
     :param body: CommentSchema: Validate the data in the body of a request
     :param db: AsyncSession: Get the database session
     :param current_user: User: Get the current user
     :param : Get the comment_id from the url
+
     :return: A comment object
-    :doc-author: Trelent
     """
+
     comment = await edit_comment(comment_id, body, db, current_user)
     if not comment:
         raise HTTPException(status_code=404, detail=detail_message.FILE_NOT_FOUND)
@@ -99,9 +93,10 @@ async def delete_comment_route(
     :param db: AsyncSession: Pass the database session to the function
     :param current_user: User: Get the current user from the auth_service
     :param : Get the id of the comment to be deleted
+
     :return: The deleted comment
-    :doc-author: Trelent
     """
+
     comment = await delete_comment(comment_id, db, current_user)
     return comment
 
@@ -113,14 +108,14 @@ async def get_comment_route(
 ):
     """
     The get_comment_route function is a route that returns the comment with the given id.
-        If no comment exists with that id, it will return a 404 error.
 
     :param comment_id: int: Get the comment id from the url path
     :param db: AsyncSession: Get a database session, which is used when executing sqlalchemy commands
     :param : Get the comment id from the url
+
     :return: The comment object
-    :doc-author: Trelent
     """
+
     comment = await get_comment(comment_id, db)
     if not comment:
         raise HTTPException(status_code=404, detail=detail_message.FILE_NOT_FOUND)

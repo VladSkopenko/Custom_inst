@@ -37,6 +37,13 @@ if not static_files_path:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """
+    The lifespan function is a context manager that runs during the lifespan of the application.
+
+    :param app: FastAPI: Pass the FastAPI app
+    :return: A lifespan function
+    """
+
     logger.debug("lifespan before")
     try:
         await startup()
@@ -72,6 +79,12 @@ app.include_router(frontend.router)
 
 
 async def startup():
+    """
+    The startup function is a coroutine that runs during the startup of the application.
+
+    :return: A coroutine
+    """
+
     redis_live: bool | None = await check_redis()
     if not redis_live:
         app.dependency_overrides[get_redis] = deny_get_redis
@@ -85,10 +98,22 @@ async def startup():
 
 
 async def get_limit():
+    """
+    The get_limit function.
+
+    :return: None
+    """
+
     return None
 
 
 async def deny_get_redis():
+    """
+    The deny_get_redis function.
+
+    :return: None
+    """
+
     return None
 
 
@@ -115,6 +140,12 @@ app.mount(
 
 # Function to open the web browser
 def open_browser():
+    """
+    The open_browser function opens the web browser in a separate thread.
+
+    :return: None
+    """
+
     webbrowser.open("http://localhost:8000")
 
 

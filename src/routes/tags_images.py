@@ -22,6 +22,7 @@ async def add_tag_to_image_route(
 ):
     """
     The add_tag_to_image_route function adds a tag to an image.
+
     :param image_id: int: Specify the image id
     :param body: TagSchema: Get the tag from the request body
     :param db: AsyncSession: Pass the database session
@@ -42,6 +43,7 @@ async def remove_tag_from_image_route(
 ):
     """
     The remove_tag_from_image_route function removes a tag from an image.
+
     :param image_id: int: Specify the image id
     :param tag_name: str: Specify the tag name
     :param db: AsyncSession: Pass the database session

@@ -10,6 +10,7 @@ from src.schemas.users import UserSchema
 async def get_admin_exist(db: AsyncSession = Depends(get_db)):
     """
     Check if admin exists.
+
     :param db: AsyncSession
     :return: True if admin exists, False otherwise
     """
@@ -23,6 +24,7 @@ async def get_admin_exist(db: AsyncSession = Depends(get_db)):
 async def get_user_by_email(email: str, db: AsyncSession = Depends(get_db)):
     """
     Get user by email.
+
     :param email: str
     :param db: AsyncSession
     :return: User
@@ -37,6 +39,7 @@ async def get_user_by_email(email: str, db: AsyncSession = Depends(get_db)):
 async def create_user(body: UserSchema, db: AsyncSession = Depends(get_db)):
     """
     Create new user.
+
     :param body: UserSchema
     :param db: AsyncSession
     :return: User
@@ -62,6 +65,7 @@ async def create_user(body: UserSchema, db: AsyncSession = Depends(get_db)):
 async def update_token(user: User, token: str | None, db: AsyncSession):
     """
     Update user token.
+
     :param user: User
     :param token: str
     :param db: AsyncSession
@@ -75,6 +79,7 @@ async def update_token(user: User, token: str | None, db: AsyncSession):
 async def confirmed_email(email: str, db: AsyncSession) -> None:
     """
     Confirmed email.
+
     :param email: str
     :param db: AsyncSession
     :return: None
