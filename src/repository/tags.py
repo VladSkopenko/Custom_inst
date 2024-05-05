@@ -55,10 +55,6 @@ async def create_tag(body: TagSchema, db: AsyncSession, current_user: User):
 async def delete_tag(tag_id: int, db: AsyncSession, current_user: User):
     """
     The delete_tag function deletes a tag from the database.
-        Args:
-            tag_id (int): The id of the tag to be deleted.
-            db (AsyncSession): An async session object for interacting with the database.
-                This is provided by FastAPI's dependency injection system, and should not be created manually.
 
     :param tag_id: int: Specify the id of the tag to be deleted
     :param db: AsyncSession: Access the database

@@ -24,6 +24,7 @@ async def create_comment(
     :return: A comment object
     :doc-author: Trelent
     """
+
     comment_data: Comment = Comment(
         image_id=image_id, user_id=current_user.id, comment=body.comment
     )
@@ -74,10 +75,6 @@ async def edit_comment(
 async def delete_comment(comment_id: int, db: AsyncSession, current_user: User):
     """
     The delete_comment function deletes a comment from the database.
-        Args:
-            comment_id (int): The id of the comment to be deleted.
-            db (AsyncSession): An async session object for interacting with the database.
-            current_user (User): The user who is making this request, as determined by FastAPI's security system.
 
     :param comment_id: int: Identify the comment to be deleted
     :param db: AsyncSession: Access the database
@@ -102,9 +99,6 @@ async def delete_comment(comment_id: int, db: AsyncSession, current_user: User):
 async def get_comment(comment_id: int, db: AsyncSession):
     """
     The get_comment function returns a comment object from the database.
-        Args:
-            comment_id (int): The id of the comment to be retrieved.
-            db (AsyncSession): An async session for querying the database.
 
     :param comment_id: int: Specify the id of the comment to be retrieved
     :param db: AsyncSession: Pass the database session to the function
@@ -124,7 +118,6 @@ async def get_comments_by_image(image_id: int, db: AsyncSession):
     """
     The get_comments_by_image function takes in an image_id and a database connection,
     and returns all comments associated with that image.
-
 
     :param image_id: int: Specify the image_id of the comments you want to retrieve
     :param db: AsyncSession: Pass in the database connection

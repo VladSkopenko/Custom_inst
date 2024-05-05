@@ -24,6 +24,14 @@ conf = ConnectionConfig(
 
 
 async def send_email(email: EmailStr, nickname: str, host: str):
+    """
+    Sends verification email to user.
+
+    :param email: user email
+    :param nickname: user nickname
+    :param host: server host
+    :return: None
+    """
     try:
         token_verification = auth_service.create_email_token({"sub": email})
         message = MessageSchema(
@@ -41,6 +49,3 @@ async def send_email(email: EmailStr, nickname: str, host: str):
         await fm.send_message(message, template_name="verify_email.html")
     except ConnectionErrors as err:
         print(err)
-
-
-
