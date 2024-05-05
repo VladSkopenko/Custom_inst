@@ -10,6 +10,15 @@ from src.schemas.images import ImageSchema
 async def create_image(
     body: ImageSchema, base_url: str, db: AsyncSession, current_user: User
 ):
+    """
+    The create_image function creates an image in the database.
+    :param body: ImageSchema: Get the data from the request body
+    :param base_url: str: Pass the base url of the image
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: A created image object
+    """
+
     image = Image(**body.dict())
     if image.title is None:
         raise HTTPException(
@@ -25,6 +34,13 @@ async def create_image(
 
 
 async def get_image(image_id: int, db: AsyncSession, mode=1):
+    """
+    The get_image function takes in an image_id and a database session, and returns an image object if it exists.
+    :param image_id: int: Specify the image you want to retrieve
+    :param db: AsyncSession: Pass the database session
+    :return: An image with the owner of a dictionary
+    """
+
     stmt = select(Image).filter_by(id=image_id)
     res = await db.execute(stmt)
     image = res.scalar_one_or_none()
@@ -56,6 +72,15 @@ async def get_image(image_id: int, db: AsyncSession, mode=1):
 async def update_image(
     image_id: int, body: ImageSchema, db: AsyncSession, current_user: User
 ):
+    """
+    The update_image function updates an image in the database.
+    :param image_id: int: Specify the image you want to update
+    :param body: ImageSchema: Pass the new image data
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: The updated image
+    """
+
     stmt = select(Image).filter_by(id=image_id)
     res = await db.execute(stmt)
     image = res.scalar_one_or_none()
@@ -77,6 +102,14 @@ async def update_image(
 
 
 async def delete_image(image_id: int, db: AsyncSession, current_user: User):
+    """
+    The delete_image function deletes an image from the database.
+    :param image_id: int: Specify the image you want to delete
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: The deleted image
+    """
+
     stmt = select(Image).filter_by(id=image_id)
     res = await db.execute(stmt)
     image = res.scalar_one_or_none()
@@ -98,6 +131,15 @@ async def delete_image(image_id: int, db: AsyncSession, current_user: User):
 async def transform_image(
     image_id: int, tr_url: str, db: AsyncSession, current_user: User
 ):
+    """
+    The transform_image function transforms an image.
+    :param image_id: int: Specify the image you want to transform
+    :param tr_url: str: Specify the transformed url
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: The transformed image
+    """
+
     stmt = select(Image).filter_by(id=image_id)
     res = await db.execute(stmt)
     image = res.scalar_one_or_none()
@@ -118,6 +160,14 @@ async def transform_image(
 
 
 async def get_base_url(image_id: int, db: AsyncSession, current_user: User):
+    """
+    Get base url of image
+    :param image_id: int: Specify the image you want to get the base url
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: The base url of the image
+    """
+
     stmt = select(Image).filter_by(id=image_id)
     res = await db.execute(stmt)
     image = res.scalar_one_or_none()
@@ -136,6 +186,12 @@ async def get_base_url(image_id: int, db: AsyncSession, current_user: User):
 
 
 async def get_all_images(db: AsyncSession):
+    """
+    The get_all_images function returns all images from the database
+    :param db: AsyncSession: Pass the database session
+    :return: A list of all images in the database
+    """
+
     stmt = select(Image)
     res = await db.execute(stmt)
     images = res.scalars().all()
@@ -158,6 +214,15 @@ async def get_transform_url(image_id: int, db: AsyncSession, current_user: User)
 
 
 async def qr_code(image_id: int, qr_url: str, db: AsyncSession, current_user: User):
+    """
+    The qr_code function generates a QR code for an image.
+    :param image_id: int: Specify the image you want to generate the QR code for
+    :param qr_url: str: Specify the url of the QR code
+    :param db: AsyncSession: Pass the database session
+    :param current_user: User: Get the current user
+    :return: An image with the qr_url of the image
+    """
+
     stmt = select(Image).filter_by(id=image_id)
     res = await db.execute(stmt)
     image = res.scalar_one_or_none()

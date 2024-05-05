@@ -27,7 +27,13 @@ psycopg2 = "^2.9.9"
 qrcode = "^7.4.2"
 poetry-plugin-export = "^1.7.1"
 pillow = "^10.3.0"
+pytz = "^2024.1"
+colorlog = "^6.8.2"
 
+
+[tool.poetry.group.dev.dependencies]
+sphinx = "^7.3.7"
+poetry-plugin-export = "^1.7.1"
 
 [build-system]
 requires = ["poetry-core"]

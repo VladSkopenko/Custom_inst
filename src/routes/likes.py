@@ -29,15 +29,32 @@ async def add_grade_to_image_route(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(auth_service.get_current_user),
 ):
+    """
+    Add grade to image.
+    :param image_id: id of image
+    :param body: schema with grade
+    :param db: database session
+    :param current_user: current user
+    :return: grade of image
+    """
 
     image_grade = await add_grade_to_image(image_id, body, db, current_user)
     return image_grade
 
 
-@router.get("/rating/{image_id}", response_model=ImageRating, status_code=status.HTTP_200_OK)
+@router.get(
+    "/rating/{image_id}", response_model=ImageRating, status_code=status.HTTP_200_OK
+)
 async def get_image_rating(image_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Get rating of image grade
+    :param image_id: id of image
+    :param db: database session
+    :return: rating of image in JSON format
+    """
 
     rating = await get_current_rating(image_id, db)
-    return {"rating": rating,
-            'image': image_id,
-            }
+    return {
+        "rating": rating,
+        "image": image_id,
+    }
