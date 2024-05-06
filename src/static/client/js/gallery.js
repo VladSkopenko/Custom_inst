@@ -36,11 +36,9 @@ function render_gallery(photos_data) {
         const formattedCreatedDate = `${createdDate.getDate().toString().padStart(2, '0')}-${(createdDate.getMonth() + 1).toString().padStart(2, '0')}-${createdDate.getFullYear()}`;
         const updatedDate = new Date(image.updated_at);
         const formattedUpdatedDate = `${updatedDate.getDate().toString().padStart(2, '0')}-${(updatedDate.getMonth() + 1).toString().padStart(2, '0')}-${updatedDate.getFullYear()}`;
-<<<<<<< Updated upstream
+
         return `<a href="photo_page.html?imageId=${image.id}&tagsId=${tags_id}&commentsInfo=${comments_info}&rating=${rating}" class="photo-link">
-=======
-        return `<a href="./images_detail.html?imageId=${image.id}&tagsId=${tags_id}&commentsInfo=${comments_info}" class="photo-link">
->>>>>>> Stashed changes
+
         <li class="photo" data-id=${image.id}>
   <div class = "photo-image__wrapper">
   <img src="${image.base_url}" alt="${image.title}" data-updated_at=${formattedUpdatedDate} data-qr_url=${image.qr_url} data-transform_url=${image.transform_url}/>
