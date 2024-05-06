@@ -8,6 +8,7 @@ from src.services.auth import auth_service
 from src.conf.config import config
 
 
+
 conf = ConnectionConfig(
     MAIL_USERNAME=config.MAIL_USERNAME,
     MAIL_PASSWORD=config.MAIL_PASSWORD,
