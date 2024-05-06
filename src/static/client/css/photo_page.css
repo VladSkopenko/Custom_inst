@@ -4,6 +4,9 @@
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .image-details {
@@ -12,4 +15,16 @@
 
 .image-details p {
     margin-bottom: 10px;
+}
+#photo {
+    max-height: 40vw;
+    width: auto;
+    margin-bottom: 20px;
+}
+          a {
+              text-decoration: none;
+          }
+.comments li {
+    list-style: none;
+    border: 1px dotted red;margin-bottom: 4px;
 }
