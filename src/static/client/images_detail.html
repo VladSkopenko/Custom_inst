@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Details</title>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+    
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <link rel="icon" href="{{ url_for('static', path='/favicon.ico') }}" />
+    <link href="./css/images_detail.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="image-details">
+            <h1>Image Details</h1>
+            <div class="image-wrapper">
+                <img src="" alt="Image">
+            </div>
+            <div class="details">
+                <p><strong>Title:</strong> <span id="image-title"></span></p>
+                <p><strong>Description:</strong> <span id="image-description"></span></p>
+                <!-- Add more details here as needed -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+                const imageId = getImageIdFromURL(); // Implement this function to extract image ID from URL
+                const apiUrl = `/api/images/${imageId}`;
+
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Populate image details
+                        document.getElementById('image-title').textContent = data.title;
+                        document.getElementById('image-description').textContent = data.description;
+                        // Update the image source
+                        document.querySelector('.image-wrapper img').src = data.base_url;
+                    })
+                    .catch(error => console.error('Error fetching image details:', error));
+            });
+
+            function getImageIdFromURL() {
+                // Implement this function to extract the image ID from the URL
+                // Example: https://example.com/api/images/123456 -> image ID is 123456
+            }
+
+    </script>
+</body>
+
+</html>
