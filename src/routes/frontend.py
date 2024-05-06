@@ -18,11 +18,11 @@ async def home(request: Request):
     """
     Route to render the home page.
     This route renders the index.html template as the home page.
-    Parameters:
-    - request (Request): The incoming request object.
-    Returns:
-    - HTMLResponse: HTML response containing the rendered template.
+
+    :params: request: the request object
+    :returns: HTMLResponse: the rendered HTML response
     """
+
     try:
         context = {"request": request, "title": "Welcome to PhotoShare"}
         return templates.TemplateResponse("index.html", context)

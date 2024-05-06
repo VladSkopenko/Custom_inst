@@ -1,9 +1,11 @@
 from fastapi import APIRouter
 from fastapi import BackgroundTasks
-from fastapi import (Depends, HTTPException, Request, Response, Security, status)
-from fastapi.security import (HTTPAuthorizationCredentials,
-                              HTTPBearer,
-                              OAuth2PasswordRequestForm)
+from fastapi import Depends, HTTPException, Request, Response, Security, status
+from fastapi.security import (
+    HTTPAuthorizationCredentials,
+    HTTPBearer,
+    OAuth2PasswordRequestForm,
+)
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.common import detail_message
@@ -17,8 +19,9 @@ from src.schemas.users import RequestEmail
 from src.services.auth import auth_service
 from src.services.email import send_email
 
-router = APIRouter(prefix='/auth', tags=['auth'])
+router = APIRouter(prefix="/auth", tags=["auth"])
 get_refresh_token = HTTPBearer()
+
 
 
 @router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -64,22 +67,26 @@ async def login(body: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = 
     access_token = await auth_service.create_access_token(data={"sub": user.email})
     refresh_token = await auth_service.create_refresh_token(data={"sub": user.email})
     await repositories_users.update_token(user, refresh_token, db)
-    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+    }
 
 
-@router.get('/refresh_token',  response_model=TokenSchema)
-async def refresh_token(credentials: HTTPAuthorizationCredentials = Depends(get_refresh_token),
-                        db: AsyncSession = Depends(get_db)):
+@router.get("/refresh_token", response_model=TokenSchema)
+async def refresh_token(
+    credentials: HTTPAuthorizationCredentials = Depends(get_refresh_token),
+    db: AsyncSession = Depends(get_db),
+):
     """
-    The refresh_token function is used to refresh the access token.
-        The function takes in a refresh token and returns an access_token, 
-        a new refresh_token, and the type of token (bearer).
-    
-    :param credentials: HTTPAuthorizationCredentials: Get the token from the request header
-    :param db: AsyncSession: Get the database session
-    :return: A dictionary that contains the access_token, refresh_token and token_type
-    :doc-author: Trelent
+    Refresh token.
+
+    :param credentials: HTTPAuthorizationCredentials
+    :param db: AsyncSession
+    :return: Token
     """
+
     token = credentials.credentials
     email = await auth_service.decode_refresh_token(token)
     user = await repositories_users.get_user_by_email(email, db)
@@ -90,7 +97,22 @@ async def refresh_token(credentials: HTTPAuthorizationCredentials = Depends(get_
     access_token = await auth_service.create_access_token(data={"sub": email})
     refresh_token = await auth_service.create_refresh_token(data={"sub": email})
     await repositories_users.update_token(user, refresh_token, db)
-    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+    }
+
+
+@router.get("/confirmed_email/{token}")
+async def confirmed_email(token: str, db: AsyncSession = Depends(get_db)):
+    """
+    Confirmed email.
+
+    :param token: str: Token
+    :param db: AsyncSession
+    :return: None
+    """
 
 
 @router.get('/confirmed_email/{token}')
@@ -111,15 +133,29 @@ async def confirmed_email(token: str, db: AsyncSession = Depends(get_db)):
     user = await repositories_users.get_user_by_email(email, db)
     if user is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=detail_message.VERIFICATION_ERROR)
+
     if user.confirmed:
         return {"message": "Your email is already confirmed"}
     await repositories_users.confirmed_email(email, db)
     return {"message": "Email confirmed"}
 
 
-@router.post('/request_email')
-async def request_email(body: RequestEmail, background_tasks: BackgroundTasks, request: Request,
-                        db: AsyncSession = Depends(get_db)):
+@router.post("/request_email")
+async def request_email(
+    body: RequestEmail,
+    background_tasks: BackgroundTasks,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Request email.
+
+    :param body: RequestEmail
+    :param background_tasks: BackgroundTasks
+    :param request: Request
+    :param db: AsyncSession
+    :return: None
+    """
 
     """
     The request_email function is used to send an email to the user with a link that will allow them
@@ -136,11 +172,20 @@ async def request_email(body: RequestEmail, background_tasks: BackgroundTasks, r
     :doc-author: Trelent
     """
     user = await repositories_users.get_user_by_email(body.email, db)
+    if user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Account already exists"
+        )
+    if not body.email:
+
+        user = await repositories_users.get_user_by_email(body.email, db)
 
     if user.confirmed:
         return {"message": "Your email is already confirmed"}
     if user:
-        background_tasks.add_task(send_email, user.email, user.nickname, str(request.base_url))
+        background_tasks.add_task(
+            send_email, user.email, user.nickname, str(request.base_url)
+        )
     return {"message": "Check your email for confirmation."}
 
 
@@ -158,6 +203,7 @@ async def logout(
     :return: A 204 response
     :doc-author: Trelent
     """
+
     await repositories_users.update_token(user, "", db)
     user.refresh_token = None
     db.commit()

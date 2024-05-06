@@ -17,20 +17,17 @@ from src.schemas.tags import TagSchema
 async def add_tag_to_image(
     image_id: int, body: TagSchema, db: AsyncSession, current_user: User
 ):
-
     """
-The add_tag_to_image function adds a tag to an image.
-    Args:
-        image_id (int): The id of the image to which we want to add a tag.
-        body (TagSchema): A TagSchema object containing the name of the new tag.
+    The add_tag_to_image function adds a tag to an image.
 
-:param image_id: int: Get the image id
-:param body: TagSchema: Get the tag name from the request body
-:param db: AsyncSession: Pass a database connection to the function
-:param current_user: User: Check if the user is logged in
-:return: A string
-:doc-author: Trelent
-"""
+    :param image_id: int: Get the image id
+    :param body: TagSchema: Get the tag name from the request body
+    :param db: AsyncSession: Pass a database connection to the function
+    :param current_user: User: Check if the user is logged in
+    :return: A string
+    :doc-author: Trelent
+    """
+
     image = await get_image(image_id, db, mode="add_tag_to_image")
     owner_image = image.user_id
     if owner_image != current_user.id:
@@ -60,20 +57,16 @@ The add_tag_to_image function adds a tag to an image.
 async def remove_tag_from_image(
     image_id: int, tag_name: str, db: AsyncSession, current_user: User
 ):
-
     """
-The remove_tag_from_image function removes a tag from an image.
-    Args:
-        image_id (int): The id of the image to remove the tag from.
-        tag_name (str): The name of the tag to be removed.
+    The remove_tag_from_image function removes a tag from an image.
 
-:param image_id: int: Find the image in the database
-:param tag_name: str: Get the tag name from the request body
-:param db: AsyncSession: Connect to the database
-:param current_user: User: Check if the user is logged in
-:return: A string
-:doc-author: Trelent
-"""
+    :param image_id: int: Find the image in the database
+    :param tag_name: str: Get the tag name from the request body
+    :param db: AsyncSession: Connect to the database
+    :param current_user: User: Check if the user is logged in
+    :return: A string
+    :doc-author: Trelent
+    """
     image = await get_image(image_id, db)
     owner_image = image.user_id
     if owner_image != current_user.id:
@@ -94,34 +87,30 @@ The remove_tag_from_image function removes a tag from an image.
 
 
 async def get_tags_by_image(image_id: int, db: AsyncSession):
-
     """
-The get_tags_by_image function returns a list of tag_ids associated with the image_id passed in as an argument.
+    The get_tags_by_image function returns a list of tag_ids associated with the image_id passed in as an argument.
 
-:param image_id: int: Specify the image to get tags for
-:param db: AsyncSession: Pass in the database connection
-:return: A list of tag ids
-:doc-author: Trelent
-"""
+    :param image_id: int: Specify the image to get tags for
+    :param db: AsyncSession: Pass in the database connection
+    :return: A list of tag ids
+    :doc-author: Trelent
+    """
+
     stmt = select(image_m2m_tag.c.tag_id).where(image_m2m_tag.c.image_id == image_id)
     result = await db.execute(stmt)
     return result.scalars().all()
 
 
 async def get_data_image(image_id: int, db: AsyncSession):
-
     """
-The get_data_image function takes in an image_id and a database connection.
-It then returns a dictionary containing the following information:
-    - The image itself, as returned by get_image()
-    - A list of tags associated with the image, as returned by get_tags_by_image()
-    - A list of comments associated with the image, as returned by get_comments()
+    The get_data_image function takes in an image_id and a database connection.
 
-:param image_id: int: Get the image from the database
-:param db: AsyncSession: Pass the database connection to the function
-:return: A dictionary with the following keys:
-:doc-author: Trelent
-"""
+    :param image_id: int: Get the image from the database
+    :param db: AsyncSession: Pass the database connection to the function
+    :return: A dictionary with the following keys:
+    :doc-author: Trelent
+    """
+
     image = await get_image(image_id, db)
     comments = await get_comments_by_image(image_id, db)
     tags = await get_tags_by_image(image_id, db)

@@ -14,12 +14,13 @@ async def add_grade_to_image(
     image_id: int, body: LikeSchema, db: AsyncSession, current_user: User
 ) -> ImageLike:
     """
-    Add grade to image if it exists
-    param image_id: image id
-    param body: like schema
-    param db: database session
-    param current_user: current user
-    return: image like in JSON format
+    Add grade to image if it exists.
+
+    :param image_id: image id
+    :param body: like schema
+    :param db: database session
+    :param current_user: current user
+    :return: image like
     """
 
     try:
@@ -40,10 +41,11 @@ async def add_grade_to_image(
 
 async def get_current_rating(image_id: int, db: AsyncSession) -> float:
     """
-    Get current rating
-    param image_id: image id
-    param db: database session
-    return: current rating
+    Get current rating.
+
+    :param image_id: image id
+    :param db: database session
+    :return: current rating
     """
 
     result = await db.execute(

@@ -31,6 +31,7 @@ async def add_grade_to_image_route(
 ):
     """
     Add grade to image.
+
     :param image_id: id of image
     :param body: schema with grade
     :param db: database session
@@ -48,6 +49,7 @@ async def add_grade_to_image_route(
 async def get_image_rating(image_id: int, db: AsyncSession = Depends(get_db)):
     """
     Get rating of image grade
+
     :param image_id: id of image
     :param db: database session
     :return: rating of image in JSON format

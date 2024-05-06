@@ -21,11 +21,7 @@ class Auth:
     SECRET_KEY = config.SECRET_KEY_JWT
     ALGORITHM = config.ALGORITHM
 
-    cache = redis.Redis(
-        host=config.REDIS_DOMAIN,
-        port=config.REDIS_PORT,
-        db=0
-    )
+    cache = redis.Redis(host=config.REDIS_DOMAIN, port=config.REDIS_PORT, db=0)
 
     def verify_password(self, plain_password, hashed_password):
         """
@@ -56,20 +52,21 @@ class Auth:
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
     async def create_access_token(
-            self, data: dict, expires_delta: Optional[float] = None
+        self, data: dict, expires_delta: Optional[float] = None
     ):
         """
         The create_access_token function creates a new access token.
             Args:
                 data (dict): The data to be encoded in the JWT.
                 expires_delta (Optional[float]): A timedelta object representing how long the token should last for. Defaults to 15 minutes if not specified.
-        
+     
         :param self: Represent the instance of the class
         :param data: dict: Pass the data that will be encoded into the token
         :param expires_delta: Optional[float]: Set the expiration time for the access token
         :return: A token that is encoded with the data you pass to it
         :doc-author: Trelent
         """
+
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.now(pytz.UTC) + timedelta(seconds=expires_delta)
@@ -84,20 +81,16 @@ class Auth:
         return encoded_access_token
 
     async def create_refresh_token(
-            self, data: dict, expires_delta: Optional[float] = None
-    ):        
+        self, data: dict, expires_delta: Optional[float] = None
+    ):
         """
-        The create_refresh_token function creates a refresh token for the user.
-            Args:
-                data (dict): The payload to be encoded in the JWT.
-                expires_delta (Optional[float]): The time until expiration of the token, defaults to 7 days if not specified.
-        
-        :param self: Represent the instance of the class
-        :param data: dict: Pass the data that needs to be encoded in the token
-        :param expires_delta: Optional[float]: Set the expiration time of the refresh token
-        :return: A refresh token
-        :doc-author: Trelent
+        Create refresh token.
+
+        :param data: data
+        :param expires_delta: expiration time
+        :return: refresh token
         """
+
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.now(pytz.UTC) + timedelta(seconds=expires_delta)
@@ -113,6 +106,7 @@ class Auth:
 
     async def decode_refresh_token(self, refresh_token: str):
         """
+
         The decode_refresh_token function is used to decode the refresh token.
             The function will raise an HTTPException if the token is invalid or has expired.
             If the token is valid, it will return a string with the email address of 
@@ -123,6 +117,7 @@ class Auth:
         :return: The email address of the user who requested a new access token
         :doc-author: Trelent
         """
+
         try:
             payload = jwt.decode(
                 refresh_token, self.SECRET_KEY, algorithms=[self.ALGORITHM]
@@ -141,9 +136,10 @@ class Auth:
             )
 
     async def get_current_user(
-            self, token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
+        self, token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
     ):
         """
+
         The get_current_user function is a dependency that will be used in the
             protected endpoints. It takes a token and returns the user object if it's valid,
             otherwise raises an HTTPException with status code 401 (Unauthorized).
@@ -154,6 +150,7 @@ class Auth:
         :return: A user object, which is used in the following function:
         :doc-author: Trelent
         """
+
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=detail_message.COULD_NOT_VALIDATE_CREDENTIALS,
@@ -186,6 +183,13 @@ class Auth:
         return user
 
     def create_email_token(self, data: dict):
+        """
+        Create email token.
+
+        :param data: data
+        :return: email token
+        """
+
         to_encode = data.copy()
         expire = datetime.now(pytz.UTC) + timedelta(days=1)
         to_encode.update({"iat": datetime.now(pytz.UTC), "exp": expire})
@@ -194,6 +198,7 @@ class Auth:
 
     async def get_email_from_token(self, token: str):
         """
+
         The get_email_from_token function takes a token as an argument and returns the email address associated with that token.
         The function uses the jwt library to decode the token, which is then used to retrieve the email address from within it.
         
@@ -202,6 +207,7 @@ class Auth:
         :return: The email associated with the token
         :doc-author: Trelent
         """
+
         try:
             payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
             email = payload["sub"]

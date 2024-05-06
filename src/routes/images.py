@@ -48,6 +48,7 @@ async def load_image(
 ):
     """
     The load_image function creates a new image in the database.
+
     :param body: ImageSchema: Get the data from the request body
     :param file: UploadFile: Upload the image
     :param db: AsyncSession: Pass the database session
@@ -73,6 +74,7 @@ async def get_all_images(
 ):
     """
     The get_all_images function returns a list of all images in the database.
+
     :param page: Optional[int]: Specify the page number
     :param per_page: Optional[int]: Limit the number of images returned
     :param db: AsyncSession: Pass the database session
@@ -108,6 +110,7 @@ async def get_all_images(
 async def get_image(image_id: int = Path(ge=1), db: AsyncSession = Depends(get_db)):
     """
     The get_image function returns the image with the specified id.
+
     :param image_id: int: Get the image id from the url
     :param db: AsyncSession: Pass the database session
     :return: A single image object
@@ -133,6 +136,7 @@ async def update_image(
 ):
     """
     The update_image function updates an image in the database.
+
     :param image_id: int: Specify the image id
     :param body: ImageSchema: Get the data from the request body
     :param db: AsyncSession: Pass the database session
@@ -159,6 +163,7 @@ async def delete_image(
 ):
     """
     The delete_image function deletes an image from the database.
+
     :param image_id: int: Specify the image id
     :param db: AsyncSession: Pass the database session
     :param current_user: User: Get the current user
@@ -186,6 +191,7 @@ async def create_transform_image(
 ):
     """
     The create_transform_image function transforms an image to grayscale.
+
     :param image_id: int: Specify the image id
     :param db: AsyncSession: Pass the database session
     :param current_user: User: Get the current user
@@ -214,6 +220,7 @@ async def create_transform_image(
 ):
     """
     The create_transform_image function transforms an image to sepia.
+
     :param image_id: int: Specify the image id
     :param db: AsyncSession: Pass the database session
     :param current_user: User: Get the current user
@@ -238,6 +245,7 @@ async def create_transform_image(
 ):
     """
     The create_transform_image function transforms an image to oil paint.
+
     :param image_id: int: Specify the image id
     :param db: AsyncSession: Pass the database session
     :param current_user: User: Get the current user
@@ -266,6 +274,7 @@ async def create_transform_image(
 ):
     """
     The create_transform_image function transforms an image to watermark.
+
     :param image_id: int: Specify the image id
     :param db: AsyncSession: Pass the database session
     :param current_user: User: Get the current user
@@ -291,6 +300,7 @@ async def create_qr_code(
 ):
     """
     The create_qr_code function creates a qr code for an image.
+
     :param image_id: int: Specify the image id
     :param db: AsyncSession: Pass the database session
     :param current_user: User: Get the current user
