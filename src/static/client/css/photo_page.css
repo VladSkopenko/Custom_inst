@@ -17,14 +17,15 @@
     margin-bottom: 10px;
 }
 #photo {
-    max-height: 40vw;
-    width: auto;
-    margin-bottom: 20px;
+    max-width: 40vw;
 }
           a {
               text-decoration: none;
           }
 .comments li {
     list-style: none;
-    border: 1px dotted red;margin-bottom: 4px;
+    border: 1px dotted rgb(51, 202, 232);
+    border-radius: 4px;
+    padding: 4px;
+    margin-bottom: 4px;
 }
