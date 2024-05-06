@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Photo</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content h1 {
+            text-align: center;
+        }
+
+        /* Additional styles */
+        input[type="file"],
+        input[type="text"] {
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body class="d-flex h-100 text-center text-white bg-dark">
+    <div class="container">
+        <div class="content">
+            <h1>Upload Photo</h1>
+            <input type="text" id="titleInput" placeholder="Enter Title">
+            <input type="text" id="descriptionInput" placeholder="Enter Description">
+            <input type="file" id="photoInput" accept="image/*">
+            <button class="btn btn-primary" id="uploadButton">Upload</button>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Your footer content here -->
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const uploadButton = document.getElementById('uploadButton');
+            const photoInput = document.getElementById('photoInput');
+            const titleInput = document.getElementById('titleInput');
+            const descriptionInput = document.getElementById('descriptionInput');
+
+            uploadButton.addEventListener('click', function () {
+                const file = photoInput.files[0];
+                const title = titleInput.value;
+                const description = descriptionInput.value;
+                if (file && title && description) {
+                    uploadPhoto(file, title, description);
+                } else {
+                    alert('Please choose a photo, enter a title, and enter a description to upload.');
+                }
+            });
+        });
+
+    function uploadPhoto(file, title, description) {
+        
+        console.log('Uploading file:', file.name);
+
+        // Construct the data object
+        const data = {
+            title: title,
+            description: description,
+            file: file
+        };
+
+        console.log('Data:', data);
+
+        const refreshToken = localStorage.getItem('refresh_token');
+        const accessToken = localStorage.getItem('access_token');
+
+        console.log('refreshToken: ', refreshToken)
+        console.log('accessToken: ', accessToken)
+        if (!refreshToken || !accessToken) {
+            console.error('Unauthorized');
+            return;
+        }
+
+        // Convert the data object to JSON
+        const jsonData = JSON.stringify(data);
+
+        fetch(`/api/images/`, {
+            method: 'POST',
+            body: jsonData,
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                console.log('response :', response)
+                if (!response.ok) {
+                    throw new Error('Upload failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Upload successful:', data);
+            })
+            .catch(error => {
+                console.error('Error uploading file:', error);
+            });
+    }
+
+    </script>
+</body>
+
+</html>

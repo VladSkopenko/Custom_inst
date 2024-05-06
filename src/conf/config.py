@@ -45,6 +45,8 @@ class Settings(BaseSettings):
     MAIL_SERVER: str = "smtp.meta.ua"
     MAIL_FROM_NAME: str = "PHOTOSHARE"
 
+    SPHINX_DIRECTORY: str = str(base_path.joinpath("docs", "_build", "html"))
+
     class Config:
         extra = "ignore"
         env_file = ".env"

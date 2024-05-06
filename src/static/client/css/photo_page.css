@@ -1,0 +1,31 @@
+.image-details-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-details {
+    margin-top: 20px;
+}
+
+.image-details p {
+    margin-bottom: 10px;
+}
+#photo {
+    max-width: 40vw;
+}
+          a {
+              text-decoration: none;
+          }
+.comments li {
+    list-style: none;
+    border: 1px dotted rgb(51, 202, 232);
+    border-radius: 4px;
+    padding: 4px;
+    margin-bottom: 4px;
+}
