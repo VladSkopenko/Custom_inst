@@ -1,11 +1,10 @@
-# from dotenv import load_dotenv
 from os import environ
 from pathlib import Path
 
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
-# load_dotenv()
+load_dotenv()
 base_path_project = Path(__file__).resolve().parent.parent
 base_path = base_path_project.parent
 load_dotenv(base_path.joinpath(".env"))
@@ -24,10 +23,12 @@ class Settings(BaseSettings):
     DATABASE_USER: str = "postgres"
     DATABASE_PASSWORD: str = "postgres"
     DATABASE_NAME: str = "postgres"
+    DATABASE_PORT: int = 5432
     DB_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
 
     REDIS_DOMAIN: str = "localhost"
     REDIS_PORT: int = 6379
+    REDIS_PASSWORD: str = ""
 
     CLOUDINARY_NAME: str = "dlfc34moq"
     CLOUDINARY_API_KEY: int = 287698145284357

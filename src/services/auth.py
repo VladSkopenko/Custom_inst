@@ -20,7 +20,7 @@ class Auth:
     SECRET_KEY = config.SECRET_KEY_JWT
     ALGORITHM = config.ALGORITHM
 
-    cache = redis.Redis(host=config.REDIS_DOMAIN, port=config.REDIS_PORT, db=0)
+    cache = redis.Redis(host=config.REDIS_DOMAIN, port=config.REDIS_PORT, password=config.REDIS_PASSWORD, db=0)
 
     def verify_password(self, plain_password, hashed_password):
         """

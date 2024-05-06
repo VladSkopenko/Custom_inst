@@ -3,7 +3,7 @@ __pycache__
 .idea
 .vscode
 postgres-data
-.env
+src/conf/.env
 Pipfile
 Pipfile.lock
 .pytest_cache
