@@ -24,7 +24,7 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 config.set_main_option(
     "sqlalchemy.url",
-    f"postgresql://{con.DB_USER}:{con.DATABASE_PASSWORD}@{con.DATABASE_HOST}:{con.DATABASE_PORT}/{con.DATABASE_NAME}",
+    f"postgresql://{con.DATABASE_USER}:{con.DATABASE_PASSWORD}@{con.DATABASE_HOST}:{con.DATABASE_PORT}/{con.DATABASE_NAME}",
 )
 
 # other values from the config, defined by the needs of env.py,
