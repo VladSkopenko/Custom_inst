@@ -22,6 +22,7 @@ function render_gallery(photos_data) {
             image,
             tags_id,
             comments_info,
+            rating,
         } = photo;
         let photoTitle = image.title;
         let maxCharactersPerPhotoTitle = 30;
@@ -33,7 +34,8 @@ function render_gallery(photos_data) {
         const formattedCreatedDate = `${createdDate.getDate().toString().padStart(2, '0')}-${(createdDate.getMonth() + 1).toString().padStart(2, '0')}-${createdDate.getFullYear()}`;
         const updatedDate = new Date(image.updated_at);
         const formattedUpdatedDate = `${updatedDate.getDate().toString().padStart(2, '0')}-${(updatedDate.getMonth() + 1).toString().padStart(2, '0')}-${updatedDate.getFullYear()}`;
-        return `<li class="photo" data-id=${image.id}>
+        return `<a href="photo_page.html?imageId=${image.id}&tagsId=${tags_id}&commentsInfo=${comments_info}&rating=${rating}" class="photo-link">
+        <li class="photo" data-id=${image.id}>
   <div class = "photo-image__wrapper">
   <img src="${image.base_url}" alt="${image.title}" data-updated_at=${formattedUpdatedDate} data-qr_url=${image.qr_url} data-transform_url=${image.transform_url}/>
   </div>
@@ -44,8 +46,8 @@ function render_gallery(photos_data) {
   <p class="photo__description">|</p>
   <p class="photo__year">${formattedCreatedDate}</p>
   </div>
- 
   </li>
+  </a>
   `;
 
     }).join('');

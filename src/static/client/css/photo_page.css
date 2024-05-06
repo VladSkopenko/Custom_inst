@@ -1,0 +1,15 @@
+.image-details-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.image-details {
+    margin-top: 20px;
+}
+
+.image-details p {
+    margin-bottom: 10px;
+}
