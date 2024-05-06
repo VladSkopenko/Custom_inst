@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Photo</title>
+    <style>
+        body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.content {
+    text-align: center;
+}
+
+/* Additional styles */
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="content">
+            <h1>Upload Photo</h1>
+            <input type="file" id="photoInput" accept="image/*">
+            <button id="uploadButton">Upload</button>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Your footer content here -->
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+                const uploadButton = document.getElementById('uploadButton');
+                const photoInput = document.getElementById('photoInput');
+
+                uploadButton.addEventListener('click', function () {
+                    const file = photoInput.files[0];
+                    if (file) {
+                        uploadPhoto(file);
+                    } else {
+                        alert('Please choose a photo to upload.');
+                    }
+                });
+            });
+
+            function uploadPhoto(file) {
+                    console.log('Uploading file:', file.name);
+
+                    const formData = new FormData();
+                    formData.append('photo', file);
+
+                    fetch('/api/images', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Upload failed');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Upload successful:', data);
+                        })
+                        .catch(error => {
+                            console.error('Error uploading file:', error);
+                        });
+                }
+
+
+    </script>
+</body>
+
+</html>

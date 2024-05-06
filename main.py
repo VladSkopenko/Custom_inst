@@ -130,12 +130,11 @@ app.mount(
     ),
     name="static",
 )
-# app.mount(
-#     path="/sphinx",
-#     app=StaticFilesCache(directory=config.SPHINX_DIRECTORY, html=True),
-#     name="sphinx",
-# )
-# # print(f"{config.SPHINX_DIRECTORY=}")
+app.mount(
+    path="/sphinx",
+    app=StaticFilesCache(directory=config.SPHINX_DIRECTORY, html=True),
+    name="sphinx",
+)
 
 
 # Function to open the web browser
