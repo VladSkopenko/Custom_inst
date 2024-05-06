@@ -6,6 +6,7 @@ from fastapi.security import (HTTPAuthorizationCredentials,
                               OAuth2PasswordRequestForm)
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.common import detail_message
 from src.database.db import get_db
 from src.database.models import User
 from src.repository import users as repositories_users
@@ -13,7 +14,6 @@ from src.schemas.users import TokenSchema
 from src.schemas.users import UserResponse
 from src.schemas.users import UserSchema
 from src.schemas.users import RequestEmail
-from src.schemas.users import LogoutResponse
 from src.services.auth import auth_service
 from src.services.email import send_email
 
@@ -23,9 +23,19 @@ get_refresh_token = HTTPBearer()
 
 @router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def signup(body: UserSchema, bt: BackgroundTasks, request: Request, db: AsyncSession = Depends(get_db)):
+    """
+    The signup function creates a new user in the database.
+    
+    :param body: UserSchema: Validate the request body, and to deserialize it into a userschema object
+    :param bt: BackgroundTasks: Add a task to the background tasks queue
+    :param request: Request: Get the base_url of the request
+    :param db: AsyncSession: Get the database session
+    :return: The new user, but the send_email function is asynchronous
+    :doc-author: Trelent
+    """
     exist_user = await repositories_users.get_user_by_email(body.email, db)
     if exist_user:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Account already exists")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=detail_message.ACCOUNT_EXIST)
     body.password = auth_service.get_password_hash(body.password)
     new_user = await repositories_users.create_user(body, db)
     bt.add_task(send_email, new_user.email, new_user.nickname, str(request.base_url))
@@ -34,15 +44,23 @@ async def signup(body: UserSchema, bt: BackgroundTasks, request: Request, db: As
 
 @router.post("/login",  response_model=TokenSchema)
 async def login(body: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
+    """
+    The login function is used to authenticate a user.
+    
+    :param body: OAuth2PasswordRequestForm: Get the username and password from the request body
+    :param db: AsyncSession: Pass the database session to the function
+    :return: A dictionary with access_token, refresh_token and token_type
+    :doc-author: Trelent
+    """
     user = await repositories_users.get_user_by_email(body.username, db)
     if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="No such user")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=detail_message.NO_SUCH_USER)
     if not user.confirmed:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Email not confirmed")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=detail_message.EMAIL_NOT_CONFIRMED)
     if not user.is_active:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User is non active")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=detail_message.NON_ACTIVE_USER)
     if not auth_service.verify_password(body.password, user.password):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect credentials")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=detail_message.INCORECT_CREDENTIALS)
     access_token = await auth_service.create_access_token(data={"sub": user.email})
     refresh_token = await auth_service.create_refresh_token(data={"sub": user.email})
     await repositories_users.update_token(user, refresh_token, db)
@@ -52,12 +70,22 @@ async def login(body: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = 
 @router.get('/refresh_token',  response_model=TokenSchema)
 async def refresh_token(credentials: HTTPAuthorizationCredentials = Depends(get_refresh_token),
                         db: AsyncSession = Depends(get_db)):
+    """
+    The refresh_token function is used to refresh the access token.
+        The function takes in a refresh token and returns an access_token, 
+        a new refresh_token, and the type of token (bearer).
+    
+    :param credentials: HTTPAuthorizationCredentials: Get the token from the request header
+    :param db: AsyncSession: Get the database session
+    :return: A dictionary that contains the access_token, refresh_token and token_type
+    :doc-author: Trelent
+    """
     token = credentials.credentials
     email = await auth_service.decode_refresh_token(token)
     user = await repositories_users.get_user_by_email(email, db)
     if user.refresh_token != token:
         await repositories_users.update_token(user, None, db)
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=detail_message.INVALID_REFRESH_TOKEN)
 
     access_token = await auth_service.create_access_token(data={"sub": email})
     refresh_token = await auth_service.create_refresh_token(data={"sub": email})
@@ -66,11 +94,23 @@ async def refresh_token(credentials: HTTPAuthorizationCredentials = Depends(get_
 
 
 @router.get('/confirmed_email/{token}')
-async def confirmed_email(token: str, db: AsyncSession = Depends(get_db)):    
+async def confirmed_email(token: str, db: AsyncSession = Depends(get_db)): 
+    """
+    The confirmed_email function is used to confirm a user's email address.
+        It takes in the token that was sent to the user's email and uses it to get their email address.
+        Then, it gets the user from our database using their email address and checks if they exist. If not, an error is thrown.
+        Next, we check if they have already confirmed their account or not by checking if confirmed == True for them in our database (if so, we return a message saying as much).
+        Finally, we update our database with this information.
+    
+    :param token: str: Get the token from the url
+    :param db: AsyncSession: Pass the database session to the function
+    :return: A dict with the message
+    :doc-author: Trelent
+    """
     email = await auth_service.get_email_from_token(token)
     user = await repositories_users.get_user_by_email(email, db)
     if user is None:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Verification error")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=detail_message.VERIFICATION_ERROR)
     if user.confirmed:
         return {"message": "Your email is already confirmed"}
     await repositories_users.confirmed_email(email, db)
@@ -81,6 +121,20 @@ async def confirmed_email(token: str, db: AsyncSession = Depends(get_db)):
 async def request_email(body: RequestEmail, background_tasks: BackgroundTasks, request: Request,
                         db: AsyncSession = Depends(get_db)):
 
+    """
+    The request_email function is used to send an email to the user with a link that will allow them
+    to confirm their email address. The function takes in a RequestEmail object, which contains the
+    email of the user who wants to confirm their account. It then checks if there is already a confirmed
+    user with that email address, and if so returns an error message saying as much. If not, it sends 
+    an asynchronous task (send_email) into background tasks using FastAPI's BackgroundTasks class.
+    
+    :param body: RequestEmail: Get the email from the body of the request
+    :param background_tasks: BackgroundTasks: Add a task to the background tasks queue
+    :param request: Request: Get the base_url of the request
+    :param db: AsyncSession: Get the database session
+    :return: A dict with the message
+    :doc-author: Trelent
+    """
     user = await repositories_users.get_user_by_email(body.email, db)
 
     if user.confirmed:
@@ -95,6 +149,15 @@ async def logout(
     user: User = Depends(auth_service.get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    """
+    The logout function is used to logout a user.
+    
+    :param user: User: Get the current user
+    :param db: AsyncSession: Get the database session
+    :param : Get the current user from the database and then update their token to an empty string
+    :return: A 204 response
+    :doc-author: Trelent
+    """
     await repositories_users.update_token(user, "", db)
     user.refresh_token = None
     db.commit()

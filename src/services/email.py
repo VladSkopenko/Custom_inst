@@ -8,6 +8,7 @@ from src.services.auth import auth_service
 from src.conf.config import config
 
 
+
 conf = ConnectionConfig(
     MAIL_USERNAME=config.MAIL_USERNAME,
     MAIL_PASSWORD=config.MAIL_PASSWORD,
@@ -24,6 +25,20 @@ conf = ConnectionConfig(
 
 
 async def send_email(email: EmailStr, nickname: str, host: str):
+    """
+    The send_email function sends an email to the user with a link to verify their email address.
+        The function takes in three arguments:
+            -email: the user's email address, which is used as a unique identifier for each account.
+            -nickname: the nickname of the user, which is displayed on their profile page and in other places throughout 
+                our application. This argument is passed into our template so that we can personalize our message to them. 
+                We could also pass in other information about them if we wanted (e.g., first name).  
+    
+    :param email: EmailStr: Pass the email address of the user
+    :param nickname: str: Get the nickname of the user
+    :param host: str: Pass the hostname of your website to the template
+    :return: A coroutine object
+    :doc-author: Trelent
+    """
     try:
         token_verification = auth_service.create_email_token({"sub": email})
         message = MessageSchema(

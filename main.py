@@ -20,6 +20,7 @@ from src.utils.logger import logger, handler
 from src.utils.staticfilescache import StaticFilesCache
 from src.routes import (
     auth,
+    users,
     comments,
     images,
     frontend,
@@ -63,6 +64,7 @@ app.add_middleware(
 
 app.include_router(healthchecker_db.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
+app.include_router(users.router, prefix="/api")
 app.include_router(images.router, prefix="/api")
 app.include_router(comments.router, prefix="/api")
 app.include_router(tags.router, prefix="/api")
