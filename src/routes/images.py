@@ -13,7 +13,8 @@ from fastapi import (
     Query,
 )
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from src.utils.logger import logger, handler
+logger.addHandler(handler)
 
 from src.conf.config import config
 from src.database.db import get_db
@@ -61,7 +62,8 @@ async def load_image(
     base_url = cloudinary.CloudinaryImage(public_id).build_url(
         version=upl.get("version")
     )
-
+    logger.info(body)
+    logger.info(file)
     image = await images_repository.create_image(body, base_url, db, current_user)
     return image
 

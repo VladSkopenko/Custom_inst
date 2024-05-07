@@ -187,3 +187,6 @@
     opacity: 1;
     transition: transform 350ms;
 }
+ .load_photo{
+    margin-bottom: 8px;
+ }
