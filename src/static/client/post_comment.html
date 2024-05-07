@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Comment To Image</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content h1 {
+            text-align: center;
+        }
+
+        /* Additional styles */
+        input[type="text"] {
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body class="d-flex h-100 text-center text-white bg-dark">
+    <div class="container">
+        <div class="content">
+            <h1>Add Comment To Image</h1>
+            <input type="text" id="commentInput" placeholder="Enter Comment">
+            <button class="btn btn-primary" id="addCommentButton">Add Comment</button>
+        </div>
+    </div>
+    <footer>
+        <!-- Your footer content here -->
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+                // Retrieve the image ID from URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const imageId = urlParams.get('imageId');
+
+                // Check if imageId is available
+                if (imageId) {
+                    // Log the image ID for verification
+                    console.log('Image ID:', imageId);
+
+                    // Add event listener for the add comment button
+                    const addCommentButton = document.getElementById('addCommentButton');
+                    const commentInput = document.getElementById('commentInput');
+
+                    addCommentButton.addEventListener('click', function () {
+                        const comment = commentInput.value.trim();
+                        if (comment) {
+                            addCommentToImage(comment, imageId); // Pass imageId to the function
+                        } else {
+                            alert('Please enter a comment.');
+                        }
+                    });
+                } else {
+                    console.error('Image ID not found in URL parameters.');
+                }
+            });
+
+            function addCommentToImage(comment, imageId) {
+                console.log('Adding comment to image:', comment);
+
+                // Create request body
+                const requestBody = { comment };
+
+                // Fetch request with the correct URL
+                fetch(`/api/comments/create/${imageId}`, { // Replace {comment_id} with ${imageId}
+                    method: 'POST',
+                    body: JSON.stringify(requestBody),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                    .then(response => {
+                        console.log('Response:', response);
+                        if (!response.ok) {
+                            throw new Error('Failed to add comment to image');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Comment added successfully:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error adding comment to image:', error);
+                    })
+                    .finally(() => {
+                        // Redirect to the desired page
+                        window.location.href = '/static/client/photo_page.html';
+                    });
+            }
+
+    </script>
+</body>
+
+</html>
