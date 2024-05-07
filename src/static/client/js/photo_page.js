@@ -36,6 +36,7 @@ function getImageDetailsTemplate(data) {
                 <h3>Comments</h3>
                 <ul id="commentsList"></ul>
                 <button id="postCommentButton">POST Comment</button>
+                // <a class="btn btn-sm btn-primary mt-4 p-1" href="/static/client/post_comment.html?imageId=${imageId}">POST Comment</a>
             </div>
         </div>
     `;

@@ -5,7 +5,7 @@ from src.services.auth import auth_service
 
 
 def test_get_me(client, get_token, monkeypatch):
-    with patch.object(auth_service, 'cache') as redis_mock:
+    with patch.object(auth_service, "cache") as redis_mock:
         redis_mock.get.return_value = None
         monkeypatch.setattr("fastapi_limiter.FastAPILimiter.redis", AsyncMock())
         monkeypatch.setattr("fastapi_limiter.FastAPILimiter.identifier", AsyncMock())

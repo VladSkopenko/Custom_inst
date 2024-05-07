@@ -96,7 +96,6 @@ def init_models_wrap():
                 base_url=test_image["base_url"],
                 qr_url=test_image["qr_url"],
                 description=test_image["description"],
-
             )
             session.add(current_image)
             session.add(current_user)

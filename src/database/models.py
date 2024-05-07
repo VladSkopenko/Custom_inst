@@ -152,4 +152,3 @@ image_m2m_tag = Table(
     Column("image_id", Integer, ForeignKey("images.id")),
     Column("tag_id", Integer, ForeignKey("tags.id")),
 )
-

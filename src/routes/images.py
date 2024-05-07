@@ -21,7 +21,12 @@ from src.repository.tags_images import get_data_image
 from src.schemas.images import ImageResponseSchema
 from src.schemas.images import ImageSchema
 from src.services.auth import auth_service
+from src.utils.logger import handler
+from src.utils.logger import logger
 from src.utils.watermark import watermark
+
+logger.addHandler(handler)
+
 
 router = APIRouter(prefix="/images", tags=["images"])
 cloudinary.config(
@@ -56,7 +61,8 @@ async def load_image(
     base_url = cloudinary.CloudinaryImage(public_id).build_url(
         version=upl.get("version")
     )
-
+    logger.info(body)
+    logger.info(file)
     image = await images_repository.create_image(body, base_url, db, current_user)
     return image
 
