@@ -125,6 +125,9 @@
             })
             .catch(error => {
                 console.error('Error uploading file:', error);
+            })
+            .finally(() => {
+                window.location.href = '/static/client/main.html';
             });
         }
 
