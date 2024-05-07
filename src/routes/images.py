@@ -1,32 +1,27 @@
 from io import BytesIO
 from typing import Optional
+
 import cloudinary.uploader
 import qrcode
-from fastapi import (
-    APIRouter,
-    Depends,
-    File,
-    HTTPException,
-    Path,
-    status,
-    UploadFile,
-    Query,
-)
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import File
+from fastapi import HTTPException
+from fastapi import Path
+from fastapi import Query
+from fastapi import status
+from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
-
 
 from src.conf.config import config
 from src.database.db import get_db
 from src.database.models import User
 from src.repository import images as images_repository
-from src.repository.comments import get_comments_by_image
 from src.repository.tags_images import get_data_image
-from src.repository.tags_images import get_tags_by_image
 from src.schemas.images import ImageResponseSchema
 from src.schemas.images import ImageSchema
 from src.services.auth import auth_service
 from src.utils.watermark import watermark
-from src.repository.likes import get_current_rating
 
 router = APIRouter(prefix="/images", tags=["images"])
 cloudinary.config(

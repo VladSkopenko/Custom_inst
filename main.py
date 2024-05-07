@@ -1,33 +1,33 @@
-import threading
 import os
-import webbrowser
 import pathlib
+import threading
+import webbrowser
+from contextlib import asynccontextmanager
+
+import redis.asyncio as redis
+import uvicorn
 from fastapi import (
     FastAPI,
 )
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
-import redis.asyncio as redis
-from contextlib import asynccontextmanager
-import uvicorn
 
 from src.conf.config import config
-from src.database.db import get_db, get_redis, check_redis
+from src.database.db import check_redis
+from src.database.db import get_redis
+from src.routes import auth
+from src.routes import comments
+from src.routes import frontend
+from src.routes import healthchecker_db
+from src.routes import images
 from src.routes import likes
 from src.routes import tags
-from src.utils.logger import logger, handler
+from src.routes import tags_images
+from src.routes import users
+from src.utils.logger import handler
+from src.utils.logger import logger
 from src.utils.staticfilescache import StaticFilesCache
-from src.routes import (
-    auth,
-    users,
-    comments,
-    images,
-    frontend,
-    healthchecker_db,
-    tags_images,
-)
-
 
 logger.addHandler(handler)
 static_files_path = os.path.join(os.path.dirname(__file__), "src", "static")
@@ -139,7 +139,6 @@ app.mount(
 )
 
 
-# Function to open the web browser
 def open_browser():
     """
     The open_browser function opens the web browser in a separate thread.
@@ -151,7 +150,5 @@ def open_browser():
 
 
 if __name__ == "__main__":
-    # Start the web browser in a separate thread
     threading.Thread(target=open_browser).start()
-    # Run the FastAPI application
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

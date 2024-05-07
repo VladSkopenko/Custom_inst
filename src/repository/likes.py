@@ -1,9 +1,10 @@
 from fastapi import HTTPException
+from fastapi import status
 from sqlalchemy import func
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import status
+
 from src.common import detail_message
 from src.database.models import ImageLike
 from src.database.models import User

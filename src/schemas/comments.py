@@ -1,8 +1,7 @@
-from pydantic import BaseModel
-
-from pydantic import Field
-
 from datetime import datetime
+
+from pydantic import BaseModel
+from pydantic import Field
 
 
 class CommentSchema(BaseModel):

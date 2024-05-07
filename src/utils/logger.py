@@ -1,5 +1,6 @@
-import colorlog
 import logging
+
+import colorlog
 
 from src.conf.config import config
 

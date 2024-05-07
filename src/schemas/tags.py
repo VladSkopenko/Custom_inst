@@ -1,7 +1,7 @@
-from pydantic import BaseModel
-from src.database.models import TagType
-from typing import Optional
 from enum import Enum
+from typing import Optional
+
+from pydantic import BaseModel
 
 
 class TagTypeChoices(str, Enum):

@@ -10,7 +10,8 @@ from src.database.models import User
 from src.repository.comments import get_comments_by_image
 from src.repository.images import get_image
 from src.repository.likes import get_current_rating
-from src.repository.tags import create_tag, get_tag
+from src.repository.tags import create_tag
+from src.repository.tags import get_tag
 from src.schemas.tags import TagSchema
 
 

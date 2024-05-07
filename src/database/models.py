@@ -1,21 +1,22 @@
 import enum
 from datetime import date
+
+from sqlalchemy import Boolean
+from sqlalchemy import Column
+from sqlalchemy import DateTime
+from sqlalchemy import Enum
+from sqlalchemy import ForeignKey
+from sqlalchemy import func
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy import Table
+from sqlalchemy import Text
+from sqlalchemy import text
 from sqlalchemy import UniqueConstraint
-from sqlalchemy import (
-    String,
-    ForeignKey,
-    DateTime,
-    func,
-    Enum,
-    Boolean,
-    Table,
-    Column,
-    Integer,
-    Text,
-    text,
-)
-from sqlalchemy.orm import DeclarativeBase, relationship
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 
 class Base(DeclarativeBase):

@@ -2,7 +2,9 @@ from io import BytesIO
 from urllib.request import urlopen
 
 import cloudinary.uploader
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 
 
 async def watermark(url: str, user_nickname: str) -> str:

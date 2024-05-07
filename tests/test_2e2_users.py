@@ -1,6 +1,5 @@
-from unittest.mock import Mock, patch, AsyncMock
-
-import pytest
+from unittest.mock import AsyncMock
+from unittest.mock import patch
 
 from src.services.auth import auth_service
 

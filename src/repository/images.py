@@ -1,9 +1,11 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException
+from fastapi import status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models import Image
-from src.database.models import User, Role
+from src.database.models import Role
+from src.database.models import User
 from src.schemas.images import ImageSchema
 
 

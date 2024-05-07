@@ -1,7 +1,11 @@
-from fastapi import Request, Depends, HTTPException, status
+from fastapi import Depends
+from fastapi import HTTPException
+from fastapi import Request
+from fastapi import status
 
 from src.common import detail_message
-from src.database.models import Role, User
+from src.database.models import Role
+from src.database.models import User
 from src.services.auth import auth_service
 
 

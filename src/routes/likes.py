@@ -1,11 +1,8 @@
 from fastapi import APIRouter
 from fastapi import Depends
-from fastapi import HTTPException
 from fastapi import status
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.common import detail_message
 from src.database.db import get_db
 from src.database.models import User
 from src.repository.likes import add_grade_to_image

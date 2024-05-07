@@ -3,7 +3,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.db import get_db
-from src.database.models import User, Role
+from src.database.models import Role
+from src.database.models import User
 from src.schemas.users import UserSchema
 
 

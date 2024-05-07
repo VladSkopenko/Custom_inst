@@ -1,7 +1,6 @@
 from unittest.mock import patch
-from unittest.mock import patch, MagicMock, AsyncMock
+
 from main import app
-from src.database.models import Image
 from src.services.auth import auth_service
 
 app.user_middleware = []
