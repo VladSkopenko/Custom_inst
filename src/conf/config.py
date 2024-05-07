@@ -4,10 +4,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
-load_dotenv()
+
 base_path_project = Path(__file__).resolve().parent.parent
 base_path = base_path_project.parent
-load_dotenv(base_path.joinpath(".env"))
 APP_ENV = environ.get("APP_ENV")
 
 
