@@ -42,7 +42,6 @@ async def signup(
     :param request: Request: Get the base_url of the request
     :param db: AsyncSession: Get the database session
     :return: The new user, but the send_email function is asynchronous
-    :doc-author: Trelent
     """
     exist_user = await repositories_users.get_user_by_email(body.email, db)
     if exist_user:
@@ -65,7 +64,6 @@ async def login(
     :param body: OAuth2PasswordRequestForm: Get the username and password from the request body
     :param db: AsyncSession: Pass the database session to the function
     :return: A dictionary with access_token, refresh_token and token_type
-    :doc-author: Trelent
     """
     user = await repositories_users.get_user_by_email(body.username, db)
     if user is None:
@@ -142,7 +140,6 @@ async def confirmed_email(token: str, db: AsyncSession = Depends(get_db)):
     :param token: str: Get the token from the url
     :param db: AsyncSession: Pass the database session to the function
     :return: A dict with the message
-    :doc-author: Trelent
     """
     email = await auth_service.get_email_from_token(token)
     user = await repositories_users.get_user_by_email(email, db)
@@ -204,10 +201,9 @@ async def logout(
     :param db: AsyncSession: Get the database session
     :param : Get the current user from the database and then update their token to an empty string
     :return: A 204 response
-    :doc-author: Trelent
     """
 
-    await repositories_users.update_token(user, None, db)   
+    await repositories_users.update_token(user, None, db)
     await db.commit()
     await db.flush()
     return Response(status_code=status.HTTP_204_NO_CONTENT)

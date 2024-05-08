@@ -106,9 +106,21 @@ async def get_all_images(
 
     return paginated_image_data
 
-@router.get("/search_images")
+
+@router.get("/search_images", status_code=status.HTTP_200_OK)
 async def search_images(keyword: str, db: AsyncSession = Depends(get_db)):
+    """
+    The search_images function searches for images in the database.
+
+    :param keyword: str: Search for images in the database
+    :param db: AsyncSession: Pass the database session
+    :return: A list of images
+    """
     images = await images_repository.search_images(keyword, db)
+    if images is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Images not found"
+        )
     return images
 
 
