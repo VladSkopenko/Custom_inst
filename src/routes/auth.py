@@ -207,8 +207,7 @@ async def logout(
     :doc-author: Trelent
     """
 
-    await repositories_users.update_token(user, "", db)
-    user.refresh_token = None
-    db.commit()
+    await repositories_users.update_token(user, None, db)   
+    await db.commit()
     await db.flush()
     return Response(status_code=status.HTTP_204_NO_CONTENT)

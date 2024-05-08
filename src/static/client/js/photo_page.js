@@ -19,8 +19,16 @@ function fetchImageDetails(imageId) {
     return fetch(imageUrl)
         .then(response => response.json())
 }
-
 function getImageDetailsTemplate(data) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+        if (i <= data.rating) {
+            stars += `<span class="fa fa-star checked"></span>`;
+        } else {
+            stars += `<span class="fa fa-star"></span>`;
+        }
+    } // This was missing
+
     return `
         <h1 class="text-primary">${data.image.title}</h1>
         <p><img id="photo" src="${data.image.base_url}" alt="Photo"></p>
@@ -29,18 +37,20 @@ function getImageDetailsTemplate(data) {
             <p>Description: ${data.image.description}</p>
             <p>Created At: ${formatDate(data.image.created_at)}</p>
             <p>Updated At: ${formatDate(data.image.updated_at)}</p>
-            <a href="rate_photo.html">
-                <p>Rating: ${data.rating}</p>
-            </a>
+            <p href="">
+                <p id="rating" hidden>Rating: ${data.rating}</p>
+                ${stars}
+            </p>
             <div class="comments">
                 <h3>Comments</h3>
                 <ul id="commentsList"></ul>
-                <button id="postCommentButton">POST Comment</button>
-                // <a class="btn btn-sm btn-primary mt-4 p-1" href="/static/client/post_comment.html?imageId=${imageId}">POST Comment</a>
+                <p class="btn btn-sm btn-primary mt-4 p-1" href="/static/client/post_comment.html?imageId=${data.image.id}">POST Comment</p>
             </div>
         </div>
     `;
 }
+
+
 
 function formatDate(dateString) {
     const date = new Date(dateString);

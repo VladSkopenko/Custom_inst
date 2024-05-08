@@ -37,7 +37,7 @@ function render_gallery(photos_data) {
         const updatedDate = new Date(image.updated_at);
         const formattedUpdatedDate = `${updatedDate.getDate().toString().padStart(2, '0')}-${(updatedDate.getMonth() + 1).toString().padStart(2, '0')}-${updatedDate.getFullYear()}`;
 
-        return `<a href="photo_page.html?imageId=${image.id}&tagsId=${tags_id}&commentsInfo=${comments_info}&rating=${rating}" class="photo-link">
+        return `<a href="photo_page.html?imageId=${image.id}" class="photo-link">
 
         <li class="photo" data-id=${image.id}>
   <div class = "photo-image__wrapper">
