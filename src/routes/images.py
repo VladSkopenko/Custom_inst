@@ -106,6 +106,11 @@ async def get_all_images(
 
     return paginated_image_data
 
+@router.get("/search_images")
+async def search_images(keyword: str, db: AsyncSession = Depends(get_db)):
+    images = await images_repository.search_images(keyword, db)
+    return images
+
 
 @router.get("/{image_id}", status_code=status.HTTP_200_OK)
 async def get_image(image_id: int = Path(ge=1), db: AsyncSession = Depends(get_db)):
@@ -326,3 +331,4 @@ async def create_qr_code(
 
     image = await images_repository.qr_code(image_id, qr_url, db, current_user)
     return image
+

@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from fastapi import status
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models import Image
@@ -256,3 +256,25 @@ async def qr_code(image_id: int, qr_url: str, db: AsyncSession, current_user: Us
     await db.commit()
     await db.refresh(image)
     return image
+
+async def search_images(keyword: str, db: AsyncSession):   
+    """
+    The search_images function searches for images in the database.
+    
+    :param keyword: str: Search for images with a specific keyword
+    :param db: AsyncSession: Pass the database session to the function
+    :return: A list of image objects
+    :doc-author: Trelent
+    """
+    stmt = None
+    if keyword:
+        stmt = select(Image).filter(
+            or_(
+                Image.description.ilike(f"%{keyword}%"),
+                Image.title.ilike(f"%{keyword}%")
+            )
+        )
+    
+    res = await db.execute(stmt)
+    images = res.scalars().all()
+    return images
