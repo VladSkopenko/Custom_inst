@@ -6,13 +6,13 @@ from fastapi import Request
 from fastapi.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
-# the path to the templates directory
+
 templates_path = Path(__file__).resolve().parent.parent.joinpath("templates")
 if not templates_path:
     raise RuntimeError("TEMPLATES_DIRECTORY does not exist")
 templates = Jinja2Templates(directory=templates_path)
 
-# Create a router for the home page
+
 router = APIRouter()
 
 
