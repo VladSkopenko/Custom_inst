@@ -19,7 +19,6 @@ async def get_tag(tag_name: str, db: AsyncSession, current_user: User):
     :param db: AsyncSession: Access the database
     :param current_user: User: Get the user id of the current user
     :return: A tag object
-    :doc-author: Trelent
     """
     stmt = select(Tag).where(Tag.tag_name == tag_name)
     existing_tag = await db.execute(stmt)
@@ -39,7 +38,6 @@ async def create_tag(body: TagSchema, db: AsyncSession, current_user: User):
     :param db: AsyncSession: Create a database connection
     :param current_user: User: Make sure that the user is logged in
     :return: A tag object
-    :doc-author: Trelent
     """
     tag = await get_tag(body.tag_name, db, current_user)
     if tag:
@@ -60,7 +58,6 @@ async def delete_tag(tag_id: int, db: AsyncSession, current_user: User):
     :param db: AsyncSession: Access the database
     :param current_user: User: Check if the user is logged in
     :return: The deleted tag
-    :doc-author: Trelent
     """
     stmt = select(Tag).where(Tag.id == tag_id)
     existing_tag = await db.execute(stmt)

@@ -26,7 +26,6 @@ async def add_tag_to_image(
     :param db: AsyncSession: Pass a database connection to the function
     :param current_user: User: Check if the user is logged in
     :return: A string
-    :doc-author: Trelent
     """
 
     image = await get_image(image_id, db, mode="add_tag_to_image")
@@ -66,7 +65,6 @@ async def remove_tag_from_image(
     :param db: AsyncSession: Connect to the database
     :param current_user: User: Check if the user is logged in
     :return: A string
-    :doc-author: Trelent
     """
     image = await get_image(image_id, db)
     owner_image = image.user_id
@@ -94,7 +92,6 @@ async def get_tags_by_image(image_id: int, db: AsyncSession):
     :param image_id: int: Specify the image to get tags for
     :param db: AsyncSession: Pass in the database connection
     :return: A list of tag ids
-    :doc-author: Trelent
     """
 
     stmt = select(image_m2m_tag.c.tag_id).where(image_m2m_tag.c.image_id == image_id)
@@ -109,7 +106,6 @@ async def get_data_image(image_id: int, db: AsyncSession):
     :param image_id: int: Get the image from the database
     :param db: AsyncSession: Pass the database connection to the function
     :return: A dictionary with the following keys:
-    :doc-author: Trelent
     """
 
     image = await get_image(image_id, db)

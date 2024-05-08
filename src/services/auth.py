@@ -42,7 +42,6 @@ class Auth:
         :param plain_password: Store the password that is entered by the user
         :param hashed_password: Compare the hashed password in the database with the plain text password entered by user
         :return: A boolean value
-        :doc-author: Trelent
         """
         return self.pwd_context.verify(plain_password, hashed_password)
 
@@ -54,7 +53,6 @@ class Auth:
         :param self: Represent the instance of the class
         :param password: str: Pass in the password that you want to hash
         :return: A string that is the hashed version of the password
-        :doc-author: Trelent
         """
         return self.pwd_context.hash(password)
 
@@ -73,7 +71,6 @@ class Auth:
         :param data: dict: Pass the data that will be encoded into the token
         :param expires_delta: Optional[float]: Set the expiration time for the access token
         :return: A token that is encoded with the data you pass to it
-        :doc-author: Trelent
         """
 
         to_encode = data.copy()
@@ -124,7 +121,6 @@ class Auth:
         :param self: Represent the instance of a class
         :param refresh_token: str: Pass in the refresh token that is sent to the server
         :return: The email address of the user who requested a new access token
-        :doc-author: Trelent
         """
 
         try:
@@ -157,7 +153,6 @@ class Auth:
         :param token: str: Get the token from the request header
         :param db: AsyncSession: Get the database session
         :return: A user object, which is used in the following function:
-        :doc-author: Trelent
         """
 
         credentials_exception = HTTPException(
@@ -214,7 +209,6 @@ class Auth:
         :param self: Represent the instance of the class
         :param token: str: Pass the token from the user to this function
         :return: The email associated with the token
-        :doc-author: Trelent
         """
 
         try:
