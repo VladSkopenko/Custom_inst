@@ -343,4 +343,3 @@ async def create_qr_code(
 
     image = await images_repository.qr_code(image_id, qr_url, db, current_user)
     return image
-
