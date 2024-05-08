@@ -124,9 +124,6 @@
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A comment object</p>
 </dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -144,9 +141,6 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The deleted comment</p>
-</dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
 </dd>
 </dl>
 </dd></dl>
@@ -173,9 +167,6 @@ If so it updates the database with new information from body and returns that up
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The edited comment</p>
 </dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -192,9 +183,6 @@ If so it updates the database with new information from body and returns that up
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A comment object</p>
-</dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
 </dd>
 </dl>
 </dd></dl>
@@ -213,9 +201,6 @@ and returns all comments associated with that image.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list of comments for a given image</p>
-</dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
 </dd>
 </dl>
 </dd></dl>
@@ -347,6 +332,23 @@ and returns all comments associated with that image.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="src.repository.images.search_images">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.repository.images.</span></span><span class="sig-name descname"><span class="pre">search_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keyword</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.repository.images.search_images" title="Link to this definition">¶</a></dt>
+<dd><p>The search_images function searches for images in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keyword</strong> – str: Search for images with a specific keyword</p></li>
+<li><p><strong>db</strong> – AsyncSession: Pass the database session to the function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of image objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="src.repository.images.transform_image">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.repository.images.</span></span><span class="sig-name descname"><span class="pre">transform_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tr_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.repository.images.transform_image" title="Link to this definition">¶</a></dt>
 <dd><p>The transform_image function transforms an image.</p>
@@ -446,9 +448,6 @@ If not, it creates a new Tag object and adds it to the database.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A tag object</p>
 </dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -466,9 +465,6 @@ If not, it creates a new Tag object and adds it to the database.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The deleted tag</p>
-</dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
 </dd>
 </dl>
 </dd></dl>
@@ -492,9 +488,6 @@ If no such tag exists, it raises an HTTPException with status code 404.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A tag object</p>
 </dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -517,9 +510,6 @@ If no such tag exists, it raises an HTTPException with status code 404.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A string</p>
 </dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -537,9 +527,6 @@ If no such tag exists, it raises an HTTPException with status code 404.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A dictionary with the following keys:</p>
 </dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -556,9 +543,6 @@ If no such tag exists, it raises an HTTPException with status code 404.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list of tag ids</p>
-</dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
 </dd>
 </dl>
 </dd></dl>
@@ -578,9 +562,6 @@ If no such tag exists, it raises an HTTPException with status code 404.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A string</p>
-</dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
 </dd>
 </dl>
 </dd></dl>
@@ -677,16 +658,22 @@ If no such tag exists, it raises an HTTPException with status code 404.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="src.routes.auth.confirmed_email">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.routes.auth.</span></span><span class="sig-name descname"><span class="pre">confirmed_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.routes.auth.confirmed_email" title="Link to this definition">¶</a></dt>
-<dd><p>Confirmed email.</p>
+<dd><dl class="simple">
+<dt>The confirmed_email function is used to confirm a user’s email address.</dt><dd><p>It takes in the token that was sent to the user’s email and uses it to get their email address.
+Then, it gets the user from our database using their email address and checks if they exist. If not, an error is thrown.
+Next, we check if they have already confirmed their account or not by checking if confirmed == True for them in our database (if so, we return a message saying as much).
+Finally, we update our database with this information.</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>token</strong> – str: Token</p></li>
-<li><p><strong>db</strong> – AsyncSession</p></li>
+<li><p><strong>token</strong> – str: Get the token from the url</p></li>
+<li><p><strong>db</strong> – AsyncSession: Pass the database session to the function</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
+<dd class="field-even"><p>A dict with the message</p>
 </dd>
 </dl>
 </dd></dl>
@@ -694,16 +681,16 @@ If no such tag exists, it raises an HTTPException with status code 404.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="src.routes.auth.login">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.routes.auth.</span></span><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">OAuth2PasswordRequestForm</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(NoneType)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.routes.auth.login" title="Link to this definition">¶</a></dt>
-<dd><p>Login user.</p>
+<dd><p>The login function is used to authenticate a user.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>body</strong> – OAuth2PasswordRequestForm</p></li>
-<li><p><strong>db</strong> – AsyncSession</p></li>
+<li><p><strong>body</strong> – OAuth2PasswordRequestForm: Get the username and password from the request body</p></li>
+<li><p><strong>db</strong> – AsyncSession: Pass the database session to the function</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Token</p>
+<dd class="field-even"><p>A dictionary with access_token, refresh_token and token_type</p>
 </dd>
 </dl>
 </dd></dl>
@@ -711,18 +698,17 @@ If no such tag exists, it raises an HTTPException with status code 404.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="src.routes.auth.logout">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.routes.auth.</span></span><span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.routes.auth.logout" title="Link to this definition">¶</a></dt>
-<dd><p>Logout user.</p>
+<dd><p>The logout function is used to logout a user.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>user</strong> – User</p></li>
-<li><p><strong>db</strong> – AsyncSession</p></li>
+<li><p><strong>user</strong> – User: Get the current user</p></li>
+<li><p><strong>db</strong> – AsyncSession: Get the database session</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
 </dl>
+<p>:param : Get the current user from the database and then update their token to an empty string
+:return: A 204 response</p>
 </dd></dl>
 
 <dl class="py function">
@@ -764,18 +750,18 @@ If no such tag exists, it raises an HTTPException with status code 404.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="src.routes.auth.signup">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.routes.auth.</span></span><span class="sig-name descname"><span class="pre">signup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UserSchema</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BackgroundTasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.routes.auth.signup" title="Link to this definition">¶</a></dt>
-<dd><p>Signup new user.</p>
+<dd><p>The signup function creates a new user in the database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>body</strong> – UserSchema</p></li>
-<li><p><strong>bt</strong> – BackgroundTasks</p></li>
-<li><p><strong>request</strong> – Request</p></li>
-<li><p><strong>db</strong> – AsyncSession</p></li>
+<li><p><strong>body</strong> – UserSchema: Validate the request body, and to deserialize it into a userschema object</p></li>
+<li><p><strong>bt</strong> – BackgroundTasks: Add a task to the background tasks queue</p></li>
+<li><p><strong>request</strong> – Request: Get the base_url of the request</p></li>
+<li><p><strong>db</strong> – AsyncSession: Get the database session</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>User</p>
+<dd class="field-even"><p>The new user, but the send_email function is asynchronous</p>
 </dd>
 </dl>
 </dd></dl>
@@ -902,9 +888,6 @@ then we know something is wrong with our database connection.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A dictionary with a message</p>
 </dd>
-<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Trelent</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -1018,6 +1001,11 @@ then we know something is wrong with our database connection.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.routes.images.search_images">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.routes.images.</span></span><span class="sig-name descname"><span class="pre">search_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keyword</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.routes.images.search_images" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="src.routes.images.update_image">
@@ -1205,22 +1193,30 @@ then we know something is wrong with our database connection.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="src.services.auth.Auth.cache">
-<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Redis&lt;ConnectionPool&lt;Connection&lt;host=localhost,port=6379,db=0&gt;&gt;&gt;</span></em><a class="headerlink" href="#src.services.auth.Auth.cache" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Redis&lt;ConnectionPool&lt;Connection&lt;host=redis-14476.c293.eu-central-1-1.ec2.redns.redis-cloud.com,port=14476,db=0&gt;&gt;&gt;</span></em><a class="headerlink" href="#src.services.auth.Auth.cache" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.services.auth.Auth.create_access_token">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_access_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expires_delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.services.auth.Auth.create_access_token" title="Link to this definition">¶</a></dt>
-<dd><p>Create access token.</p>
+<dd><dl class="simple">
+<dt>The create_access_token function creates a new access token.</dt><dd><dl class="simple">
+<dt>Args:</dt><dd><p>data (dict): The data to be encoded in the JWT.
+expires_delta (Optional[float]): A timedelta object representing how long the token should last for. Defaults to 15 minutes if not specified.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – data</p></li>
-<li><p><strong>expires_delta</strong> – expiration time</p></li>
+<li><p><strong>self</strong> – Represent the instance of the class</p></li>
+<li><p><strong>data</strong> – dict: Pass the data that will be encoded into the token</p></li>
+<li><p><strong>expires_delta</strong> – Optional[float]: Set the expiration time for the access token</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>access token</p>
+<dd class="field-even"><p>A token that is encoded with the data you pass to it</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1259,13 +1255,21 @@ then we know something is wrong with our database connection.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.services.auth.Auth.decode_refresh_token">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">decode_refresh_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.services.auth.Auth.decode_refresh_token" title="Link to this definition">¶</a></dt>
-<dd><p>Decode refresh token.</p>
+<dd><dl class="simple">
+<dt>The decode_refresh_token function is used to decode the refresh token.</dt><dd><p>The function will raise an HTTPException if the token is invalid or has expired.
+If the token is valid, it will return a string with the email address of
+user who owns that refresh_token.</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>refresh_token</strong> – refresh token</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> – Represent the instance of a class</p></li>
+<li><p><strong>refresh_token</strong> – str: Pass in the refresh token that is sent to the server</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>email</p>
+<dd class="field-even"><p>The email address of the user who requested a new access token</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1273,16 +1277,21 @@ then we know something is wrong with our database connection.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.services.auth.Auth.get_current_user">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_current_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(OAuth2PasswordBearer)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncSession</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.services.auth.Auth.get_current_user" title="Link to this definition">¶</a></dt>
-<dd><p>Get current user.</p>
+<dd><dl class="simple">
+<dt>The get_current_user function is a dependency that will be used in the</dt><dd><p>protected endpoints. It takes a token and returns the user object if it’s valid,
+otherwise raises an HTTPException with status code 401 (Unauthorized).</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>token</strong> – access token</p></li>
-<li><p><strong>db</strong> – database session</p></li>
+<li><p><strong>self</strong> – Denote that the get_current_user function is a member of the user class</p></li>
+<li><p><strong>token</strong> – str: Get the token from the request header</p></li>
+<li><p><strong>db</strong> – AsyncSession: Get the database session</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>user</p>
+<dd class="field-even"><p>A user object, which is used in the following function:</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1290,13 +1299,17 @@ then we know something is wrong with our database connection.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.services.auth.Auth.get_email_from_token">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_email_from_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.services.auth.Auth.get_email_from_token" title="Link to this definition">¶</a></dt>
-<dd><p>Get email from token.</p>
+<dd><p>The get_email_from_token function takes a token as an argument and returns the email address associated with that token.
+The function uses the jwt library to decode the token, which is then used to retrieve the email address from within it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>token</strong> – token</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> – Represent the instance of the class</p></li>
+<li><p><strong>token</strong> – str: Pass the token from the user to this function</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>email</p>
+<dd class="field-even"><p>The email associated with the token</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1304,7 +1317,22 @@ then we know something is wrong with our database connection.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.services.auth.Auth.get_password_hash">
 <span class="sig-name descname"><span class="pre">get_password_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.services.auth.Auth.get_password_hash" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="simple">
+<dt>The get_password_hash function takes a password as input and returns the hash of that password.</dt><dd><p>The function uses the pwd_context object to generate a hash from the given password.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> – Represent the instance of the class</p></li>
+<li><p><strong>password</strong> – str: Pass in the password that you want to hash</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string that is the hashed version of the password</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="src.services.auth.Auth.oauth2_scheme">
@@ -1319,16 +1347,21 @@ then we know something is wrong with our database connection.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="src.services.auth.Auth.verify_password">
 <span class="sig-name descname"><span class="pre">verify_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plain_password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashed_password</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.services.auth.Auth.verify_password" title="Link to this definition">¶</a></dt>
-<dd><p>Verify plain password with hashed password.</p>
+<dd><dl class="simple">
+<dt>The verify_password function takes a plain-text password and the hashed version of that password,</dt><dd><p>and returns True if they match, False otherwise. This is used to verify that the user’s login
+credentials are correct.</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>plain_password</strong> – plain password</p></li>
-<li><p><strong>hashed_password</strong> – hashed password</p></li>
+<li><p><strong>self</strong> – Represent the instance of the class</p></li>
+<li><p><strong>plain_password</strong> – Store the password that is entered by the user</p></li>
+<li><p><strong>hashed_password</strong> – Compare the hashed password in the database with the plain text password entered by user</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>boolean</p>
+<dd class="field-even"><p>A boolean value</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1401,6 +1434,7 @@ then we know something is wrong with our database connection.</p>
 <li><a class="reference internal" href="#src.repository.images.get_image"><code class="docutils literal notranslate"><span class="pre">get_image()</span></code></a></li>
 <li><a class="reference internal" href="#src.repository.images.get_transform_url"><code class="docutils literal notranslate"><span class="pre">get_transform_url()</span></code></a></li>
 <li><a class="reference internal" href="#src.repository.images.qr_code"><code class="docutils literal notranslate"><span class="pre">qr_code()</span></code></a></li>
+<li><a class="reference internal" href="#src.repository.images.search_images"><code class="docutils literal notranslate"><span class="pre">search_images()</span></code></a></li>
 <li><a class="reference internal" href="#src.repository.images.transform_image"><code class="docutils literal notranslate"><span class="pre">transform_image()</span></code></a></li>
 <li><a class="reference internal" href="#src.repository.images.update_image"><code class="docutils literal notranslate"><span class="pre">update_image()</span></code></a></li>
 </ul>
@@ -1462,6 +1496,7 @@ then we know something is wrong with our database connection.</p>
 <li><a class="reference internal" href="#src.routes.images.get_all_images"><code class="docutils literal notranslate"><span class="pre">get_all_images()</span></code></a></li>
 <li><a class="reference internal" href="#src.routes.images.get_image"><code class="docutils literal notranslate"><span class="pre">get_image()</span></code></a></li>
 <li><a class="reference internal" href="#src.routes.images.load_image"><code class="docutils literal notranslate"><span class="pre">load_image()</span></code></a></li>
+<li><a class="reference internal" href="#src.routes.images.search_images"><code class="docutils literal notranslate"><span class="pre">search_images()</span></code></a></li>
 <li><a class="reference internal" href="#src.routes.images.update_image"><code class="docutils literal notranslate"><span class="pre">update_image()</span></code></a></li>
 </ul>
 </li>
