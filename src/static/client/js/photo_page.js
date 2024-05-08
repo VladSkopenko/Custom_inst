@@ -37,14 +37,14 @@ function getImageDetailsTemplate(data) {
             <p>Description: ${data.image.description}</p>
             <p>Created At: ${formatDate(data.image.created_at)}</p>
             <p>Updated At: ${formatDate(data.image.updated_at)}</p>
-            <a href="rate_photo.html">
+            <p href="">
                 <p id="rating" hidden>Rating: ${data.rating}</p>
                 ${stars}
-            </a>
+            </p>
             <div class="comments">
                 <h3>Comments</h3>
                 <ul id="commentsList"></ul>
-                <a class="btn btn-sm btn-primary mt-4 p-1" href="/static/client/post_comment.html?imageId=${data.image.id}">POST Comment</a>
+                <p class="btn btn-sm btn-primary mt-4 p-1" href="/static/client/post_comment.html?imageId=${data.image.id}">POST Comment</p>
             </div>
         </div>
     `;
