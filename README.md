@@ -14,3 +14,11 @@
 * ### Add a tag to the photo.
 
 ## Link: [https://photo-bank-by-drujba-drujba-06de47a4.koyeb.app/](https://photo-bank-by-drujba-drujba-06de47a4.koyeb.app/)
+
+## Our team
+
+- **Developer: [Svitlana Tymchenko](https://github.com/SvitLanaTy)**
+- **Developer: [Artem Popov](https://github.com/artemLink)**
+- **Developer: [Serghei Siracenco](https://github.com/SiracencoSerghei)**
+- **Scrum Master + Developer: [Bohdan Synystkyi](https://github.com/BogSyn)**
+- **Team Lead  + Developer: [Vladyslav Skopenko](https://github.com/VladSkopenko)**
