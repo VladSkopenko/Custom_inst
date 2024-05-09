@@ -19,16 +19,15 @@ async def healthchecker(db: AsyncSession = Depends(get_db)):
 
     :param db: AsyncSession: Inject the database session into the function
     :return: A dictionary with a message
-    :doc-author: Trelent
     """
     try:
         result = await db.execute(text("SELECT 1"))
         result = result.fetchone()
         if result is None:
-            raise HTTPException(
-                status_code=500, detail=detail_message.DATABASE_ERROR
-            )
+            raise HTTPException(status_code=500, detail=detail_message.DATABASE_ERROR)
         return {"message": detail_message.GREETING}
     except Exception as e:
         print(e)
-        raise HTTPException(status_code=500, detail=detail_message.CONNECT_DATABASE_ERROR)
+        raise HTTPException(
+            status_code=500, detail=detail_message.CONNECT_DATABASE_ERROR
+        )

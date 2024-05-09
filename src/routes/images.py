@@ -14,6 +14,7 @@ from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.conf.config import config
+from src.common import detail_message
 from src.database.db import get_db
 from src.database.models import User
 from src.repository import images as images_repository
@@ -85,7 +86,7 @@ async def get_all_images(
     images = await images_repository.get_all_images(db)
     if images is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Images not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=detail_message.FILE_NOT_FOUND
         )
 
     if page is None or per_page is None:
@@ -107,9 +108,20 @@ async def get_all_images(
     return paginated_image_data
 
 
-@router.get("/search_images")
+@router.get("/search_images", status_code=status.HTTP_200_OK)
 async def search_images(keyword: str, db: AsyncSession = Depends(get_db)):
+    """
+    The search_images function searches for images in the database.
+
+    :param keyword: str: Search for images in the database
+    :param db: AsyncSession: Pass the database session
+    :return: A list of images
+    """
     images = await images_repository.search_images(keyword, db)
+    if images is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=detail_message.FILE_NOT_FOUND
+        )
     return images
 
 
@@ -154,8 +166,7 @@ async def update_image(
     image = await images_repository.update_image(image_id, body, db, current_user)
     if image is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Image with id {image_id} not found",
+            status_code=status.HTTP_404_NOT_FOUND, detail=detail_message.FILE_NOT_FOUND
         )
     return image
 
@@ -180,8 +191,7 @@ async def delete_image(
     image = await images_repository.delete_image(image_id, db, current_user)
     if image is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Image with id {image_id} not found",
+            status_code=status.HTTP_404_NOT_FOUND, detail=detail_message.FILE_NOT_FOUND
         )
     return image
 

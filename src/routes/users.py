@@ -20,6 +20,5 @@ async def get_current_user(
     :param dependencies: Add a rate limiter to the function
     :param seconds: Set the time interval for which the rate limiter is active
     :return: The user object
-    :doc-author: Trelent
     """
     return user

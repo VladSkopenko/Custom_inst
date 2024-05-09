@@ -3,6 +3,7 @@ from fastapi import status
 from sqlalchemy import select, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.common import detail_message
 from src.database.models import Image
 from src.database.models import Role
 from src.database.models import User
@@ -25,7 +26,8 @@ async def create_image(
     image = Image(**body.dict())
     if image.title is None:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Title is required"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=detail_message.TITLE_IS_REQUIRED,
         )
     image.base_url = base_url
     image.transform_url = base_url
@@ -97,7 +99,9 @@ async def update_image(
         Role.admin,
         Role.moderator,
     ):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail=detail_message.FORBIDDEN
+        )
 
     image.title = body.title
     image.description = body.description
@@ -127,7 +131,9 @@ async def delete_image(image_id: int, db: AsyncSession, current_user: User):
         Role.admin,
         Role.moderator,
     ):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail=detail_message.FORBIDDEN
+        )
 
     await db.delete(image)
     await db.commit()
@@ -158,7 +164,9 @@ async def transform_image(
         Role.admin,
         Role.moderator,
     ):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail=detail_message.FORBIDDEN
+        )
 
     image.transform_url = tr_url
     await db.commit()
@@ -189,7 +197,9 @@ async def get_base_url(image_id: int, db: AsyncSession, current_user: User):
         Role.admin,
         Role.moderator,
     ):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail=detail_message.FORBIDDEN
+        )
     return image.base_url
 
 
@@ -227,7 +237,9 @@ async def get_transform_url(image_id: int, db: AsyncSession, current_user: User)
         )
 
     if image.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail=detail_message.FORBIDDEN
+        )
     return image.transform_url
 
 
@@ -250,31 +262,33 @@ async def qr_code(image_id: int, qr_url: str, db: AsyncSession, current_user: Us
         return None
 
     if image.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="FORBIDDEN")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail=detail_message.FORBIDDEN
+        )
 
     image.qr_url = qr_url
     await db.commit()
     await db.refresh(image)
     return image
 
-async def search_images(keyword: str, db: AsyncSession):   
+
+async def search_images(keyword: str, db: AsyncSession):
     """
     The search_images function searches for images in the database.
-    
+
     :param keyword: str: Search for images with a specific keyword
     :param db: AsyncSession: Pass the database session to the function
     :return: A list of image objects
-    :doc-author: Trelent
     """
     stmt = None
     if keyword:
         stmt = select(Image).filter(
             or_(
                 Image.description.ilike(f"%{keyword}%"),
-                Image.title.ilike(f"%{keyword}%")
+                Image.title.ilike(f"%{keyword}%"),
             )
         )
-    
+
     res = await db.execute(stmt)
     images = res.scalars().all()
     return images

@@ -22,9 +22,7 @@ async def create_comment(
     :param db: AsyncSession: Pass the database connection to the function
     :param current_user: User: Get the user_id of the current user
     :return: A comment object
-    :doc-author: Trelent
     """
-
     comment_data: Comment = Comment(
         image_id=image_id, user_id=current_user.id, comment=body.comment
     )
@@ -49,7 +47,6 @@ async def edit_comment(
     :param db: AsyncSession: Access the database
     :param current_user: User: Get the current user's id
     :return: The edited comment
-    :doc-author: Trelent
     """
     stmt = (
         select(Comment)
@@ -80,7 +77,6 @@ async def delete_comment(comment_id: int, db: AsyncSession, current_user: User):
     :param db: AsyncSession: Access the database
     :param current_user: User: Get the current user's id
     :return: The deleted comment
-    :doc-author: Trelent
     """
     stmt = select(Comment).filter_by(id=comment_id, user_id=current_user.id)
     comment = await db.execute(stmt)
@@ -103,7 +99,6 @@ async def get_comment(comment_id: int, db: AsyncSession):
     :param comment_id: int: Specify the id of the comment to be retrieved
     :param db: AsyncSession: Pass the database session to the function
     :return: A comment object
-    :doc-author: Trelent
     """
     stmt = select(Comment).filter(Comment.id == comment_id)
     result = await db.execute(stmt)
@@ -122,7 +117,6 @@ async def get_comments_by_image(image_id: int, db: AsyncSession):
     :param image_id: int: Specify the image_id of the comments you want to retrieve
     :param db: AsyncSession: Pass in the database connection
     :return: A list of comments for a given image
-    :doc-author: Trelent
     """
     stmt = select(Comment).filter(Comment.image_id == image_id)
     result = await db.execute(stmt)
