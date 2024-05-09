@@ -18,8 +18,8 @@ async def get_admin_exist(db: AsyncSession = Depends(get_db)):
 
     stmt = select(User).where(User.role == Role.admin)
     user = await db.execute(stmt)
-    result = user.scalar_one_or_none()
-    return result is not None
+    result = user.scalars().all()
+    return result
 
 
 async def get_user_by_email(email: str, db: AsyncSession = Depends(get_db)):
