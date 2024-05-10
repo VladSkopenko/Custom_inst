@@ -22,7 +22,7 @@ form?.addEventListener("submit", async (e) => {
 
 
   fetch(
-    "https://0.0.0.0:8000/api/auth/signup", {
+    "https://photo-bank-by-drujba-drujba-06de47a4.koyeb.app/api/auth/signup", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
