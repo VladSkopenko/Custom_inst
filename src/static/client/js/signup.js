@@ -22,7 +22,7 @@ form?.addEventListener("submit", async (e) => {
 
 
   fetch(
-    "http://0.0.0.0:8000/api/auth/signup", {
+    "api/auth/signup", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
