@@ -2,9 +2,6 @@ const form = document.getElementById("signup-form");
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // const payload = new FormData(form);
-  // console.log([...payload]);
-
   const prePayload = new FormData(form);
   const payload = new URLSearchParams(prePayload);
   console.log("payload: ", [...payload]);
@@ -20,26 +17,24 @@ form?.addEventListener("submit", async (e) => {
   };
   console.log("data: ", data);
 
-
-  fetch(
-    "https://photo-bank-by-drujba-drujba-06de47a4.koyeb.app/api/auth/signup", {
+  try {
+    const response = await fetch("https://photo-bank-by-drujba-drujba-06de47a4.koyeb.app/api/auth/signup", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
-    // body: payload,
-  })
-    .then((res) => {
-      if (res.ok) {
-      return res.json();
-      }
+    });
+
+    if (!response.ok) {
       throw new Error("Network response was not ok.");
-    })
-    .then((data) => {
-      console.log(data);
-      // Redirect to email_sended.html
-      window.location.href = "/static/client/email_sended.html";
-    })
-    .catch((err) => console.log(err));
+    }
+
+    const responseData = await response.json();
+    console.log(responseData);
+    // Redirect to email_sended.html
+    window.location.href = "/static/client/email_sended.html";
+  } catch (error) {
+    console.error('Error:', error);
+  }
 });
