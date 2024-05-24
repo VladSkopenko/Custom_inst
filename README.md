@@ -14,6 +14,17 @@
 * ### Rate others' photos.
 * ### Add a tag to the photo.
 
+## Technologies Used
+
+- **FastAPI**: A modern, fast (high-performance) web framework for building APIs with Python.
+- **PostgreSQL**: A powerful, open-source object-relational database system.
+- **Koyeb**: A platform for deploying and running web applications and APIs.
+- **HTML**: The standard markup language for documents designed to be displayed in a web browser.
+- **JavaScript**: A programming language commonly used to create interactive effects within web browsers.
+- **Docker**: A set of platform-as-a-service products that use OS-level virtualization to deliver software in packages called containers.
+- **SQLAlchemy**: The Python SQL toolkit and Object-Relational Mapping (ORM) library.
+- **Alembic**: A lightweight database migration tool for use with SQLAlchemy.
+
 ## Our team
 
 - **Developer: [Svitlana Tymchenko](https://github.com/SvitLanaTy)**
