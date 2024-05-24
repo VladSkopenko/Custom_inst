@@ -1,4 +1,5 @@
 # PHOTOSHARE by team DRUJBA
+## Link: [https://photo-bank-by-drujba-drujba-06de47a4.koyeb.app/](https://photo-bank-by-drujba-drujba-06de47a4.koyeb.app/)
 
 ### The application was developed by the 'Drujba' team for those who want to share a great photo and appreciate fellow photographers' work.
 
@@ -12,8 +13,6 @@
 * ### Comment on the photo.
 * ### Rate others' photos.
 * ### Add a tag to the photo.
-
-## Link: [https://photo-bank-by-drujba-drujba-06de47a4.koyeb.app/](https://photo-bank-by-drujba-drujba-06de47a4.koyeb.app/)
 
 ## Our team
 
