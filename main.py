@@ -86,17 +86,21 @@ async def startup():
 
     :return: A coroutine
     """
-
-    redis_live: bool | None = await check_redis()
-    if not redis_live:
+    try:
+        # Проверка доступности Redis
+        redis_live: bool | None = await check_redis()
+        if not redis_live:
+            app.dependency_overrides[get_redis] = deny_get_redis
+            logger.debug("startup DISABLE REDIS THAT DOWN")
+        else:
+            await FastAPILimiter.init(get_redis())
+            app.dependency_overrides[get_limit] = RateLimiter(
+                times=config.RATE_LIMITER_TIMES, seconds=config.RATE_LIMITER_SECONDS
+            )
+            logger.debug("startup done")
+    except Exception as err:
+        logger.error(f"Ошибка при запуске: {err}")
         app.dependency_overrides[get_redis] = deny_get_redis
-        logger.debug("startup DISABLE REDIS THAT DOWN")
-    else:
-        await FastAPILimiter.init(get_redis())
-        app.dependency_overrides[get_limit] = RateLimiter(
-            times=config.RATE_LIMITER_TIMES, seconds=config.RATE_LIMITER_SECONDS
-        )
-        logger.debug("startup done")
 
 
 async def get_limit():

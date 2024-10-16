@@ -32,6 +32,7 @@ async def get_current_user(
     return fake_user
 
 
+
 @router.get("/some_user_card", response_model=List[FakeUserResponse])
 async def get_some_user_card():
     """SImple router for test front-end"""
