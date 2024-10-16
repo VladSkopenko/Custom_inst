@@ -172,18 +172,8 @@ class Auth:
         except JWTError as e:
             raise credentials_exception
 
-        user_hash = str(email)
 
-        user = self.cache.get(user_hash)
-
-        if user is None:
-            user = await repository_users.get_user_by_email(email, db)
-            if user is None:
-                raise credentials_exception
-            self.cache.set(user_hash, pickle.dumps(user))
-            self.cache.expire(user_hash, 300)
-        else:
-            user = pickle.loads(user)
+        user = await repository_users.get_user_by_email(email, db)
         return user
 
     def create_email_token(self, data: dict):
