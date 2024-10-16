@@ -9,3 +9,4 @@ Pipfile.lock
 .pytest_cache
 pyproject.toml
 poetry.lock
+check_redis.py
