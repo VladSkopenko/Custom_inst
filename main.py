@@ -56,7 +56,7 @@ async def lifespan(app: FastAPI):
     logger.debug("lifespan after")
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 origins = ["*"]
 
@@ -82,25 +82,20 @@ app.include_router(frontend.router)
 
 async def startup():
     """
-    The startup function is a coroutine that runs during the startup of the application.
+    The startup function is called when the application starts up.
+    It's a good place to initialize things that are needed by your app,
+    like database connections or external APIs.
 
-    :return: A coroutine
+    :return: A dictionary with a key called &quot;app&quot;
+    :doc-author: Trelent
     """
-    try:
-        # Проверка доступности Redis
-        redis_live: bool | None = await check_redis()
-        if not redis_live:
-            app.dependency_overrides[get_redis] = deny_get_redis
-            logger.debug("startup DISABLE REDIS THAT DOWN")
-        else:
-            await FastAPILimiter.init(get_redis())
-            app.dependency_overrides[get_limit] = RateLimiter(
-                times=config.RATE_LIMITER_TIMES, seconds=config.RATE_LIMITER_SECONDS
-            )
-            logger.debug("startup done")
-    except Exception as err:
-        logger.error(f"Ошибка при запуске: {err}")
-        app.dependency_overrides[get_redis] = deny_get_redis
+    redi = await redis.Redis(
+        host=config.REDIS_DOMAIN,
+        port=config.REDIS_PORT,
+        db=0,
+        password=config.REDIS_PASSWORD,
+    )
+    await FastAPILimiter.init(redi)
 
 
 async def get_limit():
@@ -143,16 +138,7 @@ app.mount(
 )
 
 
-def open_browser():
-    """
-    The open_browser function opens the web browser in a separate thread.
-
-    :return: None
-    """
-
-    webbrowser.open("http://localhost:8000")
 
 
 if __name__ == "__main__":
-    threading.Thread(target=open_browser).start()
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True, timeout_keep_alive=120)
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True, timeout_keep_alive=120)
