@@ -6,6 +6,7 @@ from faker import Faker
 
 from src.database.models import User
 from src.repository.fake import create_fake_user
+from src.repository.fake import get_fake_user
 from src.schemas.fake import FakeUserResponse
 from src.schemas.users import UserResponse
 from src.services.auth import auth_service
@@ -14,7 +15,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 fake = Faker("en")
 
 
-@router.get("/me", response_model=UserResponse)
+@router.get("/me", response_model=FakeUserResponse)
 async def get_current_user(
     user: User = Depends(auth_service.get_current_user),
 ):
@@ -27,7 +28,8 @@ async def get_current_user(
     :param seconds: Set the time interval for which the rate limiter is active
     :return: The user object
     """
-    return user
+    fake_user = get_fake_user()
+    return fake_user
 
 
 @router.get("/some_user_card", response_model=List[FakeUserResponse])

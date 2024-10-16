@@ -25,13 +25,6 @@ class Auth:
     SECRET_KEY = config.SECRET_KEY_JWT
     ALGORITHM = config.ALGORITHM
 
-    cache = redis.Redis(
-        host=config.REDIS_DOMAIN,
-        port=config.REDIS_PORT,
-        password=config.REDIS_PASSWORD,
-        db=0,
-    )
-
     def verify_password(self, plain_password, hashed_password):
         """
         The verify_password function takes a plain-text password and the hashed version of that password,
@@ -171,19 +164,8 @@ class Auth:
                 raise credentials_exception
         except JWTError as e:
             raise credentials_exception
+        user = await repository_users.get_user_by_email(email, db)
 
-        user_hash = str(email)
-
-        user = self.cache.get(user_hash)
-
-        if user is None:
-            user = await repository_users.get_user_by_email(email, db)
-            if user is None:
-                raise credentials_exception
-            self.cache.set(user_hash, pickle.dumps(user))
-            self.cache.expire(user_hash, 300)
-        else:
-            user = pickle.loads(user)
         return user
 
     def create_email_token(self, data: dict):
