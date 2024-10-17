@@ -97,7 +97,7 @@ async def login(
 
 @router.get("/refresh_token", response_model=TokenSchema)
 async def refresh_token(
-    credentials: HTTPAuthorizationCredentials = Depends(get_refresh_token),
+    refresh_token: str,
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -108,7 +108,7 @@ async def refresh_token(
     :return: Token
     """
 
-    token = credentials.credentials
+    token = refresh_token
     email = await auth_service.decode_refresh_token(token)
     user = await repositories_users.get_user_by_email(email, db)
     if user.refresh_token != token:
