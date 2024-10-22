@@ -44,3 +44,10 @@ async def get_fake_followers():
     """SImple router for test front-end"""
     fake_followers = await create_fake_followers()
     return fake_followers
+
+
+@router.get("/{user_id}", response_model=FakeUserResponse)
+async def get_user(user_id: int):
+    current_user = get_fake_user()
+    current_user["id"] = user_id
+    return current_user
