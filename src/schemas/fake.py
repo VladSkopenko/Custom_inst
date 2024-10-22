@@ -12,3 +12,11 @@ class FakeUserResponse(BaseModel):
     isActive: bool
     stack: list[str]
     city: str
+
+
+class FakePaginatedResponse(BaseModel):
+    items: list[FakeUserResponse]
+    total: int
+    page: int
+    size: int
+    pages: int

@@ -4,8 +4,10 @@ from fastapi import APIRouter
 from fastapi import Depends
 
 from src.database.models import User
+from src.repository.fake import create_fake_followers
 from src.repository.fake import create_fake_user
 from src.repository.fake import get_fake_user
+from src.schemas.fake import FakePaginatedResponse
 from src.schemas.fake import FakeUserResponse
 from src.schemas.users import UserResponse
 from src.services.auth import auth_service
@@ -35,3 +37,10 @@ async def get_some_user_card():
     """SImple router for test front-end"""
     some_users = await create_fake_user()
     return some_users
+
+
+@router.get("/fake_followers", response_model=FakePaginatedResponse)
+async def get_fake_followers():
+    """SImple router for test front-end"""
+    fake_followers = await create_fake_followers()
+    return fake_followers
